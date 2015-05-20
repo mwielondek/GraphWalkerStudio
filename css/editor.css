@@ -26,6 +26,14 @@ body {
   line-height: normal;
 }
 
-.label:hover {
+/* .label:hover {
   background-color: rgba(210, 245, 248, 0.75);
+} */
+
+.dragHover {
+  border: 1px dotted #21cfdf;
+}
+
+.selected {
+  border: 1px solid #21cfdf;
 }
