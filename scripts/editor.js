@@ -44,8 +44,8 @@ jsPlumb.ready(function() {
 
     // set correct position within the graph
     node.css({
-      "left": e.pageX - this.offsetLeft,
-      "top": e.pageY - this.offsetTop
+      "left": e.pageX - this.offsetLeft - parseInt($(node).css("width")) / 2,
+      "top": e.pageY - this.offsetTop - parseInt($(node).css("height")) / 2
     });
 
     // append node to graph
