@@ -1,3 +1,26 @@
+(function() {
+  // defaults node properties
+  var nodeProto = {
+    defaults: {
+      width: 80,
+      height: 80
+    }
+  };
+
+  Node = function(label, width, height) {
+    label = label || "New Node";
+    var node = $("<div/>").addClass("node");
+    $("<p></p>").text(label).addClass("label").appendTo(node);
+
+    node.css({
+      width: width || nodeProto.defaults.width,
+      height: height || nodeProto.defaults.height
+    });
+
+    return node;
+  };
+})()
+
 jsPlumb.ready(function() {
   var jsp = jsPlumb.getInstance({
     Container: "container",
@@ -17,8 +40,7 @@ jsPlumb.ready(function() {
 
   // append new node to graph
   var addNode = function(e) {
-    var node = $("<div/>").addClass("node");
-    $("<p>Node</p>").addClass("label").appendTo(node);
+    var node = new Node();
 
     // set correct position within the graph
     node.css({
