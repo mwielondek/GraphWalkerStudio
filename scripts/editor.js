@@ -1,21 +1,32 @@
 (function() {
-  // defaults node properties
-  var nodeProto = {
-    defaults: {
-      width: 80,
-      height: 80
-    }
+  // Default node properties
+  nodeDefaults = {
+    label: "New Node",
+    width: 120,
+    height: 80
   };
 
   Node = function(label, width, height) {
-    label = label || "New Node";
+    this.label = label || this.defaults.label;
+    this.width = width || this.defaults.width;
+    this.height = height || this.defaults.height;
+  };
+  Node.prototype.defaults = nodeDefaults;
+  Node.prototype.createElement = function() {
     var node = $("<div/>").addClass("node");
-    $("<p></p>").text(label).addClass("label").appendTo(node);
+    $("<p></p>").text(this.label).addClass("label").appendTo(node);
+
+    node.attr({
+      "data-width": this.width,
+      "data-height": this.height
+    });
 
     node.css({
-      width: width || nodeProto.defaults.width,
-      height: height || nodeProto.defaults.height
+      "width": this.width,
+      "height": this.height,
     });
+
+    node.nodeObject = this;
 
     return node;
   };
@@ -40,12 +51,12 @@ jsPlumb.ready(function() {
 
   // append new node to graph
   var addNode = function(e) {
-    var node = new Node();
+    var node = new Node().createElement();
 
     // set correct position within the graph
     node.css({
-      "left": e.pageX - this.offsetLeft - parseInt($(node).css("width")) / 2,
-      "top": e.pageY - this.offsetTop - parseInt($(node).css("height")) / 2
+      "left": e.pageX - this.offsetLeft - (node.nodeObject.width / 2),
+      "top": e.pageY - this.offsetTop - (node.nodeObject.height / 2)
     });
 
     // append node to graph
