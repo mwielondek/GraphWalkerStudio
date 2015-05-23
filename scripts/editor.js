@@ -1,12 +1,14 @@
-(function() {
+var editor = (function($, jsPlumb) {
+  var jsp; // jsPlumbInstance
+
   // Default node properties
-  nodeDefaults = {
+  var nodeDefaults = {
     label: "New Node",
     width: 120,
     height: 80
   };
 
-  Node = function(label, width, height) {
+  var Node = function(label, width, height) {
     this.label = label || this.defaults.label;
     this.width = width || this.defaults.width;
     this.height = height || this.defaults.height;
@@ -30,24 +32,6 @@
 
     return node;
   };
-})()
-
-jsPlumb.ready(function() {
-  var jsp = jsPlumb.getInstance({
-    Container: "container",
-    Endpoint: ["Dot", {radius: 2}],
-    HoverPaintStyle: {strokeStyle: "#1e8151", lineWidth: 3 },
-    PaintStyle: {strokeStyle: "#000000", lineWidth: 1 },
-    ConnectionOverlays: [
-        [ "Arrow", {
-            location: 1,
-            id: "arrow",
-            length: 12,
-            foldback: 0.1
-        } ],
-        [ "Label", { label: "Label", id: "label", cssClass: "edgeLabel" }]
-    ],
-  });
 
   // append new node to graph
   var addNode = function(e) {
@@ -94,13 +78,38 @@ jsPlumb.ready(function() {
     }
   };
 
-  // add new nodes on click
-  $("div#container")
-    .on("dblclick", addNode)
-    .on("click", deselectAll)
-    // stop event propagation to disable handler on children elements
-    .children().on("click", false);
+  var init = function(jsPlumbInstance) {
+    jsp = jsPlumbInstance;
+
+    $("div#container")
+      .on("dblclick", addNode)    // add new nodes on double click
+      .on("click", deselectAll);  // clear selected nodes on click
+  }
+
+  return {
+    init: init
+  }
+})(jQuery, jsPlumb)
+
+jsPlumb.ready(function() {
+  var jsp = jsPlumb.getInstance({
+    Container: "container",
+    Endpoint: ["Dot", {radius: 2}],
+    HoverPaintStyle: {strokeStyle: "#1e8151", lineWidth: 3 },
+    PaintStyle: {strokeStyle: "#000000", lineWidth: 1 },
+    ConnectionOverlays: [
+        [ "Arrow", {
+            location: 1,
+            id: "arrow",
+            length: 12,
+            foldback: 0.1
+        } ],
+        [ "Label", { label: "Label", id: "label", cssClass: "edgeLabel" }]
+    ],
+  });
 
   // dbg: export jsp instance
   window.jsp = jsp;
+
+  editor.init(jsp);
 });
