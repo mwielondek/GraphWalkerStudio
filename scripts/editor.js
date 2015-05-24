@@ -32,32 +32,6 @@ var editor = (function($, jsPlumb) {
 
     return node;
   };
-  Element.prototype.addEventMux = function() {
-    var isDragEvent = false;
-    this.addEventListener("mousedown", function(evt) {
-      // TODO check the node object for selected attr instead of hasClass
-      if (isDragEvent || $(this).hasClass("selected")) {
-        isDragEvent = false;
-        return;
-      }
-      evt.stopPropagation();
-      $(this).on("mouseup mouseleave", function handler(e) {
-        if (e.type == "mouseup") {
-          // click
-          selectNode.call(this);
-        } else {
-          // drag
-          isDragEvent = true;
-          var msdwn = new MouseEvent("mousedown", {
-            clientX: e.clientX,
-            clientY: e.clientY
-          });
-          this.dispatchEvent(msdwn);
-        }
-        $(this).off("mouseup mouseleave", handler)
-      });
-    }, true); // use capture
-  };
 
   // append new node to graph
   var addNode = function(e) {
@@ -73,7 +47,32 @@ var editor = (function($, jsPlumb) {
     $(this).append(node);
 
     // properly handle click and drag events
-    node.get(0).addEventMux();
+    (function(node) {
+      var isDragEvent = false;
+      node.addEventListener("mousedown", function(evt) {
+        // TODO check the node object for selected attr instead of hasClass
+        if (isDragEvent || $(this).hasClass("selected")) {
+          isDragEvent = false;
+          return;
+        }
+        evt.stopPropagation();
+        $(this).on("mouseup mouseleave", function handler(e) {
+          if (e.type == "mouseup") {
+            // click
+            selectNode.call(this);
+          } else {
+            // drag
+            isDragEvent = true;
+            var msdwn = new MouseEvent("mousedown", {
+              clientX: e.clientX,
+              clientY: e.clientY
+            });
+            this.dispatchEvent(msdwn);
+          }
+          $(this).off("mouseup mouseleave", handler)
+        });
+      }, true); // use capture
+    })(node.get(0));
     node.on("click", function(e) {
       // stop event from bubbling in order to
       // prevent firing container's deselectAll
