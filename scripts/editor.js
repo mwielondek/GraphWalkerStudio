@@ -73,11 +73,6 @@ var editor = (function($, jsPlumb) {
         });
       }, true); // use capture
     })(node.get(0));
-    node.on("click", function(e) {
-      // stop event from bubbling in order to
-      // prevent firing container's deselectAll
-      e.stopPropagation();
-    });
 
     jsp.draggable(node, {
       containment: true,
@@ -126,7 +121,10 @@ var editor = (function($, jsPlumb) {
 
     $("div#container")
       .on("dblclick", addNode)    // add new nodes on double click
-      .on("click", deselectAll);  // clear selected nodes on click
+      .on("click", function(e) {  // clear selected nodes on click
+        // only when clicked directly on the container
+        if (e.target === this) deselectAll();
+      });
   }
 
   return {
