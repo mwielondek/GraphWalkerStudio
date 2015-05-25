@@ -83,7 +83,10 @@ var editor = (function($, jsPlumb) {
     jsp.setDraggable(node, false);
 
     jsp.makeSource(node, {
-      anchor: "Continuous"
+      anchor: "Continuous",
+      connector: ["StateMachine", {
+        curviness: 0,
+        proximityLimit: 260 }],
     })
     jsp.makeTarget(node, {
       dropOptions: { hoverClass: "dragHover" },
