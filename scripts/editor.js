@@ -79,7 +79,10 @@ var editor = (function($, jsPlumb) {
       e.stopPropagation();
     });
 
-    jsp.draggable(node, {containment: true});
+    jsp.draggable(node, {
+      containment: true,
+      filter: ".ui-resizable-handle"
+      });
     jsp.setDraggable(node, false);
 
     jsp.makeSource(node, {
@@ -96,9 +99,15 @@ var editor = (function($, jsPlumb) {
   };
   var selectNode = function() {
     deselectAll();
-    $(this).addClass("selected");
-    jsp.setDraggable($(this), true);
-    jsp.setSourceEnabled($(this), false);
+    var $this = $(this);
+    $this.addClass("selected");
+    $this.resizable({
+      resize: function(e, ui) {
+        jsp.revalidate(ui.element.get(0));
+      }
+    });
+    jsp.setDraggable($this, true);
+    jsp.setSourceEnabled($this, false);
 
     return false; // don't propagate - otherwise addNode is called
   };
@@ -107,7 +116,8 @@ var editor = (function($, jsPlumb) {
     if (selected.length > 0) {
       jsp.setDraggable(selected, false);
       jsp.setSourceEnabled(selected, true);
-      $(".node.selected").removeClass("selected");
+      selected.removeClass("selected");
+      selected.resizable("destroy");
     }
   };
 
