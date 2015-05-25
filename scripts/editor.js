@@ -55,7 +55,7 @@ var editor = (function($, jsPlumb) {
           isDragEvent = false;
           return;
         }
-        evt.stopPropagation();
+        evt.stopImmediatePropagation();
         $(this).on("mouseup mouseleave", function handler(e) {
           if (e.type == "mouseup") {
             // click
