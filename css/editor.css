@@ -18,6 +18,11 @@ body {
   display: table;
 }
 
+.vertice:focus {
+  border: 1px solid #21cfdf;
+  outline: none;
+}
+
 .label {
   display: table-cell;
   vertical-align: middle;
@@ -31,10 +36,6 @@ body {
 
 .dragHover {
   border: 1px dotted #21cfdf;
-}
-
-.selected {
-  border: 1px solid #21cfdf;
 }
 
 .noselect {

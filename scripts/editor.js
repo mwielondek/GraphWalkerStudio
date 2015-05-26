@@ -1,6 +1,13 @@
 var editor = (function($, jsPlumb) {
   var jsp; // jsPlumbInstance
 
+  // ====================  EXTEND jQUERY ==================== //
+  $.fn.hasFocus = function() {
+    return this.get(0) === document.activeElement;
+  }
+
+  // ====================   VERTICE OPS  ==================== //
+
   // Default vertice properties
   var verticeDefaults = {
     label: "New Vertice",
@@ -15,7 +22,7 @@ var editor = (function($, jsPlumb) {
   };
   Vertice.prototype.defaults = verticeDefaults;
   Vertice.prototype.createElement = function() {
-    var vertice = $("<div/>").addClass("vertice");
+    var vertice = $("<div/>").addClass("vertice").attr("tabindex","0");
     $("<p></p>").text(this.label).addClass("label").appendTo(vertice);
 
     vertice.attr({
@@ -50,8 +57,8 @@ var editor = (function($, jsPlumb) {
     (function(vertice) {
       var isDragEvent = false;
       vertice.addEventListener("mousedown", function(evt) {
-        // TODO check the vertice object for selected attr instead of hasClass
-        if (isDragEvent || $(this).hasClass("selected")) {
+        evt.preventDefault(); // don't set focus yet
+        if (isDragEvent || $(this).hasFocus()) {
           isDragEvent = false;
           return;
         }
@@ -59,7 +66,7 @@ var editor = (function($, jsPlumb) {
         $(this).on("mouseup mouseleave", function handler(e) {
           if (e.type == "mouseup") {
             // click
-            selectVertice.call(this);
+            this.focus();
           } else {
             // drag
             isDragEvent = true;
@@ -73,6 +80,14 @@ var editor = (function($, jsPlumb) {
         });
       }, true); // use capture
     })(vertice.get(0));
+
+    vertice
+      .on("focus", function(e) {
+        selectVertice.call(this);
+      })
+      .on("blur", function(e) {
+        deselectVertice.call(this);
+      });
 
     jsp.draggable(vertice, {
       containment: true,
@@ -93,38 +108,27 @@ var editor = (function($, jsPlumb) {
     });
   };
   var selectVertice = function() {
-    deselectAll();
-    var $this = $(this);
-    $this.addClass("selected");
-    $this.resizable({
+    $(this).resizable({
       resize: function(e, ui) {
         jsp.revalidate(ui.element.get(0));
       }
     });
-    jsp.setDraggable($this, true);
-    jsp.setSourceEnabled($this, false);
-
-    return false; // don't propagate - otherwise addVertice is called
+    jsp.setDraggable(this, true);
+    jsp.setSourceEnabled(this, false);
   };
-  var deselectAll = function() {
-    var selected = $(".vertice.selected");
-    if (selected.length > 0) {
-      jsp.setDraggable(selected, false);
-      jsp.setSourceEnabled(selected, true);
-      selected.removeClass("selected");
-      selected.resizable("destroy");
-    }
+  var deselectVertice = function() {
+    jsp.setDraggable(this, false);
+    jsp.setSourceEnabled(this, true);
+    $(this).resizable("destroy");
   };
 
+
+  // ====================  INIT ==================== //
   var init = function(jsPlumbInstance) {
     jsp = jsPlumbInstance;
 
     $("div#container")
       .on("dblclick", addVertice)    // add new vertices on double click
-      .on("click", function(e) {  // clear selected vertices on click
-        // only when clicked directly on the container
-        if (e.target === this) deselectAll();
-      });
   }
 
   return {
