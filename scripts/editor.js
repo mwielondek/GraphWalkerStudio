@@ -1,56 +1,56 @@
 var editor = (function($, jsPlumb) {
   var jsp; // jsPlumbInstance
 
-  // Default node properties
-  var nodeDefaults = {
-    label: "New Node",
+  // Default vertice properties
+  var verticeDefaults = {
+    label: "New Vertice",
     width: 120,
     height: 80
   };
 
-  var Node = function(label, width, height) {
+  var Vertice = function(label, width, height) {
     this.label = label || this.defaults.label;
     this.width = width || this.defaults.width;
     this.height = height || this.defaults.height;
   };
-  Node.prototype.defaults = nodeDefaults;
-  Node.prototype.createElement = function() {
-    var node = $("<div/>").addClass("node");
-    $("<p></p>").text(this.label).addClass("label").appendTo(node);
+  Vertice.prototype.defaults = verticeDefaults;
+  Vertice.prototype.createElement = function() {
+    var vertice = $("<div/>").addClass("vertice");
+    $("<p></p>").text(this.label).addClass("label").appendTo(vertice);
 
-    node.attr({
+    vertice.attr({
       "data-width": this.width,
       "data-height": this.height
     });
 
-    node.css({
+    vertice.css({
       "width": this.width,
       "height": this.height,
     });
 
-    node.nodeObject = this;
+    vertice.verticeObject = this;
 
-    return node;
+    return vertice;
   };
 
-  // append new node to graph
-  var addNode = function(e) {
-    var node = new Node().createElement();
+  // append new vertice to graph
+  var addVertice = function(e) {
+    var vertice = new Vertice().createElement();
 
     // set correct position within the graph
-    node.css({
-      "left": e.pageX - this.offsetLeft - (node.nodeObject.width / 2),
-      "top": e.pageY - this.offsetTop - (node.nodeObject.height / 2)
+    vertice.css({
+      "left": e.pageX - this.offsetLeft - (vertice.verticeObject.width / 2),
+      "top": e.pageY - this.offsetTop - (vertice.verticeObject.height / 2)
     });
 
-    // append node to graph
-    $(this).append(node);
+    // append vertice to graph
+    $(this).append(vertice);
 
     // properly handle click and drag events
-    (function(node) {
+    (function(vertice) {
       var isDragEvent = false;
-      node.addEventListener("mousedown", function(evt) {
-        // TODO check the node object for selected attr instead of hasClass
+      vertice.addEventListener("mousedown", function(evt) {
+        // TODO check the vertice object for selected attr instead of hasClass
         if (isDragEvent || $(this).hasClass("selected")) {
           isDragEvent = false;
           return;
@@ -59,7 +59,7 @@ var editor = (function($, jsPlumb) {
         $(this).on("mouseup mouseleave", function handler(e) {
           if (e.type == "mouseup") {
             // click
-            selectNode.call(this);
+            selectVertice.call(this);
           } else {
             // drag
             isDragEvent = true;
@@ -72,27 +72,27 @@ var editor = (function($, jsPlumb) {
           $(this).off("mouseup mouseleave", handler)
         });
       }, true); // use capture
-    })(node.get(0));
+    })(vertice.get(0));
 
-    jsp.draggable(node, {
+    jsp.draggable(vertice, {
       containment: true,
       filter: ".ui-resizable-handle"
       });
-    jsp.setDraggable(node, false);
+    jsp.setDraggable(vertice, false);
 
-    jsp.makeSource(node, {
+    jsp.makeSource(vertice, {
       anchor: "Continuous",
       connector: ["StateMachine", {
         curviness: 0,
         proximityLimit: 260 }],
     })
-    jsp.makeTarget(node, {
+    jsp.makeTarget(vertice, {
       dropOptions: { hoverClass: "dragHover" },
       anchor: "Continuous",
       allowLoopback: true
     });
   };
-  var selectNode = function() {
+  var selectVertice = function() {
     deselectAll();
     var $this = $(this);
     $this.addClass("selected");
@@ -104,10 +104,10 @@ var editor = (function($, jsPlumb) {
     jsp.setDraggable($this, true);
     jsp.setSourceEnabled($this, false);
 
-    return false; // don't propagate - otherwise addNode is called
+    return false; // don't propagate - otherwise addVertice is called
   };
   var deselectAll = function() {
-    var selected = $(".node.selected");
+    var selected = $(".vertice.selected");
     if (selected.length > 0) {
       jsp.setDraggable(selected, false);
       jsp.setSourceEnabled(selected, true);
@@ -120,8 +120,8 @@ var editor = (function($, jsPlumb) {
     jsp = jsPlumbInstance;
 
     $("div#container")
-      .on("dblclick", addNode)    // add new nodes on double click
-      .on("click", function(e) {  // clear selected nodes on click
+      .on("dblclick", addVertice)    // add new vertices on double click
+      .on("click", function(e) {  // clear selected vertices on click
         // only when clicked directly on the container
         if (e.target === this) deselectAll();
       });
