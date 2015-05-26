@@ -87,6 +87,10 @@ var editor = (function($, jsPlumb) {
       })
       .on("blur", function(e) {
         deselectVertice.call(this);
+      })
+      .on("keydown", function(e) {
+        // remove vertice by pressing backspace or delete
+        if (e.which === 8 || e.which === 46) jsp.remove(this);
       });
 
     jsp.draggable(vertice, {
