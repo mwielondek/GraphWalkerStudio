@@ -54,24 +54,26 @@ var editor = (function($, jsPlumb) {
     // append vertex to graph
     $(this).append(vertex);
 
+    var editLabelHandler = function() {
+      if ($(this).attr("contenteditable") == true) return;
+      $("#container").toggleClass("noselect");
+      $(this).attr("contenteditable","true");
+      // stash away old value in order to be able to
+      // restore it if user presses escape
+      var range = document.createRange(),
+          sel = window.getSelection();
+      range.selectNodeContents(this);
+      sel.removeAllRanges();
+      sel.addRange(range);
+      oldValue = sel.getRangeAt(0).startContainer.textContent;
+    };
+
     var oldValue;
     vertex.find(".label")
       .on("mousedown", function(e) {
         e.stopPropagation();
       })
-      .on("dblclick", function(e) {
-        if ($(this).attr("contenteditable") == true) return;
-        $("#container").toggleClass("noselect");
-        $(this).attr("contenteditable","true");
-        // stash away old value in order to be able to
-        // restore it if user presses escape
-        var range = document.createRange(),
-            sel = window.getSelection();
-        range.selectNodeContents(this);
-        sel.removeAllRanges();
-        sel.addRange(range);
-        oldValue = sel.getRangeAt(0).startContainer.textContent;
-      })
+      .on("dblclick", editLabelHandler)
       .on("keydown blur", function(e) {
         // on enter key press or blur
         switch(e.which) {
@@ -83,10 +85,9 @@ var editor = (function($, jsPlumb) {
           case 0:   // blur
             $(this).attr("contenteditable","false");
             $("#container").toggleClass("noselect");
-          default:
-            // prevent keypresses bubbling to div (eg. prevent remove on del/bksp)
-            e.stopPropagation();
         }
+        // prevent keypresses bubbling to div (eg. prevent remove on del/bksp)
+        e.stopPropagation();
       });
 
 
@@ -126,8 +127,14 @@ var editor = (function($, jsPlumb) {
         deselectVertex.call(this);
       })
       .on("keydown", function(e) {
-        // remove vertex by pressing backspace or delete
-        if (e.which === 8 || e.which === 46) jsp.remove(this);
+        if (e.which === 8 || e.which === 46) {
+          // remove vertex by pressing backspace or delete
+          jsp.remove(this)
+        } else if (e.which === 13) {
+          // enter label editing mode on enter press
+          e.preventDefault();
+          editLabelHandler.call($(this).find(".label").get(0));
+        };
       });
 
     jsp.draggable(vertex, {
