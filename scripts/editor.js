@@ -193,7 +193,8 @@ var editor = (function($, jsPlumb) {
   };
 
   return {
-    init: init
+    init: init,
+    editLabel: editLabel
   };
 })(jQuery, jsPlumb)
 
@@ -212,6 +213,11 @@ jsPlumb.ready(function() {
         } ],
         [ "Label", { label: "Label", id: "label", cssClass: "edge-label" }]
     ],
+  });
+
+  jsp.bind("connection", function(info) {
+    var label = info.connection.getOverlay("label").getElement();
+    editor.editLabel.setHandler(label);
   });
 
   // dbg: export jsp instance
