@@ -6,6 +6,12 @@ var editor = (function($, jsPlumb) {
     return this.get(0) === document.activeElement;
   }
 
+  $.fn.setEditLabelHandler = function() {
+    this.each(function() {
+      editLabel.setHandler(this);
+    })
+  }
+
   // ====================   VERTICE OPS  ==================== //
 
   // Default vertex properties
@@ -54,42 +60,8 @@ var editor = (function($, jsPlumb) {
     // append vertex to graph
     $(this).append(vertex);
 
-    var editLabelHandler = function() {
-      if ($(this).attr("contenteditable") == true) return;
-      $("#container").toggleClass("noselect");
-      $(this).attr("contenteditable","true");
-      // stash away old value in order to be able to
-      // restore it if user presses escape
-      var range = document.createRange(),
-          sel = window.getSelection();
-      range.selectNodeContents(this);
-      sel.removeAllRanges();
-      sel.addRange(range);
-      oldValue = sel.getRangeAt(0).startContainer.textContent;
-    };
-
-    var oldValue;
-    vertex.find(".label")
-      .on("mousedown", function(e) {
-        e.stopPropagation();
-      })
-      .on("dblclick", editLabelHandler)
-      .on("keydown blur", function(e) {
-        // on enter key press or blur
-        switch(e.which) {
-          case 27:  // escape
-            $(this).text(oldValue);
-          case 13:  // enter
-            this.blur();
-            break;
-          case 0:   // blur
-            $(this).attr("contenteditable","false");
-            $("#container").toggleClass("noselect");
-        }
-        // prevent keypresses bubbling to div (eg. prevent remove on del/bksp)
-        e.stopPropagation();
-      });
-
+    // set label edit handler
+    vertex.find(".label").setEditLabelHandler();
 
     // properly handle click and drag events
     (function(vertex) {
@@ -133,7 +105,7 @@ var editor = (function($, jsPlumb) {
         } else if (e.which === 13) {
           // enter label editing mode on enter press
           e.preventDefault();
-          editLabelHandler.call($(this).find(".label").get(0));
+          editLabel.handler.call($(this).find(".label").get(0));
         };
       });
 
@@ -170,6 +142,43 @@ var editor = (function($, jsPlumb) {
     $(this).resizable("destroy");
   };
 
+  var editLabel = {
+    oldValue: "",
+    handler: function() {
+      if ($(this).attr("contenteditable") == true) return;
+      $("#container").toggleClass("noselect");
+      $(this).attr("contenteditable","true");
+      // stash away old value in order to be able to
+      // restore it if user presses escape
+      var range = document.createRange(),
+          sel = window.getSelection();
+      range.selectNodeContents(this);
+      sel.removeAllRanges();
+      sel.addRange(range);
+      oldValue = sel.getRangeAt(0).startContainer.textContent;
+    },
+    setHandler: function(el) {
+      $(el).on("mousedown", function(e) {
+        e.stopPropagation();
+      })
+      .on("dblclick", this.handler)
+      .on("keydown blur", function(e) {
+        // on enter key press or blur
+        switch(e.which) {
+          case 27:  // escape
+            $(this).text(oldValue);
+          case 13:  // enter
+            this.blur();
+            break;
+          case 0:   // blur
+            $(this).attr("contenteditable","false");
+            $("#container").toggleClass("noselect");
+        }
+        // prevent keypresses bubbling to div (eg. prevent remove on del/bksp)
+        e.stopPropagation();
+      });
+    }
+  };
 
   // ====================  INIT ==================== //
   var init = function(jsPlumbInstance) {
@@ -181,11 +190,11 @@ var editor = (function($, jsPlumb) {
         if (e.target === this) addVertex.call(this, e);
       })
       .addClass("noselect");
-  }
+  };
 
   return {
     init: init
-  }
+  };
 })(jQuery, jsPlumb)
 
 jsPlumb.ready(function() {
