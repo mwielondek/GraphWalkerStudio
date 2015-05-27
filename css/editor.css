@@ -23,19 +23,25 @@ body {
   outline: none;
 }
 
-.label {
+.drag-hover {
+  border: 1px dotted #21cfdf;
+}
+
+.label-div {
   display: table-cell;
   vertical-align: middle;
   text-align: center;
   padding: 10px;
 }
 
-/* .label:hover {
-  background-color: rgba(210, 245, 248, 0.75);
-} */
+.label {
+  margin: 0;
+  display: inline-block;
+}
 
-.dragHover {
-  border: 1px dotted #21cfdf;
+.label:hover {
+  background-color: rgba(210, 245, 248, 0.75);
+  background-clip: content-box;
 }
 
 .noselect {

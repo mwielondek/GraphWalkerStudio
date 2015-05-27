@@ -23,7 +23,8 @@ var editor = (function($, jsPlumb) {
   Vertice.prototype.defaults = verticeDefaults;
   Vertice.prototype.createElement = function() {
     var vertice = $("<div/>").addClass("vertice").attr("tabindex","0");
-    $("<p></p>").text(this.label).addClass("label").appendTo(vertice);
+    var label = $("<p/>").text(this.label).addClass("label");
+    $("<div/>").addClass("label-div").append(label).appendTo(vertice);
 
     vertice.attr({
       "data-width": this.width,
@@ -106,7 +107,7 @@ var editor = (function($, jsPlumb) {
         proximityLimit: 260 }],
     })
     jsp.makeTarget(vertice, {
-      dropOptions: { hoverClass: "dragHover" },
+      dropOptions: { hoverClass: "drag-hover" },
       anchor: "Continuous",
       allowLoopback: true
     });
