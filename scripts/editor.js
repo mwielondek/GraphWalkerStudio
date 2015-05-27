@@ -8,54 +8,54 @@ var editor = (function($, jsPlumb) {
 
   // ====================   VERTICE OPS  ==================== //
 
-  // Default vertice properties
-  var verticeDefaults = {
-    label: "New Vertice",
+  // Default vertex properties
+  var vertexDefaults = {
+    label: "New Vertex",
     width: 120,
     height: 80
   };
 
-  var Vertice = function(label, width, height) {
+  var Vertex = function(label, width, height) {
     this.label = label || this.defaults.label;
     this.width = width || this.defaults.width;
     this.height = height || this.defaults.height;
   };
-  Vertice.prototype.defaults = verticeDefaults;
-  Vertice.prototype.createElement = function() {
-    var vertice = $("<div/>").addClass("vertice").attr("tabindex","0");
+  Vertex.prototype.defaults = vertexDefaults;
+  Vertex.prototype.createElement = function() {
+    var vertex = $("<div/>").addClass("vertex").attr("tabindex","0");
     var label = $("<p/>").text(this.label).addClass("label");
-    $("<div/>").addClass("label-div").append(label).appendTo(vertice);
+    $("<div/>").addClass("label-div").append(label).appendTo(vertex);
 
-    vertice.attr({
+    vertex.attr({
       "data-width": this.width,
       "data-height": this.height
     });
 
-    vertice.css({
+    vertex.css({
       "width": this.width,
       "height": this.height,
     });
 
-    vertice.verticeObject = this;
+    vertex.vertexObject = this;
 
-    return vertice;
+    return vertex;
   };
 
-  // append new vertice to graph
-  var addVertice = function(e) {
-    var vertice = new Vertice().createElement();
+  // append new vertex to graph
+  var addVertex = function(e) {
+    var vertex = new Vertex().createElement();
 
     // set correct position within the graph
-    vertice.css({
-      "left": e.pageX - this.offsetLeft - (vertice.verticeObject.width / 2),
-      "top": e.pageY - this.offsetTop - (vertice.verticeObject.height / 2)
+    vertex.css({
+      "left": e.pageX - this.offsetLeft - (vertex.vertexObject.width / 2),
+      "top": e.pageY - this.offsetTop - (vertex.vertexObject.height / 2)
     });
 
-    // append vertice to graph
-    $(this).append(vertice);
+    // append vertex to graph
+    $(this).append(vertex);
 
     var oldValue;
-    vertice.find(".label")
+    vertex.find(".label")
       .on("mousedown", function(e) {
         e.stopPropagation();
       })
@@ -91,9 +91,9 @@ var editor = (function($, jsPlumb) {
 
 
     // properly handle click and drag events
-    (function(vertice) {
+    (function(vertex) {
       var isDragEvent = false;
-      vertice.on("mousedown", function(evt) {
+      vertex.on("mousedown", function(evt) {
         evt.preventDefault(); // don't set focus yet
         if (isDragEvent || $(this).hasFocus()) {
           isDragEvent = false;
@@ -116,39 +116,39 @@ var editor = (function($, jsPlumb) {
           $(this).off("mouseup mouseleave", handler)
         });
       });
-    })(vertice);
+    })(vertex);
 
-    vertice
+    vertex
       .on("focus", function(e) {
-        selectVertice.call(this);
+        selectVertex.call(this);
       })
       .on("blur", function(e) {
-        deselectVertice.call(this);
+        deselectVertex.call(this);
       })
       .on("keydown", function(e) {
-        // remove vertice by pressing backspace or delete
+        // remove vertex by pressing backspace or delete
         if (e.which === 8 || e.which === 46) jsp.remove(this);
       });
 
-    jsp.draggable(vertice, {
+    jsp.draggable(vertex, {
       containment: true,
       filter: ".ui-resizable-handle"
       });
-    jsp.setDraggable(vertice, false);
+    jsp.setDraggable(vertex, false);
 
-    jsp.makeSource(vertice, {
+    jsp.makeSource(vertex, {
       anchor: "Continuous",
       connector: ["StateMachine", {
         curviness: 0,
         proximityLimit: 260 }],
     })
-    jsp.makeTarget(vertice, {
+    jsp.makeTarget(vertex, {
       dropOptions: { hoverClass: "drag-hover" },
       anchor: "Continuous",
       allowLoopback: true
     });
   };
-  var selectVertice = function() {
+  var selectVertex = function() {
     $(this).resizable({
       resize: function(e, ui) {
         jsp.revalidate(ui.element.get(0));
@@ -157,7 +157,7 @@ var editor = (function($, jsPlumb) {
     jsp.setDraggable(this, true);
     jsp.setSourceEnabled(this, false);
   };
-  var deselectVertice = function() {
+  var deselectVertex = function() {
     jsp.setDraggable(this, false);
     jsp.setSourceEnabled(this, true);
     $(this).resizable("destroy");
@@ -171,7 +171,7 @@ var editor = (function($, jsPlumb) {
     $("div#container")
       // add new vertices on double click
       .on("dblclick", function(e) {
-        if (e.target === this) addVertice.call(this, e);
+        if (e.target === this) addVertex.call(this, e);
       })
       .addClass("noselect");
   }
