@@ -54,29 +54,41 @@ var editor = (function($, jsPlumb) {
     // append vertice to graph
     $(this).append(vertice);
 
-    var labelEditHandler = function() {
-      var label = $(this).find(".label");
-      var txtInput = $("<textarea/>")
-        .val(label.text())
-        .css("width","100%")
-        .on("mousedown", function(e) {
-          e.stopPropagation();
-        })
-        .on("keydown blur", function(e) {
-          // on enter key press or blur
-          if (e.which === 13 || e.which === 0) {
-            // prepare new label and reset the click handler
-            var newLabel = label
-              .text(this.value)
-              .on("dblclick", labelEditHandler);
-            $(this).replaceWith(newLabel);
-          }
-          // prevent keypresses bubbling to div (eg. prevent remove on del/bksp)
-          e.stopPropagation();
-        });
-      label.replaceWith(txtInput);
-      txtInput.select();
-    };
+    var oldValue;
+    vertice.find(".label")
+      .on("mousedown", function(e) {
+        e.stopPropagation();
+      })
+      .on("dblclick", function(e) {
+        if ($(this).attr("contenteditable") == true) return;
+        $("#container").toggleClass("noselect");
+        $(this).attr("contenteditable","true");
+        // stash away old value in order to be able to
+        // restore it if user presses escape
+        var range = document.createRange(),
+            sel = window.getSelection();
+        range.selectNodeContents(this);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        oldValue = sel.getRangeAt(0).startContainer.textContent;
+      })
+      .on("keydown blur", function(e) {
+        // on enter key press or blur
+        switch(e.which) {
+          case 27:  // escape
+            $(this).text(oldValue);
+          case 13:  // enter
+            this.blur();
+            break;
+          case 0:   // blur
+            $(this).attr("contenteditable","false");
+            $("#container").toggleClass("noselect");
+          default:
+            // prevent keypresses bubbling to div (eg. prevent remove on del/bksp)
+            e.stopPropagation();
+        }
+      });
+
 
     // properly handle click and drag events
     (function(vertice) {
@@ -116,12 +128,6 @@ var editor = (function($, jsPlumb) {
       .on("keydown", function(e) {
         // remove vertice by pressing backspace or delete
         if (e.which === 8 || e.which === 46) jsp.remove(this);
-      })
-      .on("dblclick keydown", function(e) {
-        if (e.which === 13 || e.which === 1) {
-          e.preventDefault();
-          labelEditHandler.call(this);
-        }
       });
 
     jsp.draggable(vertice, {
@@ -166,7 +172,8 @@ var editor = (function($, jsPlumb) {
       // add new vertices on double click
       .on("dblclick", function(e) {
         if (e.target === this) addVertice.call(this, e);
-      });
+      })
+      .addClass("noselect");
   }
 
   return {

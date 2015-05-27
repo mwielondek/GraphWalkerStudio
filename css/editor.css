@@ -37,11 +37,14 @@ body {
 .label {
   margin: 0;
   display: inline-block;
+  min-width: 20px;
+  min-height: 10pt;
 }
 
-.label:hover {
+.label:hover, .label:focus {
   background-color: rgba(210, 245, 248, 0.75);
   background-clip: content-box;
+  outline: none;
 }
 
 .noselect {
