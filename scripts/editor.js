@@ -54,10 +54,33 @@ var editor = (function($, jsPlumb) {
     // append vertice to graph
     $(this).append(vertice);
 
+    var labelEditHandler = function() {
+      var label = $(this);
+      var txtInput = $("<textarea/>")
+        .val(this.innerHTML)
+        .css("width","100%")
+        .on("mousedown", function(e) {
+          e.stopPropagation();
+        })
+        .on("keydown blur", function(e) {
+          // on enter key press or blur
+          if (e.which === 13 || e.which === 0) {
+            // prepare new label and reset the click handler
+            var newLabel = label.text(this.value).click(labelEditHandler);
+            $(this).replaceWith(newLabel);
+          }
+          // prevent keypresses bubbling to div (eg. prevent remove on del/bksp)
+          e.stopPropagation();
+        });
+      label.replaceWith(txtInput);
+      txtInput.select();
+    };
+    vertice.find(".label").on("click", labelEditHandler);
+
     // properly handle click and drag events
     (function(vertice) {
       var isDragEvent = false;
-      vertice.addEventListener("mousedown", function(evt) {
+      vertice.on("mousedown", function(evt) {
         evt.preventDefault(); // don't set focus yet
         if (isDragEvent || $(this).hasFocus()) {
           isDragEvent = false;
@@ -79,8 +102,8 @@ var editor = (function($, jsPlumb) {
           }
           $(this).off("mouseup mouseleave", handler)
         });
-      }, true); // use capture
-    })(vertice.get(0));
+      });
+    })(vertice);
 
     vertice
       .on("focus", function(e) {
