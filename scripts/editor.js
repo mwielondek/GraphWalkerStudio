@@ -48,13 +48,13 @@ var editor = (function($, jsPlumb) {
   };
 
   // append new vertex to graph
-  var addVertex = function(e) {
+  var addVertex = function(mouseEvent) {
     var vertex = new Vertex().createElement();
 
     // set correct position within the graph
     vertex.css({
-      "left": e.pageX - this.offsetLeft - (vertex.vertexObject.width / 2),
-      "top": e.pageY - this.offsetTop - (vertex.vertexObject.height / 2)
+      "left": mouseEvent.pageX - this.offsetLeft - (vertex.vertexObject.width / 2),
+      "top": mouseEvent.pageY - this.offsetTop - (vertex.vertexObject.height / 2)
     });
 
     // append vertex to graph
@@ -92,12 +92,8 @@ var editor = (function($, jsPlumb) {
     })(vertex);
 
     vertex
-      .on("focus", function(e) {
-        selectVertex.call(this);
-      })
-      .on("blur", function(e) {
-        deselectVertex.call(this);
-      })
+      .on("focus", selectVertex)
+      .on("blur", deselectVertex)
       .on("keydown", function(e) {
         if (e.which === 8 || e.which === 46) {
           // remove vertex by pressing backspace or delete
@@ -127,25 +123,31 @@ var editor = (function($, jsPlumb) {
       allowLoopback: true
     });
   };
-  var selectVertex = function() {
-    $(this).resizable({
+  var selectVertex = function(vertex) {
+    // If called inline from an event handler first argument will be an
+    // event object and the vertex will be the caller (this).
+    if (vertex.target) vertex = this;
+    $(vertex).resizable({
       resize: function(e, ui) {
         jsp.revalidate(ui.element.get(0));
       }
     });
-    jsp.setDraggable(this, true);
-    jsp.setSourceEnabled(this, false);
+    jsp.setDraggable(vertex, true);
+    jsp.setSourceEnabled(vertex, false);
   };
-  var deselectVertex = function() {
-    jsp.setDraggable(this, false);
-    jsp.setSourceEnabled(this, true);
-    $(this).resizable("destroy");
+  var deselectVertex = function(vertex) {
+    // If called inline from an event handler first argument will be an
+    // event object and the vertex will be the caller (this).
+    if (vertex.target) vertex = this;
+    jsp.setDraggable(vertex, false);
+    jsp.setSourceEnabled(vertex, true);
+    $(vertex).resizable("destroy");
   };
 
   var editLabel = (function() {
     var oldValue;
     return {
-      handler: function(e) {
+      handler: function() {
         // If the element already is editable do nothing. This event might
         // fire when user tries to select a word in the label by dblclick.
         if ($(this).attr("contenteditable") === "true") {
@@ -198,11 +200,16 @@ var editor = (function($, jsPlumb) {
     jsp = jsPlumbInstance;
 
     $("div#container")
-      // add new vertices on double click
+      // Add new vertices on double click
       .on("dblclick", function(e) {
-        if (e.target === this) addVertex.call(this, e);
+        if (e.target === this) addVertex(e);
       })
+      // Disable text selection to prevent vertex labels
+      // getting highlighted when creating new vertices
       .addClass("noselect");
+
+    // Bind the target DOM of addVertex
+    addVertex = addVertex.bind($("#container").get(0));
 
     // on new connection
     jsp.bind("connection", function(info) {
