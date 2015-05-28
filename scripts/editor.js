@@ -142,43 +142,45 @@ var editor = (function($, jsPlumb) {
     $(this).resizable("destroy");
   };
 
-  var editLabel = {
-    oldValue: "",
-    handler: function() {
-      if ($(this).attr("contenteditable") == true) return;
-      $("#container").toggleClass("noselect");
-      $(this).attr("contenteditable","true");
-      // stash away old value in order to be able to
-      // restore it if user presses escape
-      var range = document.createRange(),
-          sel = window.getSelection();
-      range.selectNodeContents(this);
-      sel.removeAllRanges();
-      sel.addRange(range);
-      oldValue = sel.getRangeAt(0).startContainer.textContent;
-    },
-    setHandler: function(el) {
-      $(el).on("mousedown", function(e) {
-        e.stopPropagation();
-      })
-      .on("dblclick", this.handler)
-      .on("keydown blur", function(e) {
-        // on enter key press or blur
-        switch(e.which) {
-          case 27:  // escape
-            $(this).text(oldValue);
-          case 13:  // enter
-            this.blur();
-            break;
-          case 0:   // blur
-            $(this).attr("contenteditable","false");
-            $("#container").toggleClass("noselect");
-        }
-        // prevent keypresses bubbling to div (eg. prevent remove on del/bksp)
-        e.stopPropagation();
-      });
-    }
-  };
+  var editLabel = (function() {
+    var oldValue;
+    return {
+      handler: function() {
+        if ($(this).attr("contenteditable") == true) return;
+        $("#container").toggleClass("noselect");
+        $(this).attr("contenteditable","true");
+        // stash away old value in order to be able to
+        // restore it if user presses escape
+        var range = document.createRange(),
+            sel = window.getSelection();
+        range.selectNodeContents(this);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        oldValue = sel.getRangeAt(0).startContainer.textContent;
+      },
+      setHandler: function(el) {
+        $(el).on("mousedown", function(e) {
+          e.stopPropagation();
+        })
+        .on("dblclick", this.handler)
+        .on("keydown blur", function(e) {
+          // on enter key press or blur
+          switch(e.which) {
+            case 27:  // escape
+              $(this).text(oldValue);
+            case 13:  // enter
+              this.blur();
+              break;
+            case 0:   // blur
+              $(this).attr("contenteditable","false");
+              $("#container").toggleClass("noselect");
+          }
+          // prevent keypresses bubbling to div (eg. prevent remove on del/bksp)
+          e.stopPropagation();
+        });
+      }
+    };
+  })();
 
   // ====================  INIT ==================== //
   var init = function(jsPlumbInstance) {
