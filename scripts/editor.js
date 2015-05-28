@@ -8,7 +8,7 @@ var editor = (function($, jsPlumb) {
 
   $.fn.setEditLabelHandler = function() {
     this.each(function() {
-      editLabel.setHandler(this);
+      editLabel.attachHandlerOn(this);
     })
   }
 
@@ -145,12 +145,17 @@ var editor = (function($, jsPlumb) {
   var editLabel = (function() {
     var oldValue;
     return {
-      handler: function() {
-        if ($(this).attr("contenteditable") == true) return;
+      handler: function(e) {
+        // If the element already is editable do nothing. This event might
+        // fire when user tries to select a word in the label by dblclick.
+        if ($(this).attr("contenteditable") === "true") {
+          return;
+        };
+        // Disable noselect class and enable editing the element
         $("#container").toggleClass("noselect");
         $(this).attr("contenteditable","true");
-        // stash away old value in order to be able to
-        // restore it if user presses escape
+        // Stash away old value in order to be able to restore it if user
+        // presses escape, and preselect all text on focus.
         var range = document.createRange(),
             sel = window.getSelection();
         range.selectNodeContents(this);
@@ -158,24 +163,30 @@ var editor = (function($, jsPlumb) {
         sel.addRange(range);
         oldValue = sel.getRangeAt(0).startContainer.textContent;
       },
-      setHandler: function(el) {
+      attachHandlerOn: function(el) {
         $(el).on("mousedown", function(e) {
+          // Keep focus on clicks to allow normal mouse interaction with
+          // the text selection by preventing the event from bubbling
           e.stopPropagation();
         })
         .on("dblclick", this.handler)
         .on("keydown blur", function(e) {
-          // on enter key press or blur
+          // Turn off editing mode on escape, enter or mouseclick outside
           switch(e.which) {
             case 27:  // escape
+              // Discard changes and restore old value
               $(this).text(oldValue);
             case 13:  // enter
+              // Remove focus from element -- will call handler again
+              // due to the break statement preventing fallthrough
               this.blur();
               break;
             case 0:   // blur
+              // Disable editing mode
               $(this).attr("contenteditable","false");
               $("#container").toggleClass("noselect");
           }
-          // prevent keypresses bubbling to div (eg. prevent remove on del/bksp)
+          // Prevent keypresses bubbling to div (eg. prevent remove on del/bksp)
           e.stopPropagation();
         });
       }
@@ -192,11 +203,16 @@ var editor = (function($, jsPlumb) {
         if (e.target === this) addVertex.call(this, e);
       })
       .addClass("noselect");
+
+    // on new connection
+    jsp.bind("connection", function(info) {
+      var label = info.connection.getOverlay("label").getElement();
+      editLabel.attachHandlerOn(label);
+    });
   };
 
   return {
-    init: init,
-    editLabel: editLabel
+    init: init
   };
 })(jQuery, jsPlumb)
 
@@ -215,11 +231,6 @@ jsPlumb.ready(function() {
         } ],
         [ "Label", { label: "Label", id: "label", cssClass: "edge-label" }]
     ],
-  });
-
-  jsp.bind("connection", function(info) {
-    var label = info.connection.getOverlay("label").getElement();
-    editor.editLabel.setHandler(label);
   });
 
   // dbg: export jsp instance
