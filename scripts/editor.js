@@ -12,7 +12,7 @@ var editor = (function($, jsPlumb) {
     })
   }
 
-  // ====================   VERTICE OPS  ==================== //
+  // ====================  VERTICE OPS  ===================== //
 
   // Default vertex properties
   var vertexDefaults = {
@@ -68,17 +68,18 @@ var editor = (function($, jsPlumb) {
       var isDragEvent = false;
       vertex.on("mousedown", function(evt) {
         evt.preventDefault(); // don't set focus yet
-        if (isDragEvent || $(this).hasFocus()) {
+        if (isDragEvent || $(this).hasClass("vertex-selected")) {
           isDragEvent = false;
           return;
         }
         evt.stopImmediatePropagation();
         $(this).on("mouseup mouseleave", function handler(e) {
-          if (e.type == "mouseup") {
-            // click
-            this.focus();
-          } else {
-            // drag
+          if (e.type == "mouseup") { // click
+            // if clicked when holding down meta key add vertex to
+            // current selection, otherwise simply set focus
+            var selection = e.metaKey ? $(".vertex-selected").add(this) : this;
+            selectVertex(selection);
+          } else { // drag
             isDragEvent = true;
             var msdwn = new MouseEvent("mousedown", {
               clientX: e.clientX,
@@ -93,12 +94,12 @@ var editor = (function($, jsPlumb) {
 
     vertex
       .on("focus", selectVertex)
-      .on("blur", deselectVertex)
       .on("keydown", function(e) {
+        var selected = $(".vertex-selected");
         if (e.which === 8 || e.which === 46) {
-          // remove vertex by pressing backspace or delete
-          jsp.remove(this)
-        } else if (e.which === 13) {
+          // remove all selected vertices by pressing backspace or delete
+          jsp.remove(selected);
+        } else if (e.which === 13 && selected.length == 1) {
           // enter label editing mode on enter press
           e.preventDefault();
           editLabel.handler.call($(this).find(".label").get(0));
@@ -127,21 +128,40 @@ var editor = (function($, jsPlumb) {
     // If called inline from an event handler first argument will be an
     // event object and the vertex will be the caller (this).
     if (vertex.target) vertex = this;
-    $(vertex).resizable({
-      resize: function(e, ui) {
-        jsp.revalidate(ui.element.get(0));
-      }
-    });
+    // assert vertex is a jQuery object
+    if (!(vertex instanceof jQuery)) vertex = $(vertex);
+    // prevent infinite call loop triggered by focus listener
+    if (vertex.length == 1 && vertex.hasClass("vertex-selected")) return;
+    // if (vertex.hasClass("vertex-selected")) return;
+    // first deselect all and remove resize handler in case
+    deselectVertex($(".vertex-selected"));
+    vertex.toggleClass("vertex-selected");
     jsp.setDraggable(vertex, true);
     jsp.setSourceEnabled(vertex, false);
+    if (vertex.length > 1) {
+      jsp.addToDragSelection(vertex);
+    } else {
+      vertex.focus();
+      vertex.resizable({
+        resize: function(e, ui) {
+          jsp.revalidate(ui.element.get(0));
+        }
+      });
+    }
   };
   var deselectVertex = function(vertex) {
     // If called inline from an event handler first argument will be an
     // event object and the vertex will be the caller (this).
     if (vertex.target) vertex = this;
+    // assert vertex is a jQuery object
+    if (!(vertex instanceof jQuery)) vertex = $(vertex);
+    // if no vertices are selected do nothing
+    if (vertex.length == 0 || !vertex.hasClass("vertex-selected")) return;
+    vertex.toggleClass("vertex-selected");
+    jsp.clearDragSelection();
     jsp.setDraggable(vertex, false);
     jsp.setSourceEnabled(vertex, true);
-    $(vertex).resizable("destroy");
+    if (vertex.length == 1) vertex.resizable("destroy");
   };
 
   var editLabel = (function() {
@@ -187,6 +207,8 @@ var editor = (function($, jsPlumb) {
               // Disable editing mode
               $(this).attr("contenteditable","false");
               $("#container").toggleClass("noselect");
+              // return focus to parent vertex
+              $(this).parents(".vertex").focus();
           }
           // Prevent keypresses bubbling to div (eg. prevent remove on del/bksp)
           e.stopPropagation();
@@ -204,6 +226,13 @@ var editor = (function($, jsPlumb) {
       .on("dblclick", function(e) {
         if (e.target === this) addVertex(e);
       })
+      // Deselect vertices on click
+      .on("click", function(e) {
+        var selectedVertices = $(".vertex-selected");
+        if (e.target === this && selectedVertices.length > 0) {
+          deselectVertex(selectedVertices);
+        }
+      })
       // Disable text selection to prevent vertex labels
       // getting highlighted when creating new vertices
       .addClass("noselect");
@@ -216,6 +245,25 @@ var editor = (function($, jsPlumb) {
       var label = info.connection.getOverlay("label").getElement();
       editLabel.attachHandlerOn(label);
     });
+
+    // Fix setDraggable not handling arrays of
+    // elements correctly (see jsPlumb #383)
+    jsp._setDraggable = jsp.setDraggable;
+    jsp.setDraggable = function(elems, draggable) {
+      if (!(elems instanceof jQuery)) elems = [elems];
+      $.each(elems, function(_, el) {
+        jsp._setDraggable(el, draggable);
+      });
+    }
+
+    // Extend jsPlumb.remove to handle multiple elements
+    jsp._remove = jsp.remove;
+    jsp.remove = function(elems) {
+      if (!(elems instanceof jQuery)) elems = [elems];
+      $.each(elems, function(_, el) {
+        jsp._remove(el);
+      });
+    }
   };
 
   return {

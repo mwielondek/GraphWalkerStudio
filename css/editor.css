@@ -20,8 +20,11 @@ body {
   border-radius: 15px;
 }
 
-.vertex:focus {
+.vertex-selected {
   border: 1px solid #21cfdf;
+}
+
+.vertex:focus {
   outline: none;
 }
 
