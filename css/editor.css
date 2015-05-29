@@ -63,6 +63,10 @@ body {
   border: 1px solid black;
 }
 
+._jsPlumb_connector:focus {
+  outline: none;
+}
+
 .noselect {
   -webkit-touch-callout: none;
   -webkit-user-select: none;

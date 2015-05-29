@@ -240,10 +240,45 @@ var editor = (function($, jsPlumb) {
     // Bind the target DOM of addVertex
     addVertex = addVertex.bind($("#container").get(0));
 
+    // define selected edge style
+    var selectedEdge = {
+      paintStyle: { strokeStyle: "#25bb72", lineWidth: 3 }
+    }
+    jsp.registerConnectionType("selected", selectedEdge);
+
     // on new connection
     jsp.bind("connection", function(info) {
-      var label = info.connection.getOverlay("label").getElement();
+      // attach label edit handler
+      var jspLabel = info.connection.getOverlay("label");
+      jspLabel.setLabel("Label"); // TODO fetch pre-set default value
+      var label = jspLabel.getElement();
       editLabel.attachHandlerOn(label);
+
+      // attach edge selection handler
+      var connector = $(info.connection.connector.canvas);
+      // make connector not keyboard focusable
+      connector.attr("tabindex","-1");
+      connector.on("keydown", function(e) {
+        if (e.which === 8 || e.which === 46) {
+          // remove selected edge by pressing backspace or delete
+          this.blur();
+          jsp.detach(info.connection);
+        } else if (e.which === 13) {
+          // enter label editing mode on enter press
+          e.preventDefault();
+          editLabel.handler.call(label);
+        };
+      });
+      connector.on("blur", function() {
+        info.connection.toggleType("selected");
+      });
+    });
+
+    // when an edge is clicked
+    jsp.bind("click", function(conn) {
+      var connector = conn.connector.getDisplayElements()[0];
+      conn.toggleType("selected");
+      connector.focus();
     });
 
     // Fix setDraggable not handling arrays of
@@ -275,7 +310,7 @@ jsPlumb.ready(function() {
   var jsp = jsPlumb.getInstance({
     Container: "container",
     Endpoint: ["Dot", {radius: 2}],
-    HoverPaintStyle: {strokeStyle: "#1e8151", lineWidth: 3 },
+    HoverPaintStyle: {strokeStyle: "#0b771b", lineWidth: 3 },
     PaintStyle: {strokeStyle: "#000000", lineWidth: 1 },
     ConnectionOverlays: [
         [ "Arrow", {
@@ -284,7 +319,7 @@ jsPlumb.ready(function() {
             length: 12,
             foldback: 0.1
         } ],
-        [ "Label", { label: "Label", id: "label", cssClass: "edge-label" }]
+        [ "Label", { id: "label", cssClass: "edge-label" }]
     ],
   });
 
