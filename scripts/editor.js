@@ -1,19 +1,6 @@
 var editor = (function($, jsPlumb) {
   var jsp; // jsPlumbInstance
 
-  // ====================  EXTEND jQUERY ==================== //
-  $.fn.hasFocus = function() {
-    return this.get(0) === document.activeElement;
-  }
-
-  $.fn.setEditLabelHandler = function() {
-    this.each(function() {
-      editLabel.attachHandlerOn(this);
-    })
-  }
-
-  // ====================  VERTICE OPS  ===================== //
-
   // Default vertex properties
   var vertexDefaults = {
     label: "New Vertex",
@@ -61,7 +48,10 @@ var editor = (function($, jsPlumb) {
     $(this).append(vertex);
 
     // set label edit handler
-    vertex.find(".label").setEditLabelHandler();
+    editLabel.attachHandlerOn(vertex.find(".label"), function() {
+      // return forcus to vertex after edit
+      vertex.focus();
+    });
 
     // properly handle click and drag events
     (function(vertex) {
@@ -185,7 +175,7 @@ var editor = (function($, jsPlumb) {
         sel.addRange(range);
         oldValue = sel.getRangeAt(0).startContainer.textContent;
       },
-      attachHandlerOn: function(el) {
+      attachHandlerOn: function(el, callback) {
         $(el).on("mousedown", function(e) {
           // Keep focus on clicks to allow normal mouse interaction with
           // the text selection by preventing the event from bubbling
@@ -207,8 +197,8 @@ var editor = (function($, jsPlumb) {
               // Disable editing mode
               $(this).attr("contenteditable","false");
               $("#container").toggleClass("noselect");
-              // return focus to parent vertex
-              $(this).parents(".vertex").focus();
+              // callback
+              if (callback) callback($(this).text());
           }
           // Prevent keypresses bubbling to div (eg. prevent remove on del/bksp)
           e.stopPropagation();
@@ -252,7 +242,10 @@ var editor = (function($, jsPlumb) {
       var jspLabel = info.connection.getOverlay("label");
       jspLabel.setLabel("Label"); // TODO fetch pre-set default value
       var label = jspLabel.getElement();
-      editLabel.attachHandlerOn(label);
+      editLabel.attachHandlerOn(label, function() {
+        // return focus to connector when finished editing
+        connector.focus();
+      });
 
       // attach edge selection handler
       var connector = $(info.connection.connector.canvas);
@@ -269,16 +262,14 @@ var editor = (function($, jsPlumb) {
           editLabel.handler.call(label);
         };
       });
-      connector.on("blur", function() {
+      connector.on("focus blur", function() {
         info.connection.toggleType("selected");
       });
     });
 
     // when an edge is clicked
     jsp.bind("click", function(conn) {
-      var connector = conn.connector.getDisplayElements()[0];
-      conn.toggleType("selected");
-      connector.focus();
+      conn.connector.canvas.focus();
     });
 
     // Fix setDraggable not handling arrays of
