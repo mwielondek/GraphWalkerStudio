@@ -197,6 +197,9 @@ var editor = (function($, jsPlumb) {
               // Disable editing mode
               $(this).attr("contenteditable","false");
               $("#container").toggleClass("noselect");
+              // if we try to set label to the empty string a br tag
+              // is automatically added - remove it.
+              if ($(this).text() === "") $(this).children("br").remove();
               // callback
               if (callback) callback($(this).text());
           }
