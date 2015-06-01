@@ -199,16 +199,17 @@ var editor = (function($, jsPlumb) {
 
     return elementDimension;
   };
-  var selectMarkedVertices = function(rubberband) {
+  var selectMarkedVertices = function(rubberband, append) {
     var rubberbandOffset = getTopLeftOffset(rubberband);
-    var selection = $();
+    // If flag is set append to exisiting selection, otherwise make new selection
+    var selection = append ? $(".vertex-selected") : $();
     $(".vertex").each(function() {
       var itemOffset = getTopLeftOffset($(this));
       if(itemOffset.top > rubberbandOffset.top &&
         itemOffset.left > rubberbandOffset.left &&
         itemOffset.right < rubberbandOffset.right &&
         itemOffset.bottom < rubberbandOffset.bottom) {
-          selection = selection.add($(this));
+          selection = selection.selectorToggle($(this));
         }
     });
     if (selection.length > 0) selection.selectVertex();
@@ -312,8 +313,10 @@ var editor = (function($, jsPlumb) {
             });
           })
           .on("mouseup", function(eup) {
+            // Add to existing selection if meta key is down
+            var append = eup.metaKey;
             // Select vertices that (fully) fall inside the rubberband
-            selectMarkedVertices(rb);
+            selectMarkedVertices(rb, append);
 
             // Remove rubberband
             rb.remove();
