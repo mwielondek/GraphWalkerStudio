@@ -67,8 +67,8 @@ var editor = (function($, jsPlumb) {
           if (e.type == "mouseup") { // click
             // if clicked when holding down meta key add vertex to
             // current selection, otherwise simply set focus
-            var selection = e.metaKey ? $(".vertex-selected").add(this) : this;
-            selectVertex(selection);
+            var selection = e.metaKey ? $(".vertex-selected").add(this) : $(this);
+            selection.selectVertex();
           } else { // drag
             isDragEvent = true;
             var msdwn = new MouseEvent("mousedown", {
@@ -83,7 +83,9 @@ var editor = (function($, jsPlumb) {
     })(vertex);
 
     vertex
-      .on("focus", selectVertex)
+      .on("focus", function() {
+        $(this).selectVertex();
+      })
       .on("keydown", function(e) {
         var selected = $(".vertex-selected");
         if (e.which === 8 || e.which === 46) {
@@ -114,44 +116,37 @@ var editor = (function($, jsPlumb) {
       allowLoopback: true
     });
   };
-  var selectVertex = function(vertex) {
-    // If called inline from an event handler first argument will be an
-    // event object and the vertex will be the caller (this).
-    if (vertex.target) vertex = this;
-    // assert vertex is a jQuery object
-    if (!(vertex instanceof jQuery)) vertex = $(vertex);
+
+  $.fn.selectVertex = function() {
     // prevent infinite call loop triggered by focus listener
-    if (vertex.length == 1 && vertex.hasClass("vertex-selected")) return;
-    // if (vertex.hasClass("vertex-selected")) return;
-    // first deselect all and remove resize handler in case
-    deselectVertex($(".vertex-selected"));
-    vertex.toggleClass("vertex-selected");
-    jsp.setDraggable(vertex, true);
-    jsp.setSourceEnabled(vertex, false);
-    if (vertex.length > 1) {
-      jsp.addToDragSelection(vertex);
+    if (this.length == 1 && this.hasClass("vertex-selected")) return;
+    // first deselect all vertices
+    $(".vertex-selected").deselectVertex();
+    // set selected properties
+    this.toggleClass("vertex-selected");
+    jsp.setDraggable(this, true);
+    jsp.setSourceEnabled(this, false);
+    if (this.length > 1) {
+      // if multiple vertices are selected, add to multi-drag-selection
+      jsp.addToDragSelection(this);
     } else {
-      vertex.focus();
-      vertex.resizable({
+      // only set focus and make resizable if a single vertex is selected
+      this.focus();
+      this.resizable({
         resize: function(e, ui) {
           jsp.revalidate(ui.element.get(0));
         }
       });
     }
   };
-  var deselectVertex = function(vertex) {
-    // If called inline from an event handler first argument will be an
-    // event object and the vertex will be the caller (this).
-    if (vertex.target) vertex = this;
-    // assert vertex is a jQuery object
-    if (!(vertex instanceof jQuery)) vertex = $(vertex);
+  $.fn.deselectVertex = function() {
     // if no vertices are selected do nothing
-    if (vertex.length == 0 || !vertex.hasClass("vertex-selected")) return;
-    vertex.toggleClass("vertex-selected");
+    if (this.length == 0 || !this.hasClass("vertex-selected")) return;
+    this.toggleClass("vertex-selected");
     jsp.clearDragSelection();
-    jsp.setDraggable(vertex, false);
-    jsp.setSourceEnabled(vertex, true);
-    if (vertex.length == 1) vertex.resizable("destroy");
+    jsp.setDraggable(this, false);
+    jsp.setSourceEnabled(this, true);
+    if (this.length == 1) this.resizable("destroy");
   };
 
   var editLabel = (function() {
@@ -222,9 +217,7 @@ var editor = (function($, jsPlumb) {
       // Deselect vertices on click
       .on("click", function(e) {
         var selectedVertices = $(".vertex-selected");
-        if (e.target === this && selectedVertices.length > 0) {
-          deselectVertex(selectedVertices);
-        }
+        if (e.target === this) selectedVertices.deselectVertex();
       })
       // Disable text selection to prevent vertex labels
       // getting highlighted when creating new vertices
