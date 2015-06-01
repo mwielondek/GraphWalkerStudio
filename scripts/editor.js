@@ -266,6 +266,7 @@ var editor = (function($, jsPlumb) {
     // when an edge is clicked
     jsp.bind("click", function(conn) {
       conn.connector.canvas.focus();
+      $(".vertex-selected").deselectVertex();
     });
 
     // Fix setDraggable not handling arrays of
