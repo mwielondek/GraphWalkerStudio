@@ -185,6 +185,34 @@ var editor = (function($, jsPlumb) {
     return (Math.abs(event.clientX - otherEvent.clientX) > tolerance
         || Math.abs(event.clientY - otherEvent.clientY) > tolerance);
   }
+  // RUBBERBAND
+  var getTopLeftOffset = function(element) {
+    var elementDimension = {};
+    elementDimension.left = element.offset().left;
+    elementDimension.top =  element.offset().top;
+
+    // Distance to the left is: left + width
+    elementDimension.right = elementDimension.left + element.outerWidth();
+
+    // Distance to the top is: top + height
+    elementDimension.bottom = elementDimension.top + element.outerHeight();
+
+    return elementDimension;
+  };
+  var selectMarkedVertices = function(rubberband) {
+    var rubberbandOffset = getTopLeftOffset(rubberband);
+    var selection = $();
+    $(".vertex").each(function() {
+      var itemOffset = getTopLeftOffset($(this));
+      if(itemOffset.top > rubberbandOffset.top &&
+        itemOffset.left > rubberbandOffset.left &&
+        itemOffset.right < rubberbandOffset.right &&
+        itemOffset.bottom < rubberbandOffset.bottom) {
+          selection = selection.add($(this));
+        }
+    });
+    if (selection.length > 0) selection.selectVertex();
+  };
 
   var editLabel = (function() {
     var oldValue;
@@ -272,7 +300,10 @@ var editor = (function($, jsPlumb) {
         // Append handlers
         $(this)
           .on("mousemove", function(emv) {
-            rb.show();
+            // Show rubberband
+            if (!rb.is(":visible")) rb.show();
+
+            // Update dimensions
             rb.css({
               "top": Math.min(startpos.Y, emv.pageY - this.offsetTop),
               "left": Math.min(startpos.X, emv.pageX - this.offsetLeft),
@@ -281,8 +312,13 @@ var editor = (function($, jsPlumb) {
             });
           })
           .on("mouseup", function(eup) {
-            // TODO add selection algorithm
+            // Select vertices that (fully) fall inside the rubberband
+            selectMarkedVertices(rb);
+
+            // Remove rubberband
             rb.remove();
+
+            // Remove handlers
             $(this).off("mouseup mousemove");
           });
       })
