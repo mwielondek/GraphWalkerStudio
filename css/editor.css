@@ -69,6 +69,11 @@ body {
   opacity: 0;
 }
 
+.rubberband {
+  border: 1px dotted #0b3904;
+  position: absolute;
+}
+
 ._jsPlumb_connector:focus {
   outline: none;
 }

@@ -256,6 +256,36 @@ var editor = (function($, jsPlumb) {
         var selectedVertices = $(".vertex-selected");
         if (e.target === this) selectedVertices.deselectVertex();
       })
+      // Create a selection rubberband on click-n-drag
+      .on("mousedown", function(edwn) {
+        var startpos = {
+          Y: edwn.pageY - this.offsetTop,
+          X: edwn.pageX - this.offsetLeft
+        };
+
+        // Create the rubberband div and append it to container
+        var rb = $("<div/>").addClass("rubberband").css({
+          top: startpos.Y,
+          left: startpos.X
+        }).hide().appendTo(this);
+
+        // Append handlers
+        $(this)
+          .on("mousemove", function(emv) {
+            rb.show();
+            rb.css({
+              "top": Math.min(startpos.Y, emv.pageY - this.offsetTop),
+              "left": Math.min(startpos.X, emv.pageX - this.offsetLeft),
+              "width": Math.abs(startpos.X - emv.pageX + this.offsetLeft),
+              "height": Math.abs(startpos.Y - emv.pageY + this.offsetTop)
+            });
+          })
+          .on("mouseup", function(eup) {
+            // TODO add selection algorithm
+            rb.remove();
+            $(this).off("mouseup mousemove");
+          });
+      })
       // Disable text selection to prevent vertex labels
       // getting highlighted when creating new vertices
       .addClass("noselect");
