@@ -34,49 +34,68 @@ var editor = (function($, jsPlumb) {
     return vertex;
   };
 
-  // append new vertex to graph
+  // Append new vertex to graph
   var addVertex = function(mouseEvent) {
     var vertex = new Vertex().createElement();
 
-    // set correct position within the graph
+    // Set correct position within the graph
     vertex.css({
       "left": mouseEvent.pageX - this.offsetLeft - (vertex.vertexObject.width / 2),
       "top": mouseEvent.pageY - this.offsetTop - (vertex.vertexObject.height / 2)
     });
 
-    // append vertex to graph
+    // Append vertex to graph
     $(this).append(vertex);
 
-    // set label edit handler
+    // Set label edit handler
     editLabel.attachHandlerOn(vertex.find(".label"), function() {
-      // return forcus to vertex after edit
+      // Return forcus to vertex after edit
       vertex.focus();
     });
 
-    // properly handle click and drag events
+    // Properly handle click and drag events
     (function(vertex) {
       var isDragEvent = false;
       vertex.on("mousedown", function(evt) {
-        evt.preventDefault(); // don't set focus yet
+        // Don't set focus yet
+        evt.preventDefault();
+
+        // If it's a drag event or if the vertex already is selected do nothing
         if (isDragEvent || $(this).hasClass("vertex-selected")) {
           isDragEvent = false;
           return;
         }
         evt.stopImmediatePropagation();
+
+        // Then attach the below handler which listens for either:
+        // * mouseup over the element indicating a click
+        // * mouseleave which triggers a drag
         $(this).on("mouseup mouseleave", function handler(e) {
-          if (e.type == "mouseup") { // click
-            // if clicked when holding down meta key add vertex to
-            // current selection, otherwise simply set focus
-            var selection = e.metaKey ? $(".vertex-selected").add(this) : $(this);
-            selection.selectVertex();
-          } else { // drag
-            isDragEvent = true;
-            var msdwn = new MouseEvent("mousedown", {
-              clientX: e.clientX,
-              clientY: e.clientY
-            });
-            this.dispatchEvent(msdwn);
+          switch (e.type) {
+
+            case "mouseup": // click
+              // If clicked when holding down meta key add vertex to
+              // current selection, otherwise simply set focus
+              var selection = e.metaKey ? $(".vertex-selected").add(this) : $(this);
+              selection.selectVertex();
+              break;
+
+            case "mouseleave": // drag
+              // Dispatch the original mousedown event again this time with the
+              // isDragEvent flag to prevent the mux from intercepting it, resulting
+              // in a drag.
+              isDragEvent = true;
+
+              // Since evt is a jQuery Event we can't pass it directly to dispatchEvent,
+              // but need to create a new event with the same cursor coordinates.
+              var msdwn = new MouseEvent("mousedown", {
+                clientX: e.clientX,
+                clientY: e.clientY
+              });
+              this.dispatchEvent(msdwn);
           }
+
+          // After the click/drag, disable the handler
           $(this).off("mouseup mouseleave", handler)
         });
       });
@@ -192,10 +211,10 @@ var editor = (function($, jsPlumb) {
               // Disable editing mode
               $(this).attr("contenteditable","false");
               $("#container").toggleClass("noselect");
-              // if we try to set label to the empty string a br tag
+              // If we try to set label to the empty string a br tag
               // is automatically added - remove it.
               if ($(this).text() === "") $(this).children("br").remove();
-              // callback
+              // Callback
               if (callback) callback($(this).text());
           }
           // Prevent keypresses bubbling to div (eg. prevent remove on del/bksp)
@@ -226,34 +245,34 @@ var editor = (function($, jsPlumb) {
     // Bind the target DOM of addVertex
     addVertex = addVertex.bind($("#container").get(0));
 
-    // define selected edge style
+    // Define selected edge style
     var selectedEdge = {
       paintStyle: { strokeStyle: "#25bb72", lineWidth: 3 }
     }
     jsp.registerConnectionType("selected", selectedEdge);
 
-    // on new connection
+    // On new connection
     jsp.bind("connection", function(info) {
-      // attach label edit handler
+      // Attach label edit handler
       var jspLabel = info.connection.getOverlay("label");
       jspLabel.setLabel("Label"); // TODO fetch pre-set default value
       var label = jspLabel.getElement();
       editLabel.attachHandlerOn(label, function() {
-        // return focus to connector when finished editing
+        // Return focus to connector when finished editing
         connector.focus();
       });
 
-      // attach edge selection handler
+      // Attach edge selection handler
       var connector = $(info.connection.connector.canvas);
-      // make connector not keyboard focusable
+      // Make connector not keyboard focusable
       connector.attr("tabindex","-1");
       connector.on("keydown", function(e) {
         if (e.which === 8 || e.which === 46) {
-          // remove selected edge by pressing backspace or delete
+          // Remove selected edge by pressing backspace or delete
           this.blur();
           jsp.detach(info.connection);
         } else if (e.which === 13) {
-          // enter label editing mode on enter press
+          // Enter label editing mode on enter press
           e.preventDefault();
           editLabel.handler.call(label);
         };
@@ -263,7 +282,7 @@ var editor = (function($, jsPlumb) {
       });
     });
 
-    // when an edge is clicked
+    // When an edge is clicked
     jsp.bind("click", function(conn) {
       conn.connector.canvas.focus();
       $(".vertex-selected").deselectVertex();
@@ -311,7 +330,7 @@ jsPlumb.ready(function() {
     ],
   });
 
-  // dbg: export jsp instance
+  // DBG: export jsp instance
   window.jsp = jsp;
 
   editor.init(jsp);
