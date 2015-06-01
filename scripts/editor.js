@@ -60,43 +60,44 @@ var editor = (function($, jsPlumb) {
         // Don't set focus yet
         evt.preventDefault();
 
-        // If it's a drag event or if the vertex already is selected do nothing
+        // Set "click" handler
+        $(this).on("mouseup", function(e) {
+          // Ignore if cursor has moved
+          if (!mouseMoved(evt,e)) {
+            // If clicked when holding down meta key add vertex to
+            // current selection OR remove it if already selected,
+            // otherwise create new selection.
+            var selection = e.metaKey ? $(".vertex-selected").selectorToggle(this) : $(this);
+            selection.selectVertex();
+          }
+          // Disable both handlers after click or drag
+          $(this).off("mouseleave mouseup");
+        });
+
+        // If it's a drag event or if the vertex already is selected, do nothing
         if (isDragEvent || $(this).hasClass("vertex-selected")) {
           isDragEvent = false;
           return;
         }
+        // Stop event from triggering jsPlumb's handlers (and making a new connection)
         evt.stopImmediatePropagation();
 
-        // Then attach the below handler which listens for either:
-        // * mouseup over the element indicating a click
-        // * mouseleave which triggers a drag
-        $(this).on("mouseup mouseleave", function handler(e) {
-          switch (e.type) {
+        // When the cursor leaves the vertex trigger a drag
+        $(this).on("mouseleave", function(e) {
+          // Dispatch the original mousedown event again this time with the
+          // isDragEvent flag to prevent the mux from intercepting it, resulting
+          // in a drag.
+          isDragEvent = true;
 
-            case "mouseup": // click
-              // If clicked when holding down meta key add vertex to
-              // current selection, otherwise simply set focus
-              var selection = e.metaKey ? $(".vertex-selected").add(this) : $(this);
-              selection.selectVertex();
-              break;
-
-            case "mouseleave": // drag
-              // Dispatch the original mousedown event again this time with the
-              // isDragEvent flag to prevent the mux from intercepting it, resulting
-              // in a drag.
-              isDragEvent = true;
-
-              // Since evt is a jQuery Event we can't pass it directly to dispatchEvent,
-              // but need to create a new event with the same cursor coordinates.
-              var msdwn = new MouseEvent("mousedown", {
-                clientX: e.clientX,
-                clientY: e.clientY
-              });
-              this.dispatchEvent(msdwn);
-          }
-
-          // After the click/drag, disable the handler
-          $(this).off("mouseup mouseleave", handler)
+          // Since evt is a jQuery Event we can't pass it directly to dispatchEvent,
+          // but need to create a new event with the same cursor coordinates.
+          var msdwn = new MouseEvent("mousedown", {
+            clientX: e.clientX,
+            clientY: e.clientY
+          });
+          this.dispatchEvent(msdwn);
+          // Disable both handlers after click or drag
+          $(this).off("mouseleave mouseup");
         });
       });
     })(vertex);
@@ -137,8 +138,12 @@ var editor = (function($, jsPlumb) {
   };
 
   $.fn.selectVertex = function() {
-    // prevent infinite call loop triggered by focus listener
-    if (this.length == 1 && this.hasClass("vertex-selected")) return;
+    // When selecting a single vertex, give it focus
+    if (this.length == 1 && !this.hasFocus()) {
+      this.focus();
+      // exit here since the focus handler will retrigger this function
+      return;
+    }
     // first deselect all vertices
     $(".vertex-selected").deselectVertex();
     // set selected properties
@@ -149,8 +154,7 @@ var editor = (function($, jsPlumb) {
       // if multiple vertices are selected, add to multi-drag-selection
       jsp.addToDragSelection(this);
     } else {
-      // only set focus and make resizable if a single vertex is selected
-      this.focus();
+      // only make resizable if a single vertex is selected
       this.resizable({
         resize: function(e, ui) {
           jsp.revalidate(ui.element.get(0));
@@ -167,6 +171,20 @@ var editor = (function($, jsPlumb) {
     jsp.setSourceEnabled(this, true);
     if (this.length == 1) this.resizable("destroy");
   };
+  // Toggle selector. If selector is present remove it, if not present add it.
+  $.fn.selectorToggle = function(selector) {
+    return this.is(selector) ? this.not(selector) : this.add(selector);
+  }
+  $.fn.hasFocus = function() {
+    // TODO create exception object?
+    if (this.length > 1) throw "Error: cannot check multiple elements for focus"
+    return this.get(0) === document.activeElement;
+  }
+  var mouseMoved = function(event, otherEvent, tolerance) {
+    var tolerance = tolerance || 1;
+    return (Math.abs(event.clientX - otherEvent.clientX) > tolerance
+        || Math.abs(event.clientY - otherEvent.clientY) > tolerance);
+  }
 
   var editLabel = (function() {
     var oldValue;
