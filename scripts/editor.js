@@ -137,36 +137,46 @@ var editor = (function($, jsPlumb) {
     });
   };
 
-  $.fn.selectVertex = function() {
-    // When selecting a single vertex, give it focus
-    if (this.length == 1 && !this.hasFocus()) {
-      this.focus();
-      // exit here since the focus handler will retrigger this function
-      return;
-    }
-    // first deselect all vertices
-    $(".vertex-selected").deselectVertex();
-    // set selected properties
-    this.toggleClass("vertex-selected");
-    jsp.setDraggable(this, true);
-    jsp.setSourceEnabled(this, false);
-    if (this.length > 1) {
-      // if multiple vertices are selected, add to multi-drag-selection
-      jsp.addToDragSelection(this);
-    } else {
-      // only make resizable if a single vertex is selected
-      this.resizable({
-        start: function() {
-          // prevent rubberband selection due to the mousedown-n-drag event
-          $("#rubberband").remove();
-        },
-        resize: function(e, ui) {
-          // clear the offset and size cache and repaint the vertex
-          jsp.revalidate(ui.element.get(0));
-        }
-      });
-    }
-  };
+  $.fn.selectVertex = (function() {
+    // used to prevent function execution, for instance when setting
+    // the focus on a vertex programmatically
+    var ignoreNextTrigger = false;
+    return function() {
+      if (ignoreNextTrigger) {
+        ignoreNextTrigger = false;
+        return;
+      }
+      if (this.length > 1 || !this.hasFocus()) {
+        // When selecting a single vertex, give it focus. When selecting multiple
+        // vertices, give focus to one of them in order to properly handle keydown
+        // events such as remove.
+        ignoreNextTrigger = true;
+        this[0].focus();
+      }
+      // first deselect all vertices
+      $(".vertex-selected").deselectVertex();
+      // set selected properties
+      this.toggleClass("vertex-selected");
+      jsp.setDraggable(this, true);
+      jsp.setSourceEnabled(this, false);
+      if (this.length > 1) {
+        // if multiple vertices are selected, add to multi-drag-selection
+        jsp.addToDragSelection(this);
+      } else {
+        // only make resizable if a single vertex is selected
+        this.resizable({
+          start: function() {
+            // prevent rubberband selection due to the mousedown-n-drag event
+            $("#rubberband").remove();
+          },
+          resize: function(e, ui) {
+            // clear the offset and size cache and repaint the vertex
+            jsp.revalidate(ui.element.get(0));
+          }
+        });
+      }
+    };
+  })();
   $.fn.deselectVertex = function() {
     // if no vertices are selected do nothing
     if (this.length == 0 || !this.hasClass("vertex-selected")) return;
