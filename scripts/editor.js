@@ -156,7 +156,12 @@ var editor = (function($, jsPlumb) {
     } else {
       // only make resizable if a single vertex is selected
       this.resizable({
+        start: function() {
+          // prevent rubberband selection due to the mousedown-n-drag event
+          $("#rubberband").remove();
+        },
         resize: function(e, ui) {
+          // clear the offset and size cache and repaint the vertex
           jsp.revalidate(ui.element.get(0));
         }
       });
@@ -293,7 +298,7 @@ var editor = (function($, jsPlumb) {
         };
 
         // Create the rubberband div and append it to container
-        var rb = $("<div/>").addClass("rubberband").css({
+        var rb = $("<div/>").attr("id", "rubberband").css({
           top: startpos.Y,
           left: startpos.X
         }).hide().appendTo(this);
