@@ -12,7 +12,7 @@ studio-canvas {
   margin: 30px 30px;
 }
 
-.vertex {
+vertex {
   background-color: rgba(140, 208, 196, 0.85);
   background-clip: padding-box;
   border: 1px solid black;
@@ -21,12 +21,12 @@ studio-canvas {
   border-radius: 15px;
 }
 
-.vertex-selected {
-  border: 1px solid #21cfdf;
+vertex:focus {
+  outline: none;
 }
 
-.vertex:focus {
-  outline: none;
+.vertex-selected {
+  border: 1px solid #21cfdf;
 }
 
 .drag-hover {
