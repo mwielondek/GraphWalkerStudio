@@ -240,7 +240,7 @@ var editor = (function($, jsPlumb) {
           return;
         };
         // Disable noselect class and enable editing the element
-        $("#container").toggleClass("noselect");
+        $("studio-canvas").toggleClass("noselect");
         $(this).attr("contenteditable","true");
         // Stash away old value in order to be able to restore it if user
         // presses escape, and preselect all text on focus.
@@ -272,7 +272,7 @@ var editor = (function($, jsPlumb) {
             case 0:   // blur
               // Disable editing mode
               $(this).attr("contenteditable","false");
-              $("#container").toggleClass("noselect");
+              $("studio-canvas").toggleClass("noselect");
               // If we try to set label to the empty string a br tag
               // is automatically added - remove it.
               if ($(this).text() === "") $(this).children("br").remove();
@@ -290,7 +290,7 @@ var editor = (function($, jsPlumb) {
   var init = function(jsPlumbInstance) {
     jsp = jsPlumbInstance;
 
-    $("div#container")
+    $("studio-canvas")
       // Add new vertices on double click
       .on("dblclick", function(e) {
         if (e.target === this) addVertex(e);
@@ -345,7 +345,7 @@ var editor = (function($, jsPlumb) {
       .addClass("noselect");
 
     // Bind the target DOM of addVertex
-    addVertex = addVertex.bind($("#container").get(0));
+    addVertex = addVertex.bind($("studio-canvas").get(0));
 
     // Define selected edge style
     var selectedEdge = {
@@ -411,7 +411,8 @@ var editor = (function($, jsPlumb) {
   };
 
   return {
-    init: init
+    init: init,
+    addVertex: addVertex
   };
 })(jQuery, jsPlumb)
 

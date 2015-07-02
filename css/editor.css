@@ -3,7 +3,8 @@ body {
   font-size: 10pt;
 }
 
-#container {
+studio-canvas {
+  display: block;
   position: relative;
   width: 800px;
   height: 600px;

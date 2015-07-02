@@ -2,16 +2,39 @@
 <html>
 <head>
   <title>jsPlumb test</title>
-  <script src="../components/jquery/jquery-2.1.4.min.js" type="text/javascript"></script>
-  <script src="../components/jquery-ui/jquery-ui.js" type="text/javascript"></script>
-  <script src="../components/jsPlumb/dist/js/dom.jsPlumb-1.7.5-min.js" type="text/javascript"></script>
-  <script src="../components/riot/riot+compiler.min.js" type="text/javascript"></script>
+  <script src="../libs/jquery/jquery-2.1.4.min.js" type="text/javascript"></script>
+  <script src="../libs/jquery-ui/jquery-ui.js" type="text/javascript"></script>
+  <script src="../libs/jsPlumb/dist/js/dom.jsPlumb-1.7.5-min.js" type="text/javascript"></script>
+  <script src="../libs/riot/riot+compiler.min.js" type="text/javascript"></script>
   <script src="../scripts/editor.js" type="text/javascript"></script>
   <link rel="stylesheet" href="../css/editor.css">
-  <link rel="stylesheet" href="../components/jquery-ui/jquery-ui.css">
+  <link rel="stylesheet" href="../libs/jquery-ui/jquery-ui.css">
 </head>
 <body>
-  <div id="container">
-  </div>
+  <studioapp></studioapp>
+
+  <!-- begin riot -->
+  <script src="../scripts/riotcontrol.js"></script>
+  <script src="../scripts/modelstore.js"></script>
+  <!-- tags -->
+  <script src="../scripts/studioapp.tag" type="riot/tag"></script>
+  <script src="../scripts/canvas.tag" type="riot/tag"></script>
+  <script src="../scripts/vertex.tag" type="riot/tag"></script>
+
+  <script>
+    window.debug = true
+    // disable log output if not in debug mode
+    if (!window.debug) console.log = function() {}
+
+    var testVertices = [{label: 'test', view: {top: '100px', left: '100px'}}, {label: 'test2'},
+    {label: 'test3', view: {top: '300px'}}]
+
+    var modelStore = new ModelStore(testVertices)
+    RiotControl.addStore(modelStore)
+    riot.compile(function() {
+      window.sa = riot.mount('studioapp')
+    })
+  </script>
+  <!-- end riot -->
 </body>
 </html>
