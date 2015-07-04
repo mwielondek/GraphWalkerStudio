@@ -1,6 +1,6 @@
 <studioapp>
   <p>Studio</p>
-  <studio-canvas/>
+  <studio-canvas options={ opts.canvas } />
 
 
 </studioapp>

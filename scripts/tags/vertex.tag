@@ -6,10 +6,23 @@
 
   var self = this
 
+  self.defaults = {
+    label: 'New Vertex',
+    view: {
+      width: 120,
+      height: 80
+    }
+  };
+  // Merge options with defaults into self
+  $.extend(true, self, self.defaults, self.opts.options);
+
   self.on('update', function() {
-    // only update the css if view property present
-    if (!self.view) return
-    var css = $.extend({},self.view,{'position':'absolute'})
+    var css = {
+      'height': self.view.height,
+      'width': self.view.width,
+      'top': self.view.centerY - (self.view.height / 2),
+      'left': self.view.centerX - (self.view.width / 2)
+    };
     $(self.root).css(css)
   })
 </vertex>

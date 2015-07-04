@@ -10,7 +10,6 @@ define(['riot'], function(riot) {
     })
 
     self.on('vertex_add', function(vertex) {
-      console.log("vertex_add: ", vertex);
       self.vertices.push(vertex)
       self.trigger('vertex_change', self.vertices)
     })

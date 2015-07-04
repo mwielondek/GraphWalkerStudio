@@ -9,7 +9,7 @@ var config = {
   },
   shim: {
     'tag/vertex': ['jquery'],
-    'tag/canvas': ['app/riotcontrol']
+    'tag/canvas': ['app/riotcontrol','jquery']
   }
 };
 // Prevent browser caching
@@ -17,6 +17,23 @@ if (window.debug) config.urlArgs = "bust=" +  (new Date()).getTime();
 requirejs.config(config);
 
 requirejs(['app/studioapp'], function(StudioApp) {
-  // disable log output if not in debug mode
-  if (!window.debug) console.log = function() {}
+  if (window.debug) {
+    window.StudioApp = StudioApp;
+  } else {
+    // disable log output if not in debug mode
+    console.log = function() {};
+  }
+
+  StudioApp.init({
+    canvas: {
+      bg: '#FF0000',
+      vertex: {
+        label: 'Custom name',
+        view: {
+          width: 200
+        }
+      }
+    }
+  });
+  // StudioApp.init();
 });
