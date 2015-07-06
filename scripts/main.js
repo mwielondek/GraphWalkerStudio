@@ -9,9 +9,7 @@ var config = {
     tag: '../scripts/tags/js'
   },
   shim: {
-    'tag/Studio': ['tag/Canvas'],
-    'tag/Canvas': ['app/RiotControl','jquery', 'tag/Vertex'],
-    'tag/Vertex': ['jquery']
+    'tag/Studio': ['riot', 'jquery', 'app/RiotControl']
   }
 };
 // Prevent browser caching

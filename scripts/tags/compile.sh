@@ -1,8 +1,9 @@
-cd $(dirname $0)
-# if no args given, compile all tag files in folder
 if [ $# -eq 0 ]
-then 
-  find *.tag -type f -print | sed 'p;s/\(.*\).tag/js\/\1.js/' | xargs -n2 riot -m 
+then
+  echo "usage: $0 <outputdir>"
 else
-  echo $1 | gsed 's/.*\///' | gsed 'p;{s/^/js\//;s/\.tag/\.js/}' | xargs -n2 riot -m
+  [ -d $1 ] || mkdir $1
+  cat *.tag > $1/compiled.tag && cd $1
+  riot -m compiled.tag Studio.js
+  rm compiled.tag
 fi

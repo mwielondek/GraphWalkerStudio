@@ -1,6 +1,9 @@
 <studio-canvas>
   <vertex each={ vertex, i in vertices } options={ parent.mergeVertexOptions(vertex) } />
 
+  var RiotControl = require('app/RiotControl');
+  var $ = require('jquery');
+
   var self = this
 
   self.vertices = []

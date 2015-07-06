@@ -3,6 +3,7 @@
     <p class="label">{ label }</p>
   </div>
 
+  var $ = require('jquery');
 
   var self = this
 

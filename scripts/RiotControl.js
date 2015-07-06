@@ -1,5 +1,5 @@
 define(function() {
-  RiotControl = {
+  var RiotControl = {
     _stores: [],
     addStore: function(store) {
       this._stores.push(store);
@@ -14,4 +14,6 @@ define(function() {
       });
     };
   });
+
+  return RiotControl;
 });

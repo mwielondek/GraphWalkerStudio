@@ -1,5 +1,5 @@
 define(['riot'], function(riot) {
-  return function ModelStore(vertices, edges) {
+  return function VertexStore(vertices, edges) {
     var self = riot.observable(this)
 
     self.vertices = vertices || []
