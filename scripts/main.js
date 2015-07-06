@@ -5,18 +5,20 @@ var config = {
   baseUrl: 'lib',
   paths: {
     app: '../scripts',
+    store: '../scripts/stores',
     tag: '../scripts/tags/js'
   },
   shim: {
-    'tag/vertex': ['jquery'],
-    'tag/canvas': ['app/riotcontrol','jquery']
+    'tag/Studio': ['tag/Canvas'],
+    'tag/Canvas': ['app/RiotControl','jquery', 'tag/Vertex'],
+    'tag/Vertex': ['jquery']
   }
 };
 // Prevent browser caching
 if (window.debug) config.urlArgs = "bust=" +  (new Date()).getTime();
 requirejs.config(config);
 
-requirejs(['app/studioapp'], function(StudioApp) {
+requirejs(['app/StudioApp'], function(StudioApp) {
   if (window.debug) {
     window.StudioApp = StudioApp;
   } else {
