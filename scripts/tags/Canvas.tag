@@ -1,6 +1,17 @@
 <studio-canvas>
   <vertex each={ vertex, i in vertices } options={ parent.mergeVertexOptions(vertex) } />
 
+  <style>
+  studio-canvas {
+    display: block;
+    position: relative;
+    width: 800px;
+    height: 600px;
+    background-color: #f0f0f0;
+    margin: 30px 30px;
+  }
+  </style>
+
   var $             = require('jquery');
   var RiotControl   = require('app/RiotControl');
   var VertexActions = require('action/VertexActions');
