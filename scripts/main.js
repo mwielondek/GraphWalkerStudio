@@ -4,20 +4,22 @@ window.debug = true
 var config = {
   baseUrl: 'lib',
   paths: {
-    app: '../scripts',
-    store: '../scripts/stores',
-    tag: '../scripts/tags/js'
+    app:    '../scripts',
+    action: '../scripts/actions',
+    store:  '../scripts/stores',
+    tag:    '../scripts/tags/js'
   },
   shim: {
-    // merge all the tag shims into tag/Studio
+    // Merge all the tag shims into tag/Studio
     'tag/Studio': (function() {
       var tagShims = {
-        'tag/Canvas': ['riot', 'jquery', 'app/RiotControl', 'action/VertexConstants'],
+        'tag/Canvas': ['riot', 'jquery', 'app/RiotControl', 'action/VertexActions'],
         'tag/Vertex': ['jquery']
       };
       var compiledShim = [];
       for (var prop in tagShims) {
         if (tagShims[prop].constructor !== Array) continue;
+        // Filter out duplicates and concatenate
         compiledShim = compiledShim.concat(tagShims[prop].filter(
           function(el) { return compiledShim.indexOf(el) == -1 }));
       }

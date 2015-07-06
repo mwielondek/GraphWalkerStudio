@@ -1,8 +1,9 @@
 <studio-canvas>
   <vertex each={ vertex, i in vertices } options={ parent.mergeVertexOptions(vertex) } />
 
-  var RiotControl = require('app/RiotControl');
-  var $ = require('jquery');
+  var $             = require('jquery');
+  var RiotControl   = require('app/RiotControl');
+  var VertexActions = require('action/VertexActions');
 
   var self = this
 
@@ -17,24 +18,27 @@
     return $.extend(true, {}, self.opts.options.vertex, vertexObject);
   }
 
-  RiotControl.on('vertex_change', function(vertices) {
-    self.vertices = vertices
-    self.update()
-  })
-
   addVertex(e) {
+    // Prepare vertex object
     var vertex = {
       view: {
         centerY: e.pageY - self.root.offsetTop,
         centerX: e.pageX - self.root.offsetLeft
       }
     }
-    RiotControl.trigger('vertex_add', vertex)
+    // Dispatch action
+    VertexActions.addVertex(vertex);
   }
 
+  VertexActions.addChangeListener(function(vertices) {
+    self.vertices = vertices
+    self.update()
+  })
+
   self.on('mount', function() {
-    // Load vertices from model store
-    RiotControl.trigger('canvas_init')
+    // Load vertices from model store. `getAll` will make the registered stores emit a change event,
+    // together with a list of vertex objects, which in turn will trigger the change listener above.
+    VertexActions.getAll()
 
     // Set up event listeners
     $(self.root)
