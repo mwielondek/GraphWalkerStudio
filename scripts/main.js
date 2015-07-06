@@ -9,9 +9,23 @@ var config = {
     tag: '../scripts/tags/js'
   },
   shim: {
-    'tag/Studio': ['riot', 'jquery', 'app/RiotControl']
+    // merge all the tag shims into tag/Studio
+    'tag/Studio': (function() {
+      var tagShims = {
+        'tag/Canvas': ['riot', 'jquery', 'app/RiotControl', 'action/VertexConstants'],
+        'tag/Vertex': ['jquery']
+      };
+      var compiledShim = [];
+      for (var prop in tagShims) {
+        if (tagShims[prop].constructor !== Array) continue;
+        compiledShim = compiledShim.concat(tagShims[prop].filter(
+          function(el) { return compiledShim.indexOf(el) == -1 }));
+      }
+      return compiledShim;
+    })()
   }
 };
+
 // Prevent browser caching
 if (window.debug) config.urlArgs = "bust=" +  (new Date()).getTime();
 requirejs.config(config);
