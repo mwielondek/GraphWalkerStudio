@@ -7,14 +7,20 @@
   this.context = '';
   this.selection = [];
 
-  updateSelection(vertex, append) {
+  updateSelection(vertex, toggle) {
     // If vertex is falsy, clear selection
     if (!vertex) {
       this.selection = [];
     } else {
-      if (append && this.selection.indexOf(vertex) < 0) {
-        // Append to existing selection if append flag is set and not already selected
-        this.selection.push(vertex);
+      if (toggle) {
+        var index = this.selection.indexOf(vertex);
+        if (index == -1) {
+          // If vertex isn't currently selected, add it to selection
+          this.selection.push(vertex);
+        } else {
+          // If vertex is currently selected, deselect it
+          this.selection.splice(index, 1);
+        }
       } else {
         this.selection = [vertex];
       }
