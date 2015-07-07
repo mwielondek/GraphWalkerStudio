@@ -1,5 +1,6 @@
 <studio-canvas>
-  <vertex each={ vertex, i in vertices } options={ parent.mergeVertexOptions(vertex) } />
+  <vertex each={ vertex, i in vertices } options={ parent.mergeVertexOptions(vertex) }
+    isselected={ parent.opts.selection.indexOf(vertex.id) != -1 } onselect={ parent.opts.onselect }/>
 
   <style>
   studio-canvas {
@@ -56,6 +57,10 @@
       // Add new vertices on double click
       .on("dblclick", function(e) {
         if (e.target === this) self.addVertex(e);
+      })
+      // Deselect vertices on click
+      .on("click", function(e) {
+        if (e.target == this) self.opts.onselect(0);
       });
 
   });

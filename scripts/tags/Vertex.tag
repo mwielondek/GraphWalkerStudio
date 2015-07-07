@@ -1,10 +1,12 @@
-<vertex tabindex="0">
-  <div class="label-div">
-    <p class="label">{ label }</p>
+<vertex>
+  <div class="vertex { selected: opts.isselected }" tabindex="0" onclick={ onClickHandle }>
+    <div class="label-div">
+      <p class="label">{ label }</p>
+    </div>
   </div>
 
   <style>
-  vertex {
+  .vertex {
     background-color: rgba(140, 208, 196, 0.85);
     background-clip: padding-box;
     border: 1px solid black;
@@ -13,11 +15,11 @@
     border-radius: 15px;
   }
 
-  vertex:focus {
+  .vertex:focus {
     outline: none;
   }
 
-  vertex.selected {
+  .vertex.selected {
     border: 1px solid #21cfdf;
   }
 
@@ -67,6 +69,10 @@
       'top': self.view.centerY - (self.view.height / 2),
       'left': self.view.centerX - (self.view.width / 2)
     };
-    $(self.root).css(css)
-  })
+    $(self.root).children('.vertex').css(css);
+  });
+
+  onClickHandle(e) {
+    this.opts.onselect(e.item.vertex.id);
+  }
 </vertex>

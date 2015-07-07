@@ -16,6 +16,9 @@ define(['riot', 'action/VertexConstants', 'app/RiotControl'], function(riot, Act
     })
 
     self.on(Actions.ADD_VERTEX, function(vertex) {
+      if (!vertex.id) {
+        vertex.id = Math.random().toString(16).substr(2); // TODO: get the ID from GW
+      }
       self.vertices.push(vertex)
       self.trigger(EMIT_CHANGE, self.vertices)
     })
