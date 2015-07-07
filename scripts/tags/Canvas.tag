@@ -6,10 +6,9 @@
   studio-canvas {
     display: block;
     position: relative;
-    width: 800px;
-    height: 600px;
+    height: 100%;
+    margin-right: 320px;
     background-color: #f0f0f0;
-    margin: 30px 30px;
   }
   </style>
 

@@ -1,5 +1,6 @@
 <studio>
   <p>Studio</p>
+  <studio-contextpane />
   <studio-canvas options={ opts.canvas } selection={ selection } onselect={ updateSelection } />
 
 
