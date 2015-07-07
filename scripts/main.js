@@ -40,16 +40,5 @@ requirejs(['app/StudioApp'], function(StudioApp) {
     console.log = function() {};
   }
 
-  StudioApp.init({
-    canvas: {
-      bg: '#FF0000',
-      vertex: {
-        label: 'Custom name',
-        view: {
-          width: 200
-        }
-      }
-    }
-  });
-  // StudioApp.init();
+  StudioApp.init();
 });

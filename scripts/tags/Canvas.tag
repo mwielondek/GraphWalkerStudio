@@ -1,6 +1,6 @@
 <studio-canvas>
-  <vertex each={ vertex, i in vertices } options={ parent.mergeVertexOptions(vertex) }
-    isselected={ parent.opts.selection.indexOf(vertex.id) != -1 } onselect={ parent.opts.onselect }/>
+  <vertex each={ vertices } isselected={ parent.opts.selection.indexOf(id) != -1 }
+    onselect={ parent.opts.onselect }/>
 
   <style>
   studio-canvas {
@@ -20,15 +20,6 @@
   var self = this
 
   self.vertices = []
-
-  self.defaults = {
-    bg: "#FFFFFF"
-  };
-  self.settings = $.extend({}, self.defaults, self.opts.options);
-
-  mergeVertexOptions(vertexObject) {
-    return $.extend(true, {}, self.opts.options.vertex, vertexObject);
-  }
 
   addVertex(e) {
     // Prepare vertex object

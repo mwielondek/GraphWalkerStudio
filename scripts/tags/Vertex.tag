@@ -59,8 +59,11 @@
       height: 80
     }
   };
-  // Merge options with defaults into self
-  $.extend(true, self, self.defaults, self.opts.options);
+
+  self.one('update', function() {
+    // Merge defaults into self
+    $.extend(true, self, self.defaults);
+  });
 
   self.on('update', function() {
     var css = {
@@ -75,6 +78,6 @@
   onClickHandle(e) {
     // Select vertex, or add it to existing selection if
     // meta key was down during the click.
-    this.opts.onselect(e.item.vertex.id, e.metaKey);
+    this.opts.onselect(this.id, e.metaKey);
   }
 </vertex>
