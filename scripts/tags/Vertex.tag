@@ -73,6 +73,8 @@
   });
 
   onClickHandle(e) {
-    this.opts.onselect(e.item.vertex.id);
+    // Select vertex, or add it to existing selection if
+    // meta key was down during the click.
+    this.opts.onselect(e.item.vertex.id, e.metaKey);
   }
 </vertex>
