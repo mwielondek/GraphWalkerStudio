@@ -14,7 +14,7 @@
       <ul>
         <li>URL: <input name="ws_url" />
         <button onclick="{ toggleConnection }">{ connected ? 'Disconnect' : 'Connect' }</button></li>
-        <li><textarea name="output" readonly="true">output</textarea></li>
+        <li><textarea name="output" readonly="true"></textarea></li>
       </ul>
     </div>
   </div>
@@ -51,22 +51,34 @@
 
   this.connected = false;
 
+  var _this = this;
+  this.on("mount", function() {
+    // Prepare for reading data from WebSocket
+    _this.reader = new FileReader();
+    _this.reader.addEventListener("loadend", function() {
+      var data = _this.reader.result;
+      // Print data to output
+      _this.write(data);
+      // Do something with the data object
+      var dataObject = JSON.parse(data);
+    });
+  });
+
   toggleConnection() {
     this.connected ? this.disconnect() : this.connect();
   }
   connect() {
-
     var url = this.ws_url.value || (window.debug ? 'ws://localhost:9999' : '');
     this.write('connecting to', url);
     var ws = new WebSocket(url);
-    this.websocket = ws;
+    window.ws = this.websocket = ws;
 
     var _this = this;
     ws.onopen = function() {
       _this.write('connection opened');
       _this.connected = true;
       _this.update();
-      ws.send('hello there');
+      // ws.send('hello there');
     };
     ws.onclose = function() {
       _this.write('disconnected');
@@ -74,7 +86,8 @@
       _this.update();
     };
     ws.onmessage = function(evt) {
-      _this.write('message', evt.data);
+      // Data comes in form of a blob
+      _this.reader.readAsText(evt.data);
     };
   }
   disconnect() {
