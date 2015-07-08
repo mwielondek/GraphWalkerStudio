@@ -9,6 +9,9 @@ var config = {
     store:  '../scripts/stores',
     tag:    '../scripts/tags/js'
   },
+  // map: {
+  //   '*': { 'riot': 'riot_wip' }
+  // },
   shim: {
     // Merge all the tag shims into tag/Studio
     'tag/Studio': (function() {
