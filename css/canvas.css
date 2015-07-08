@@ -2,6 +2,7 @@ html, body {
   font-family: Verdana;
   font-size: 10pt;
   height: 100%;
+  overflow: hidden;
 }
 
 .drag-hover {

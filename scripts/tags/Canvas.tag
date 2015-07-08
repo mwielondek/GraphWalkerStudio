@@ -4,9 +4,9 @@
 
   <style>
   studio-canvas {
+    height: 100%;
     display: block;
     position: relative;
-    height: 100%;
     margin-right: 320px;
     background-color: #f0f0f0;
   }

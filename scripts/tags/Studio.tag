@@ -3,6 +3,12 @@
   <studio-contextpane />
   <studio-canvas options={ opts.canvas } selection={ selection } onselect={ updateSelection } />
 
+  <style>
+    studio {
+      height: 90%;
+      display: block;
+    }
+  </style>
 
   // STATE
   this.context = '';
