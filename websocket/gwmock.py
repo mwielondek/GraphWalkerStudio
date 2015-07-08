@@ -1,4 +1,4 @@
-import sys
+import sys, json, random
 from SimpleWebSocketServer import WebSocket, SimpleWebSocketServer
 
 DEFAULT_PORT = 9999
@@ -11,7 +11,20 @@ class Mock(WebSocket):
 
     def handleMessage(self):
         print "Received message: %s" % self.data
-        self.sendMessage(self.data)
+
+        request = json.loads(self.data)
+
+        # Prepare mock response
+        response = {}
+        # response type always the same as request type
+        response['type'] = request['type']
+
+        if request['type'] == "ADDVERTEX":
+            response['success'] = True
+            # generate random ID
+            response['id'] = ("v_%x" % random.randint(0x0, 0xFFFFF))
+
+        self.sendMessage(json.dumps(response))
 
     def handleConnected(self):
         print "Connection opened"
