@@ -1,4 +1,4 @@
-window.debug = true
+window.debug = (window.location.hostname == 'localhost' ? true : false)
 
 // RequireJS config
 var config = {
