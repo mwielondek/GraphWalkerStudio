@@ -46,4 +46,22 @@
       min-height: 100px;
     }
   </style>
+
+  connect() {
+    var url = this.ws_url.value;
+    this.write('connecting to', url);
+    var ws = new WebSocket(url);
+
+    var _this = this;
+    ws.onopen = function() {
+      _this.write('connection opened');
+      ws.send('hello there');
+    };
+    ws.onmessage = function(evt) {
+      _this.write('message', evt.data);
+    };
+  }
+  write() {
+    this.output.value += '\n' + [].slice.call(arguments, 0).join(' ');
+  }
 </studio-contextpane>
