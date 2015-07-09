@@ -55,6 +55,23 @@
 
   var _this = this;
   this.on("mount", function() {
+    // Set up connection listeners
+    ConnectionActions.addConnectionListener({
+      onopen: function(websocket) {
+        _this.write('connection opened');
+        _this.connected = true;
+        _this.update();
+      },
+      onclose: function() {
+        _this.write('disconnected');
+        _this.connected = false;
+        _this.update();
+      },
+      onmessage: function(evt) {
+        // Data comes in form of a blob
+        _this.reader.readAsText(evt.data);
+      }
+    });
     // Prepare for reading data from WebSocket
     _this.reader = new FileReader();
     _this.reader.addEventListener("loadend", function() {
@@ -73,30 +90,14 @@
     var url = this.ws_url.value || (window.debug ? 'ws://localhost:9999' : '');
     this.write('connecting to', url);
 
-    ConnectionActions.connect(url, function() {
-      console.log('connected');
+    ConnectionActions.isSocketOpen(function(isOpen) {
+      // Close existing connection before connecting anew
+      if (isOpen) ConnectionActions.disconnect();
+      ConnectionActions.connect(url);
     });
-
-
-    // var _this = this;
-    // ws.onopen = function() {
-    //   _this.write('connection opened');
-    //   _this.connected = true;
-    //   _this.update();
-    //   // ws.send('hello there');
-    // };
-    // ws.onclose = function() {
-    //   _this.write('disconnected');
-    //   _this.connected = false;
-    //   _this.update();
-    // };
-    // ws.onmessage = function(evt) {
-    //   // Data comes in form of a blob
-    //   _this.reader.readAsText(evt.data);
-    // };
   }
   disconnect() {
-    this.websocket.close();
+    ConnectionActions.disconnect();
   }
   write() {
     this.output.value += '\n' + [].slice.call(arguments, 0).join(' ');
