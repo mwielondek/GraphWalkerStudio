@@ -49,6 +49,8 @@
     }
   </style>
 
+  var ConnectionActions = require('action/ConnectionActions');
+
   this.connected = false;
 
   var _this = this;
@@ -70,25 +72,28 @@
   connect() {
     var url = this.ws_url.value || (window.debug ? 'ws://localhost:9999' : '');
     this.write('connecting to', url);
-    var ws = new WebSocket(url);
-    window.ws = this.websocket = ws;
 
-    var _this = this;
-    ws.onopen = function() {
-      _this.write('connection opened');
-      _this.connected = true;
-      _this.update();
-      // ws.send('hello there');
-    };
-    ws.onclose = function() {
-      _this.write('disconnected');
-      _this.connected = false;
-      _this.update();
-    };
-    ws.onmessage = function(evt) {
-      // Data comes in form of a blob
-      _this.reader.readAsText(evt.data);
-    };
+    ConnectionActions.connect(url, function() {
+      console.log('connected');
+    });
+
+
+    // var _this = this;
+    // ws.onopen = function() {
+    //   _this.write('connection opened');
+    //   _this.connected = true;
+    //   _this.update();
+    //   // ws.send('hello there');
+    // };
+    // ws.onclose = function() {
+    //   _this.write('disconnected');
+    //   _this.connected = false;
+    //   _this.update();
+    // };
+    // ws.onmessage = function(evt) {
+    //   // Data comes in form of a blob
+    //   _this.reader.readAsText(evt.data);
+    // };
   }
   disconnect() {
     this.websocket.close();

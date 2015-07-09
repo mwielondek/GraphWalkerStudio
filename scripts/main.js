@@ -17,7 +17,8 @@ var config = {
     'tag/Studio': (function() {
       var tagShims = {
         'tag/Canvas': ['riot', 'jquery', 'app/RiotControl', 'action/VertexActions'],
-        'tag/Vertex': ['jquery', 'action/VertexConstants']
+        'tag/Vertex': ['jquery', 'action/VertexConstants'],
+        'tag/ContextPane': ['action/ConnectionActions'] // TODO: extract settings to own tag?
       };
       var compiledShim = [];
       for (var prop in tagShims) {
