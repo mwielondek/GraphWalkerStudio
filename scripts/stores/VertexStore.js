@@ -12,8 +12,8 @@ define(['riot', 'constants/VertexConstants', 'app/RiotControl'], function(riot, 
     // Event listeners
     var Actions = Constants.actions;
     const EMIT_CHANGE = Actions.VERTEX_LIST_CHANGED
-    self.on(Actions.GET_ALL, function() {
-      self.trigger(EMIT_CHANGE, self.vertices)
+    self.on(Actions.GET_ALL, function(callback) {
+      callback(self.vertices)
     })
 
     self.on(Actions.ADD_VERTEX, function(vertex) {

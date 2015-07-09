@@ -9,8 +9,8 @@ define(['app/RiotControl', 'constants/VertexConstants'], function(RiotControl, C
     },
 
     // Triggers
-    getAll: function() {
-      RiotControl.trigger(Actions.GET_ALL);
+    getAll: function(callback) {
+      RiotControl.trigger(Actions.GET_ALL, callback);
     },
     addVertex: function(newVertex) {
       RiotControl.trigger(Actions.ADD_VERTEX, newVertex);

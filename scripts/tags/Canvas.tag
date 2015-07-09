@@ -32,16 +32,16 @@
     VertexActions.addVertex(vertex);
   }
 
+  VertexActions.getAll(function(vertices) {
+    self.vertices = vertices;
+  });
+
   VertexActions.addChangeListener(function(vertices) {
     self.vertices = vertices
     self.update()
   })
 
   self.on('mount', function() {
-    // Load vertices from model store. `getAll` will make the registered stores emit a change event,
-    // together with a list of vertex objects, which in turn will trigger the change listener above.
-    VertexActions.getAll()
-
     // Set up event listeners
     $(self.root)
       // Add new vertices on double click
