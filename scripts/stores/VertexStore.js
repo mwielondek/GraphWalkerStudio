@@ -23,7 +23,6 @@ define(['riot', 'constants/VertexConstants', 'app/RiotControl', 'jquery'], funct
     });
 
     self.on(CALLS.CHANGE_VERTEX, function(query, props) {
-      console.log('change vertex, query, type', query, typeof query);
       if (query !== null && typeof query === 'object') {
         // Search by object
         var vertex = self.vertices.filter(function(el) { return el === query })[0];
