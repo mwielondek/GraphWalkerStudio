@@ -12,23 +12,26 @@ class Mock(WebSocket):
     def handleMessage(self):
         print "Received message: %s" % self.data
 
-        request = json.loads(self.data)
+        try:
+            request = json.loads(self.data)
 
-        # Prepare mock response
-        response = {}
-        # response type always the same as request type
-        response['type'] = request['type']
+            # Prepare mock response
+            response = {}
+            # response type always the same as request type
+            response['type'] = request['type']
 
-        if request['type'] == "ADDVERTEX":
-            if not request['forcefail']:
-                response['success'] = True
-                # generate random ID
-                response['id'] = ("v_%x" % random.randint(0x0, 0xFFFFF))
-            else:
-                response['success'] = False
-                response['msg'] = 'Failed to create Vertex'
+            if request['type'] == "ADDVERTEX":
+                if not request.get('forcefail'):
+                    response['success'] = True
+                    # generate random ID
+                    response['id'] = ("v_%x" % random.randint(0x0, 0xFFFFF))
+                else:
+                    response['success'] = False
+                    response['msg'] = 'Failed to create Vertex'
 
-        self.sendMessage(json.dumps(response))
+            self.sendMessage(json.dumps(response))
+        except Exception as e:
+            print "Couldn't decipher request: %s" % e
 
     def handleConnected(self):
         print "Connection opened"
