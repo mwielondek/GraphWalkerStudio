@@ -17,7 +17,7 @@ var config = {
     'tag/Studio': (function() {
       var tagShims = {
         'tag/Canvas': ['riot', 'jquery', 'app/RiotControl', 'action/VertexActions'],
-        'tag/Vertex': ['jquery']
+        'tag/Vertex': ['jquery', 'action/VertexConstants']
       };
       var compiledShim = [];
       for (var prop in tagShims) {

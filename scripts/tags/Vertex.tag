@@ -1,5 +1,6 @@
 <vertex>
-  <div class="vertex { selected: opts.isselected }" tabindex="0" onclick={ onClickHandle }>
+  <!-- TODO: remove dedicated vertex-div below and move attr to vertex tag above once riot/#924 fixed -->
+  <div class="vertex { selected: opts.isselected } { status }" tabindex="0" onclick={ onClickHandle }>
     <div class="label-div">
       <p class="label">{ label }</p>
     </div>
@@ -7,7 +8,6 @@
 
   <style>
   .vertex {
-    background-color: rgba(140, 208, 196, 0.85);
     background-clip: padding-box;
     border: 1px solid black;
     position: absolute;
@@ -21,6 +21,18 @@
 
   .vertex.selected {
     border: 1px solid #21cfdf;
+  }
+
+  .vertex.unverified {
+    background-color: rgba(255, 163, 42, 0.85);
+  }
+
+  .vertex.verified {
+    background-color: rgba(20, 187, 107, 0.85);
+  }
+
+  .vertex.error {
+    background-color: rgba(221, 72, 72, 0.85);
   }
 
   .label-div {
@@ -49,11 +61,13 @@
   </style>
 
   var $ = require('jquery');
+  var Constants = require('action/VertexConstants');
 
   var self = this
 
   self.defaults = {
     label: 'New Vertex',
+    status: (Constants.status.UNVERIFIED).toLowerCase(),
     view: {
       width: 120,
       height: 80
