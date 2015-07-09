@@ -13,7 +13,8 @@ define(function() {
   constants.calls = new Enum([
     'GET_ALL',
     'ADD_VERTEX',
-    'DEL_VERTEX'
+    'DEL_VERTEX',
+    'CHANGE_VERTEX'
   ]);
 
   constants.events = new Enum([
