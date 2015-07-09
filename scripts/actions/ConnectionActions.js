@@ -13,23 +13,17 @@ define(['app/RiotControl', 'constants/ConnectionConstants'], function(RiotContro
     addConnectionListener: function(handlers) {
       var onopen = handlers.onopen;
       if (onopen) {
-        RiotControl.on(EVENTS.CONNECTION_ESTABLISHED, function(websocket) {
-          onopen(websocket);
-        });
+        RiotControl.on(EVENTS.CONNECTION_ESTABLISHED, onopen);
       }
 
       var onclose = handlers.onclose;
       if (onclose) {
-        RiotControl.on(EVENTS.CONNECTION_CLOSED, function() {
-          onclose();
-        });
+        RiotControl.on(EVENTS.CONNECTION_CLOSED, onclose);
       }
 
       var onmessage = handlers.onmessage;
       if (onmessage) {
-        RiotControl.on(EVENTS.INCOMING_MESSAGE, function(message) {
-          onmessage(message);
-        });
+        RiotControl.on(EVENTS.INCOMING_MESSAGE, onmessage);
       }
     },
 
@@ -55,6 +49,29 @@ define(['app/RiotControl', 'constants/ConnectionConstants'], function(RiotContro
     },
     send: function(message) {
       RiotControl.trigger(CALLS.SEND, message);
+    },
+    startReading: function(callback) {
+      RiotControl.on(EVENTS.INCOMING_MESSAGE, callback);
+    },
+    stopReading: function(callback) {
+      RiotControl.off(EVENTS.INCOMING_MESSAGE, callback);
+    },
+    readNext: function(callback) {
+      RiotControl.one(EVENTS.INCOMING_MESSAGE, callback);
+    },
+    readUntil: function(callback) {
+      var _this = this;
+      var onmessage = function(message) {
+        // The return value of the callback func determines whether
+        // it should continue listening for messages or stop.
+        var stop = callback(message);
+        if (stop) {
+          // unbind onmessage listener
+          _this.stopReading(onmessage);
+        }
+      };
+      // bind onmessage
+      this.startReading(onmessage);
     }
   }
 });
