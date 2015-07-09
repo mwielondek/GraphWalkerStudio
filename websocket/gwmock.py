@@ -20,9 +20,13 @@ class Mock(WebSocket):
         response['type'] = request['type']
 
         if request['type'] == "ADDVERTEX":
-            response['success'] = True
-            # generate random ID
-            response['id'] = ("v_%x" % random.randint(0x0, 0xFFFFF))
+            if not request['forcefail']:
+                response['success'] = True
+                # generate random ID
+                response['id'] = ("v_%x" % random.randint(0x0, 0xFFFFF))
+            else:
+                response['success'] = False
+                response['msg'] = 'Failed to create Vertex'
 
         self.sendMessage(json.dumps(response))
 
