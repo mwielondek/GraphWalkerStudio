@@ -1,6 +1,6 @@
 <vertex>
   <!-- TODO: remove dedicated vertex-div below and move attr to vertex tag above once riot/#924 fixed -->
-  <div class="vertex { selected: opts.isselected } { status }" tabindex="0" onclick={ onClickHandle }>
+  <div class="vertex { selected: opts.isselected } { status.toLowerCase() }" tabindex="0" onclick={ onClickHandle }>
     <div class="label-div">
       <p class="label">{ label }</p>
     </div>
@@ -67,7 +67,7 @@
 
   self.defaults = {
     label: 'New Vertex',
-    status: (Constants.status.UNVERIFIED).toLowerCase(),
+    status: Constants.status.UNVERIFIED,
     view: {
       width: 120,
       height: 80
