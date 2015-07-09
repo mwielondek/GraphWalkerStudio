@@ -13,8 +13,10 @@ define(function() {
   constants.actions = new Enum([
     'CONNECTION_ESTABLISHED',
     'CONNECTION_CLOSED',
+    'INCOMING_MESSAGE',
     'GET_WEBSOCKET',
     'CONNECT',
+    'CLOSE',
     'SEND',
     'READ'
   ]);
