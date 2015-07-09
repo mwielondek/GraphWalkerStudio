@@ -10,10 +10,13 @@ define(function() {
 
   var constants = {};
 
-  constants.actions = new Enum([
+  constants.calls = new Enum([
     'GET_ALL',
     'ADD_VERTEX',
-    'DEL_VERTEX',
+    'DEL_VERTEX'
+  ]);
+
+  constants.events = new Enum([
     'VERTEX_LIST_CHANGED'
   ]);
 

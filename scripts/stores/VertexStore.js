@@ -10,13 +10,14 @@ define(['riot', 'constants/VertexConstants', 'app/RiotControl'], function(riot, 
     self.vertices = []
 
     // Event listeners
-    var Actions = Constants.actions;
-    const EMIT_CHANGE = Actions.VERTEX_LIST_CHANGED
-    self.on(Actions.GET_ALL, function(callback) {
+    var CALLS = Constants.calls;
+    var EVENTS = Constants.events;
+    const EMIT_CHANGE = EVENTS.VERTEX_LIST_CHANGED;
+    self.on(CALLS.GET_ALL, function(callback) {
       callback(self.vertices)
     })
 
-    self.on(Actions.ADD_VERTEX, function(vertex) {
+    self.on(CALLS.ADD_VERTEX, function(vertex) {
       if (!vertex.id) {
         vertex.id = 'v_' + Math.random().toString(16).substr(2); // TODO: get the ID from GW
       }

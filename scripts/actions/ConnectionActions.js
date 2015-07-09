@@ -1,6 +1,7 @@
 define(['app/RiotControl', 'constants/ConnectionConstants'], function(RiotControl, Constants) {
 
-  var Actions = Constants.actions;
+  var CALLS = Constants.calls;
+  var EVENTS = Constants.events;
 
   return {
     // Listeners
@@ -12,21 +13,21 @@ define(['app/RiotControl', 'constants/ConnectionConstants'], function(RiotContro
     addConnectionListener: function(handlers) {
       var onopen = handlers.onopen;
       if (onopen) {
-        RiotControl.on(Actions.CONNECTION_ESTABLISHED, function(websocket) {
+        RiotControl.on(EVENTS.CONNECTION_ESTABLISHED, function(websocket) {
           onopen(websocket);
         });
       }
 
       var onclose = handlers.onclose;
       if (onclose) {
-        RiotControl.on(Actions.CONNECTION_CLOSED, function() {
+        RiotControl.on(EVENTS.CONNECTION_CLOSED, function() {
           onclose();
         });
       }
 
       var onmessage = handlers.onmessage;
       if (onmessage) {
-        RiotControl.on(Actions.INCOMING_MESSAGE, function(message) {
+        RiotControl.on(EVENTS.INCOMING_MESSAGE, function(message) {
           onmessage(message);
         });
       }
@@ -34,7 +35,7 @@ define(['app/RiotControl', 'constants/ConnectionConstants'], function(RiotContro
 
     // Triggers
     getWebSocket: function(callback) {
-      RiotControl.trigger(Actions.GET_WEBSOCKET, callback);
+      RiotControl.trigger(CALLS.GET_WEBSOCKET, callback);
     },
     isSocketOpen: function(callback) {
       this.getWebSocket(function(websocket) {
@@ -43,17 +44,17 @@ define(['app/RiotControl', 'constants/ConnectionConstants'], function(RiotContro
       });
     },
     connect: function(url, callback) {
-      RiotControl.trigger(Actions.CONNECT, url);
+      RiotControl.trigger(CALLS.CONNECT, url);
       // callback will receive the websocket upon connection
       if (callback) this.addConnectionListener({onopen: callback});
     },
     disconnect: function(callback) {
-      RiotControl.trigger(Actions.CLOSE);
+      RiotControl.trigger(CALLS.CLOSE);
       // callback will receive the websocket upon connection
       if (callback) this.addConnectionListener({onclose: callback});
     },
     send: function(message) {
-      RiotControl.trigger(Actions.SEND, message);
+      RiotControl.trigger(CALLS.SEND, message);
     }
   }
 });

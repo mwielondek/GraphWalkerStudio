@@ -1,46 +1,41 @@
 define(['riot', 'app/RiotControl', 'constants/ConnectionConstants', 'constants/VertexConstants'],
-function(riot, RiotControl) {
-
-  var ConnectionActions = require('constants/ConnectionConstants').actions;
-  var VertexActions = require('constants/VertexConstants').actions;
+function(riot, RiotControl, Constants) {
 
   function ConnectionStore() {
     var self = riot.observable(this)
+
+    var EVENTS = Constants.events;
+    var CALLS = Constants.calls;
 
     // Register store with RiotControl. All subsequent `trigger` and `on` method calls through
     // RiotControl will be passed on to this store.
     RiotControl.addStore(self)
 
-    self.on(VertexActions.ADD_VERTEX, function() {
-      console.log('from connstore ADD_VERTEX');
-    });
-
-    self.on(ConnectionActions.GET_WEBSOCKET, function(callback) {
-      // TODO: apply same getter instead of broadcast in VertexStore
+    self.on(CALLS.GET_WEBSOCKET, function(callback) {
       callback(self.websocket);
     });
 
-    self.on(ConnectionActions.SEND, function(message) {
+    self.on(CALLS.SEND, function(message) {
       self.websocket.send(message);
     });
 
-    self.on(ConnectionActions.CONNECT, function(url) {
+    self.on(CALLS.CONNECT, function(url) {
       console.log('connecting to', url);
       var ws = new WebSocket(url);
       ws.onopen = function() {
         self.websocket = ws;
-        self.trigger(ConnectionActions.CONNECTION_ESTABLISHED, ws);
+        self.trigger(EVENTS.CONNECTION_ESTABLISHED, ws);
       };
       ws.onclose = function() {
-        self.trigger(ConnectionActions.CONNECTION_CLOSED);
+        self.trigger(EVENTS.CONNECTION_CLOSED);
       };
       ws.onmessage = function(evt) {
         var message = evt.data
-        self.trigger(ConnectionActions.INCOMING_MESSAGE, message);
+        self.trigger(EVENTS.INCOMING_MESSAGE, message);
       };
     });
 
-    self.on(ConnectionActions.CLOSE, function() {
+    self.on(CALLS.CLOSE, function() {
       if (self.websocket) self.websocket.close();
     });
 

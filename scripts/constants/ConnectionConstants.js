@@ -10,10 +10,13 @@ define(function() {
 
   var constants = {};
 
-  constants.actions = new Enum([
+  constants.events = new Enum([
     'CONNECTION_ESTABLISHED',
     'CONNECTION_CLOSED',
-    'INCOMING_MESSAGE',
+    'INCOMING_MESSAGE'
+  ]);
+
+  constants.calls = new Enum([
     'GET_WEBSOCKET',
     'CONNECT',
     'CLOSE',
