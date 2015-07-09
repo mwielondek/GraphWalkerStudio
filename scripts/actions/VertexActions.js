@@ -1,4 +1,4 @@
-define(['app/RiotControl', './VertexConstants'], function(RiotControl, Constants) {
+define(['app/RiotControl', 'constants/VertexConstants'], function(RiotControl, Constants) {
 
   var Actions = Constants.actions;
 

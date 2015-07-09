@@ -1,4 +1,4 @@
-define(['riot', 'action/VertexConstants', 'app/RiotControl'], function(riot, Constants, RiotControl) {
+define(['riot', 'constants/VertexConstants', 'app/RiotControl'], function(riot, Constants, RiotControl) {
   function VertexStore() {
     var self = riot.observable(this)
 

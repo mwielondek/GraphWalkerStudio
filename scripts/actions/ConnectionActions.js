@@ -1,4 +1,4 @@
-define(['app/RiotControl', './ConnectionConstants'], function(RiotControl, Constants) {
+define(['app/RiotControl', 'constants/ConnectionConstants'], function(RiotControl, Constants) {
 
   var Actions = Constants.actions;
 

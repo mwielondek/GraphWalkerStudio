@@ -5,7 +5,8 @@ var config = {
   baseUrl: 'lib',
   paths: {
     app:    '../scripts',
-    action: '../scripts/actions',
+    actions: '../scripts/actions',
+    constants: '../scripts/constants',
     store:  '../scripts/stores',
     tag:    '../scripts/tags/js'
   },
@@ -16,9 +17,9 @@ var config = {
     // Merge all the tag shims into tag/Studio
     'tag/Studio': (function() {
       var tagShims = {
-        'tag/Canvas': ['riot', 'jquery', 'app/RiotControl', 'action/VertexActions'],
-        'tag/Vertex': ['jquery', 'action/VertexConstants'],
-        'tag/ContextPane': ['action/ConnectionActions'] // TODO: extract settings to own tag?
+        'tag/Canvas': ['riot', 'jquery', 'app/RiotControl', 'actions/VertexActions'],
+        'tag/Vertex': ['jquery', 'constants/VertexConstants'],
+        'tag/ContextPane': ['actions/ConnectionActions'] // TODO: extract settings to own tag?
       };
       var compiledShim = [];
       for (var prop in tagShims) {

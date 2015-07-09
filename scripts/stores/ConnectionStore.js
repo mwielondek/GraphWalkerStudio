@@ -1,8 +1,8 @@
-define(['riot', 'app/RiotControl', 'action/ConnectionConstants', 'action/VertexConstants'],
+define(['riot', 'app/RiotControl', 'constants/ConnectionConstants', 'constants/VertexConstants'],
 function(riot, RiotControl) {
 
-  var ConnectionActions = require('action/ConnectionConstants').actions;
-  var VertexActions = require('action/VertexConstants').actions;
+  var ConnectionActions = require('constants/ConnectionConstants').actions;
+  var VertexActions = require('constants/VertexConstants').actions;
 
   function ConnectionStore() {
     var self = riot.observable(this)

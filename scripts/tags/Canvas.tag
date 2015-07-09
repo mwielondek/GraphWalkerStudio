@@ -14,7 +14,7 @@
 
   var $             = require('jquery');
   var RiotControl   = require('app/RiotControl');
-  var VertexActions = require('action/VertexActions');
+  var VertexActions = require('actions/VertexActions');
 
   var self = this
 

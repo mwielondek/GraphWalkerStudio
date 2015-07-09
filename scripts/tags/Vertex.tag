@@ -61,7 +61,7 @@
   </style>
 
   var $ = require('jquery');
-  var Constants = require('action/VertexConstants');
+  var Constants = require('constants/VertexConstants');
 
   var self = this
 

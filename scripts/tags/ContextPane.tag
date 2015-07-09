@@ -49,7 +49,7 @@
     }
   </style>
 
-  var ConnectionActions = require('action/ConnectionActions');
+  var ConnectionActions = require('actions/ConnectionActions');
 
   this.connected = false;
 
