@@ -62,7 +62,11 @@
 
   self.one('update', function() {
     // Merge defaults into self
-    $.extend(true, self, self.defaults);
+
+    // TODO: write custom extend func without overwrite
+    // (i.e. extend self with defaults but dont overwrite)
+    var merged = $.extend(true, {}, self.defaults, self);
+    $.extend(true, self, merged);
   });
 
   self.on('update', function() {
