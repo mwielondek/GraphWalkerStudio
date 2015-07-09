@@ -1,4 +1,4 @@
-define(['riot', 'action/VertexConstants', 'app/RiotControl'], function(riot, Actions, RiotControl) {
+define(['riot', 'action/VertexConstants', 'app/RiotControl'], function(riot, Constants, RiotControl) {
   function VertexStore() {
     var self = riot.observable(this)
 
@@ -10,6 +10,7 @@ define(['riot', 'action/VertexConstants', 'app/RiotControl'], function(riot, Act
     self.vertices = []
 
     // Event listeners
+    var Actions = Constants.actions;
     const EMIT_CHANGE = Actions.VERTEX_LIST_CHANGED
     self.on(Actions.GET_ALL, function() {
       self.trigger(EMIT_CHANGE, self.vertices)

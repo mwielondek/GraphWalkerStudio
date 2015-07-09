@@ -1,4 +1,7 @@
-define(['app/RiotControl', './VertexConstants'], function(RiotControl, Actions) {
+define(['app/RiotControl', './VertexConstants'], function(RiotControl, Constants) {
+
+  var Actions = Constants.actions;
+
   return {
     // Listeners
     addChangeListener: function(callback) {

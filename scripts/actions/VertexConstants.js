@@ -8,12 +8,21 @@ define(function() {
     }
   }
 
-  var vertexConstants = [
+  var constants = {};
+
+  constants.actions = new Enum([
     'GET_ALL',
     'ADD_VERTEX',
     'DEL_VERTEX',
     'VERTEX_LIST_CHANGED'
-  ];
+  ]);
 
-  return new Enum(vertexConstants);
+  constants.status = new Enum([
+    'UNVERIFIED',
+    'VERIFIED',
+    'ERROR'
+  ]);
+
+
+  return constants;
 });
