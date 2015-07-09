@@ -1,4 +1,4 @@
-import sys, json, random
+import sys, json, random, time
 from SimpleWebSocketServer import WebSocket, SimpleWebSocketServer
 
 DEFAULT_PORT = 9999
@@ -29,6 +29,8 @@ class Mock(WebSocket):
                     response['success'] = False
                     response['msg'] = 'Failed to create Vertex'
 
+            # simulate delay
+            time.sleep(0.5);
             self.sendMessage(json.dumps(response))
         except Exception as e:
             print "Couldn't decipher request: %s" % e
