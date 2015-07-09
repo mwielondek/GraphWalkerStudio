@@ -1,6 +1,5 @@
 define(['riot', 'app/RiotControl', 'constants/ConnectionConstants', 'constants/VertexConstants'],
 function(riot, RiotControl, Constants) {
-
   function ConnectionStore() {
     var self = riot.observable(this)
 
@@ -16,11 +15,14 @@ function(riot, RiotControl, Constants) {
     });
 
     self.on(CALLS.SEND, function(message) {
-      self.websocket.send(message);
+      if (self.websocket) self.websocket.send(message);
     });
 
     self.on(CALLS.CONNECT, function(url) {
-      console.log('connecting to', url);
+      // Data from the WebSocket comes in the form of a blob which needs
+      // to be converted before use. Blob => JSON string => JSON object.
+      self.reader = self.reader || new FileReader();
+
       var ws = new WebSocket(url);
       ws.onopen = function() {
         self.websocket = ws;
@@ -30,8 +32,14 @@ function(riot, RiotControl, Constants) {
         self.trigger(EVENTS.CONNECTION_CLOSED);
       };
       ws.onmessage = function(evt) {
-        var message = evt.data
-        self.trigger(EVENTS.INCOMING_MESSAGE, message);
+        var originalMessage = evt.data;
+        self.reader.readAsText(originalMessage);
+        self.reader.addEventListener('loadend', function handler() {
+          var data   = self.reader.result;
+          var dataObject = JSON.parse(data);
+          self.trigger(EVENTS.INCOMING_MESSAGE, dataObject, originalMessage);
+          self.reader.removeEventListener('loadend', handler);
+        });
       };
     });
 

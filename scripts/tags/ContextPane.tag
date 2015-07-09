@@ -67,19 +67,9 @@
         _this.connected = false;
         _this.update();
       },
-      onmessage: function(evt) {
-        // Data comes in form of a blob
-        _this.reader.readAsText(evt.data);
+      onmessage: function(message) {
+        _this.write(JSON.stringify(message));
       }
-    });
-    // Prepare for reading data from WebSocket
-    _this.reader = new FileReader();
-    _this.reader.addEventListener("loadend", function() {
-      var data = _this.reader.result;
-      // Print data to output
-      _this.write(data);
-      // Do something with the data object
-      var dataObject = JSON.parse(data);
     });
   });
 
