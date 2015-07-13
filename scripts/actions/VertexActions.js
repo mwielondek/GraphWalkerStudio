@@ -16,7 +16,7 @@ define(['app/RiotControl', 'constants/VertexConstants', './ConnectionActions',
     getAll: function(callback) {
       RiotControl.trigger(CALLS.GET_ALL, callback);
     },
-    addVertex: function(newVertex) {
+    add: function(newVertex) {
       // give vertex temporary ID if not already set
       if (!newVertex.id) {
         newVertex.id = 'v_' + Math.random().toString(16).substr(2);

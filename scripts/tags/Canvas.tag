@@ -30,7 +30,7 @@
       }
     }
     // Dispatch action
-    VertexActions.addVertex(vertex);
+    VertexActions.add(vertex);
   }
 
   VertexActions.getAll(function(vertices) {
