@@ -10,9 +10,9 @@ var config = {
     store:  '../scripts/stores',
     tag:    '../scripts/tags/js'
   },
-  // map: {
-  //   '*': { 'riot': 'riot_wip' }
-  // },
+  map: {
+    '*': { 'riot': 'riot_wip' } // DEV: use latest Riot version
+  },
   shim: {
     // Merge all the tag shims into tag/Studio
     'tag/Studio': (function() {

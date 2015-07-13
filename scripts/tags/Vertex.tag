@@ -76,19 +76,13 @@
   };
 
   self.one('update', function() {
-    // Merge defaults into self. Can't be done 'on mount' since the
-    // attributes have not been computed yet (specifically self.view).
-
     // TODO: write custom extend func without overwrite
     // (i.e. extend self with defaults but dont overwrite)
     var merged = $.extend(true, {}, self.defaults, self);
     $.extend(true, self, merged);
-
-    // Make into jsPlumb source & target
-    jsPlumb.makeSource($(this.root).children('.vertex')[0]);
   });
 
-  self.on('update', function() {
+  self.on('mount', function() {
     var css = {
       'height': self.view.height,
       'width': self.view.width,
@@ -96,6 +90,9 @@
       'left': self.view.centerX - (self.view.width / 2)
     };
     $(self.root).children('.vertex').css(css);
+
+    // Make into jsPlumb source & target
+    jsPlumb.makeSource($(this.root).children('.vertex')[0]);
   });
 
   onClickHandle(e) {
