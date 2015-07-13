@@ -61,6 +61,7 @@
   </style>
 
   var $ = require('jquery');
+  var jsp = require('jsplumb');
   var Constants = require('constants/VertexConstants');
 
   var self = this
@@ -75,12 +76,16 @@
   };
 
   self.one('update', function() {
-    // Merge defaults into self
+    // Merge defaults into self. Can't be done 'on mount' since the
+    // attributes have not been computed yet (specifically self.view).
 
     // TODO: write custom extend func without overwrite
     // (i.e. extend self with defaults but dont overwrite)
     var merged = $.extend(true, {}, self.defaults, self);
     $.extend(true, self, merged);
+
+    // Make into jsPlumb source & target
+    jsPlumb.makeSource($(this.root).children('.vertex')[0]);
   });
 
   self.on('update', function() {

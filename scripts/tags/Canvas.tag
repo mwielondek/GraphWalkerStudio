@@ -13,6 +13,7 @@
   </style>
 
   var $             = require('jquery');
+  var jsp           = require('jsplumb');
   var RiotControl   = require('app/RiotControl');
   var VertexActions = require('actions/VertexActions');
 
@@ -42,6 +43,8 @@
   })
 
   self.on('mount', function() {
+    // Set as container for jsPlumb
+    jsp.setContainer(this.root);
     // Set up event listeners
     $(self.root)
       // Add new vertices on double click
