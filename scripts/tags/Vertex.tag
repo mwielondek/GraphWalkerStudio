@@ -1,6 +1,7 @@
 <vertex>
   <!-- TODO: remove dedicated vertex-div below and move attr to vertex tag above once riot/#924 fixed -->
-  <div class="vertex { selected: opts.isselected } { status.toLowerCase() }" tabindex="0" onclick={ onClickHandle }>
+  <div class="vertex { selected: opts.isselected } { status.toLowerCase() }" tabindex="0"
+  id={ id } onclick={ onClickHandle }>
     <div class="label-div">
       <p class="label">{ label }</p>
     </div>
@@ -92,7 +93,9 @@
     $(self.root).children('.vertex').css(css);
 
     // Make into jsPlumb source & target
-    jsPlumb.makeSource($(this.root).children('.vertex')[0]);
+    var vertexDiv = $(this.root).children('.vertex')[0];
+    jsPlumb.makeSource(vertexDiv);
+    jsPlumb.makeTarget(vertexDiv);
   });
 
   onClickHandle(e) {

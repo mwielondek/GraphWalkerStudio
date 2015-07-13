@@ -17,9 +17,11 @@ var config = {
     // Merge all the tag shims into tag/Studio
     'tag/Studio': (function() {
       var tagShims = {
-        'tag/Canvas': ['riot', 'jquery', 'app/RiotControl', 'actions/VertexActions', 'jsplumb'],
-        'tag/Vertex': ['jquery', 'constants/VertexConstants', 'jsplumb'],
-        'tag/ContextPane': ['actions/ConnectionActions'] // TODO: extract settings to own tag?
+        'tag/Canvas': ['riot', 'jquery', 'app/RiotControl', 'actions/VertexActions', 'actions/EdgeActions',
+         'jsplumb'],
+        'tag/Vertex': ['riot', 'jquery', 'constants/VertexConstants', 'jsplumb'],
+        'tag/Edge': ['riot', 'jquery', 'constants/EdgeConstants', 'jsplumb'],
+        'tag/ContextPane': ['riot', 'actions/ConnectionActions'] // TODO: extract settings to own tag?
       };
       var compiledShim = [];
       for (var prop in tagShims) {

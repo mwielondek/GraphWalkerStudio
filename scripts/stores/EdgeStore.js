@@ -1,5 +1,5 @@
 define(['riot', 'constants/EdgeConstants', 'app/RiotControl', 'jquery'], function(riot, Constants, RiotControl, $) {
-  function VertexStore() {
+  function EdgeStore() {
     var self = riot.observable(this);
 
     // Register store with RiotControl. All subsequent `trigger` and `on` method calls through
@@ -35,5 +35,5 @@ define(['riot', 'constants/EdgeConstants', 'app/RiotControl', 'jquery'], functio
     })
   }
 
-  return new VertexStore();
+  return new EdgeStore();
 });
