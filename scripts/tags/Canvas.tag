@@ -65,13 +65,25 @@
     jsp.ready(function() {
       // Defaults
       jsp.importDefaults({
-        PaintStyle : {
-          lineWidth:3,
-          strokeStyle: '#000000',
-        },
-        DragOptions : { cursor: "crosshair" },
-        Endpoints : [ [ "Dot", { radius:3 } ], [ "Dot", { radius:3 } ] ],
-        EndpointStyles : [{ fillStyle:"#225588" }, { fillStyle:"#558822" }]
+        Endpoint: ['Dot', {radius: 2}],
+        Anchor: 'Continuous',
+        Connector: [
+          'StateMachine', {
+            curviness: 0,
+            proximityLimit: 260
+        }],
+        DropOptions: { hoverClass: 'drag-hover' },
+        HoverPaintStyle: {strokeStyle: '#0b771b', lineWidth: 3 },
+        PaintStyle: {strokeStyle: '#000000', lineWidth: 1 },
+        ConnectionOverlays: [
+            [ 'Arrow', {
+                location: 1,
+                id: 'arrow',
+                length: 12,
+                foldback: 0.1
+            } ],
+            [ 'Label', { id: 'label', cssClass: 'edge-label' }]
+        ]
       });
       // Set canvas as container
       jsp.setContainer(self.root);
@@ -85,11 +97,11 @@
     // Set up event listeners
     $(self.root)
       // Add new vertices on double click
-      .on("dblclick", function(e) {
+      .on('dblclick', function(e) {
         if (e.target === this) self.addVertex(e);
       })
       // Deselect vertices on click
-      .on("click", function(e) {
+      .on('click', function(e) {
         if (e.target == this) self.opts.onselect(0);
       });
 
