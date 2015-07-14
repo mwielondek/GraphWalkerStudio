@@ -85,6 +85,7 @@
   });
 
   self.on('mount', function() {
+    // Set style
     var css = {
       'height': self.view.height,
       'width': self.view.width,
@@ -94,13 +95,12 @@
     $root.children('.vertex').css(css);
 
     // Make into jsPlumb source & target
-    var vertexDiv = $root.children('.vertex')[0];
+    var vertexDiv = self.vertexDiv = $root.children('.vertex')[0];
     jsPlumb.makeSource(vertexDiv);
     jsPlumb.makeTarget(vertexDiv);
 
     // MouseEvent multiplexing. Trigger click as usual, trigger
     // mousedown-n-drag only after the cursor has left the element.
-    // TODO if selected dont allow drag
     self.handleEvent = function(evt) {
       switch(evt.type) {
         case 'mousedown':
@@ -134,6 +134,13 @@
       }
     };
     self.root.addEventListener('mousedown', this, true);
+  });
+
+  self.on('updated', function() {
+    if (self.vertexDiv) {
+      // Default drag behaviour when selected is resize & move.
+      jsp.setSourceEnabled(self.vertexDiv, !self.opts.isselected);
+    }
   });
 
   onClickHandle(e) {
