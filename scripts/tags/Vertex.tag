@@ -100,17 +100,22 @@
     jsPlumb.makeTarget(vertexDiv);
 
     // Make draggable
-    jsp.draggable(vertexDiv);
+    jsp.draggable(vertexDiv, {
+      start: function(params) {
+        // Avoid setting listeners on vertices not being directly
+        // dragged (i.e. dragged as part of selection but not under
+        // the cursor => hence will not trigger click anyway)
+        var isElementBeingDragged = params.e;
+        if (!isElementBeingDragged) return;
 
-    // Trigger `updated` to set draggable/source/resize properties and
-    // revalidate to set the correct offset for dragging connections.
-    setTimeout(function() {
-      // Run inside setTimeout to schedule it at the end of the
-      // event queue so that the DOM redrawing has a chance to
-      // catch up.
-      jsp.revalidate(self.vertexDiv);
-      self.trigger('updated');
-    }, 0);
+        // Avoid resetting the selection by triggering the click
+        // handler on mouseup.
+        self.root.addEventListener('click', function handler(e) {
+          e.stopPropagation();
+          this.removeEventListener('click', handler, true);
+        }, true);
+      }
+    });
 
     // MouseEvent multiplexing. Trigger click as usual, trigger
     // mousedown-n-drag only after the cursor has left the element.
@@ -147,6 +152,16 @@
       }
     };
     self.root.addEventListener('mousedown', this, true);
+
+    // Trigger `updated` to set draggable/source/resize properties and
+    // revalidate to set the correct offset for dragging connections.
+    setTimeout(function() {
+      // Run inside setTimeout to schedule it at the end of the
+      // event queue so that the DOM redrawing has a chance to
+      // catch up.
+      jsp.revalidate(self.vertexDiv);
+      self.trigger('updated');
+    }, 0);
   });
 
   self.on('updated', function() {
