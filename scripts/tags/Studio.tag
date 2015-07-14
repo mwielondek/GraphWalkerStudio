@@ -15,7 +15,7 @@
   this.selection = [];
 
   updateSelection(vertex, toggle) {
-    // If vertex is falsy, clear selection
+    // If `vertex` is falsy, clear selection
     if (!vertex) {
       this.selection = [];
     } else {

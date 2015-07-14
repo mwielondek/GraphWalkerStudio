@@ -106,4 +106,11 @@
       });
 
   });
+
+  self.on('update', function() {
+    // TODO: figure out why it's triggered twice on selection
+    var selection = self.opts.selection;
+    jsp.clearDragSelection();
+    jsp.addToDragSelection(selection);
+  });
 </studio-canvas>

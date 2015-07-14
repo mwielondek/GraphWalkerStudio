@@ -155,8 +155,6 @@
       // Default drag behaviour when selected is resize & move.
       jsp.setSourceEnabled(self.vertexDiv, !selected);
       jsp.setDraggable(self.vertexDiv, selected);
-      // TODO: add multiple selection
-      // jsp.addToDragSelection(self.vertexDiv);
       var modifyEventListener = selected ? removeEventListener : addEventListener;
       modifyEventListener.call(self.root, 'mousedown', this, true);
     }
