@@ -99,6 +99,12 @@
     jsPlumb.makeSource(vertexDiv);
     jsPlumb.makeTarget(vertexDiv);
 
+    // Make draggable
+    jsp.draggable(vertexDiv);
+
+    // Trigger updated to set draggable/source/resize properties
+    self.trigger('updated');
+
     // MouseEvent multiplexing. Trigger click as usual, trigger
     // mousedown-n-drag only after the cursor has left the element.
     self.handleEvent = function(evt) {
@@ -138,8 +144,14 @@
 
   self.on('updated', function() {
     if (self.vertexDiv) {
+      var selected = self.opts.isselected;
       // Default drag behaviour when selected is resize & move.
-      jsp.setSourceEnabled(self.vertexDiv, !self.opts.isselected);
+      jsp.setSourceEnabled(self.vertexDiv, !selected);
+      jsp.setDraggable(self.vertexDiv, selected);
+      // TODO: add multiple selection
+      // jsp.addToDragSelection(self.vertexDiv);
+      var modifyEventListener = selected ? removeEventListener : addEventListener;
+      modifyEventListener.call(self.root, 'mousedown', this, true);
     }
   });
 
