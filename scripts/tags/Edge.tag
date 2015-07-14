@@ -1,5 +1,4 @@
 <edge>
-  <p>{ label }</p>
 
   var $ = require('jquery');
   var jsp = require('jsplumb');
@@ -19,6 +18,11 @@
   });
 
   self.on('mount', function() {
-    jsp.connect({source: self.source, target: self.target});
+    var connection = jsp.connect({source: self.source, target: self.target});
+    connection.getOverlay('label').setLabel(self.label);
+  });
+
+  self.on('unmount', function() {
+    jsp.detach({source: self.source, target: self.target});
   });
 </edge>
