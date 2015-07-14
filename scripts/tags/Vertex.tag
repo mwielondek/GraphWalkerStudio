@@ -66,6 +66,7 @@
   var Constants = require('constants/VertexConstants');
 
   var self = this
+  var $root = $(self.root);
 
   self.defaults = {
     label: 'New Vertex',
@@ -90,12 +91,49 @@
       'top': self.view.centerY - (self.view.height / 2),
       'left': self.view.centerX - (self.view.width / 2)
     };
-    $(self.root).children('.vertex').css(css);
+    $root.children('.vertex').css(css);
 
     // Make into jsPlumb source & target
-    var vertexDiv = $(this.root).children('.vertex')[0];
+    var vertexDiv = $root.children('.vertex')[0];
     jsPlumb.makeSource(vertexDiv);
     jsPlumb.makeTarget(vertexDiv);
+
+    // MouseEvent multiplexing. Trigger click as usual, trigger
+    // mousedown-n-drag only after the cursor has left the element.
+    // TODO if selected dont allow drag
+    self.handleEvent = function(evt) {
+      switch(evt.type) {
+        case 'mousedown':
+          // Stop propagation (i.e. triggering other handlers set by e.g. jsp)
+          evt.stopPropagation();
+          self.root.addEventListener('mouseleave', this, true);
+          self.root.addEventListener('mouseup', this, true);
+          break;
+
+        case 'mouseup':
+          self.root.removeEventListener('mouseleave', this, true);
+          self.root.removeEventListener('mouseup', this, true);
+          break;
+
+        case 'mouseleave':
+          // Don't trigger when hovering over child elements, e.g. label
+          if (evt.target != vertexDiv) break;
+
+          self.root.removeEventListener('mouseleave', this, true);
+          self.root.removeEventListener('mouseup', this, true);
+
+          // Allow the `mousedown` event to propagate
+          self.root.removeEventListener('mousedown', this, true);
+
+          // Re-trigger mousedown event
+          vertexDiv.dispatchEvent(new MouseEvent('mousedown', evt));
+
+          // Reactivate our event multiplexer
+          self.root.addEventListener('mousedown', this, true);
+          break;
+      }
+    };
+    self.root.addEventListener('mousedown', this, true);
   });
 
   onClickHandle(e) {
