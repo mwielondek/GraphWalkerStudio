@@ -102,8 +102,15 @@
     // Make draggable
     jsp.draggable(vertexDiv);
 
-    // Trigger updated to set draggable/source/resize properties
-    self.trigger('updated');
+    // Trigger `updated` to set draggable/source/resize properties and
+    // revalidate to set the correct offset for dragging connections.
+    setTimeout(function() {
+      // Run inside setTimeout to schedule it at the end of the
+      // event queue so that the DOM redrawing has a chance to
+      // catch up.
+      jsp.revalidate(self.vertexDiv);
+      self.trigger('updated');
+    }, 0);
 
     // MouseEvent multiplexing. Trigger click as usual, trigger
     // mousedown-n-drag only after the cursor has left the element.
