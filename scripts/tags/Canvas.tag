@@ -102,8 +102,83 @@
       // Deselect vertices on click
       .on('click', function(e) {
         if (e.target == this) self.opts.onselect(0);
+      })
+      // Create a selection rubberband on click-n-drag
+      .on('mousedown', function(evt) {
+        // Record the starting point
+        var startpos = {
+          Y: evt.pageY - this.offsetTop,
+          X: evt.pageX - this.offsetLeft
+        };
+
+        // Create the rubberband div and append it to container
+        var rb = $("<div/>").attr("id", "rubberband").css({
+          top: startpos.Y,
+          left: startpos.X
+        }).appendTo(this);
+
+        // Append temporary handlers
+        $(this)
+          .on("mousemove", function(emv) {
+            // Update dimensions
+            rb.css({
+              "top":    Math.min(startpos.Y, emv.pageY - this.offsetTop),
+              "left":   Math.min(startpos.X, emv.pageX - this.offsetLeft),
+              "width":  Math.abs(startpos.X - emv.pageX + this.offsetLeft),
+              "height": Math.abs(startpos.Y - emv.pageY + this.offsetTop)
+            });
+          })
+          .on("mouseup", function(eup) {
+            // Add to existing selection if meta key is down
+            var append = eup.metaKey;
+            // Select vertices that (fully) fall inside the rubberband
+            var selectedVertices = getSelectedVertices(rb[0]);
+            self.opts.onselect(selectedVertices.map(function(el) {
+              return el.id;
+            }), append);
+
+
+            // Remove rubberband
+            setTimeout(function() {
+              rb.remove(); // HACK: if we call `remove` without `setTimeout`
+                           // it will prevent the click from falling through.
+            }, 0);
+
+            // Remove handlers
+            $(this).off("mouseup mousemove");
+          });
       });
 
+      // Rubberband helper functions
+      var getElementOffset = function(element) {
+        var elementOffset = {};
+        elementOffset.left = element.offsetLeft;
+        elementOffset.top =  element.offsetTop;
+
+        // Distance to the right is: left + width
+        elementOffset.right = elementOffset.left + element.offsetWidth;
+
+        // Distance to the bottom is: top + height
+        elementOffset.bottom = elementOffset.top + element.offsetHeight;
+
+        return elementOffset;
+      };
+      var getSelectedVertices = function(rubberband) {
+        var selectedVertices = [];
+        var rubberbandOffset = getElementOffset(rubberband);
+        $("vertex").each(function(i,el) {
+          var itemOffset = getElementOffset(this);
+          // Check if vertex falls inside the rubberband
+          if(itemOffset.top > rubberbandOffset.top &&
+            itemOffset.left > rubberbandOffset.left &&
+            itemOffset.right < rubberbandOffset.right &&
+            itemOffset.bottom < rubberbandOffset.bottom) {
+              // If it does, add it to selection
+              selectedVertices.push(this);
+            }
+        });
+        return selectedVertices;
+      };
   });
 
   self.on('update', function() {
