@@ -1,4 +1,4 @@
-<vertex class="{ selected: opts.selection[0] } { status.toLowerCase() }" tabindex="0" id={ id } >
+<vertex class="{ selected: opts.selection[0] } { status.toLowerCase() }" tabindex="1" id={ id } >
   <div class="label-div">
     <p class="label">{ label }</p>
   </div>
@@ -125,11 +125,11 @@
       }
     });
 
-    // Make selectable
-    self.root.addEventListener('click', function(e) {
-      // Select vertex, or toggle its selection state
-      // if meta key was down during the click.
-      self.opts.onselect(self.id, e.metaKey);
+    // Make selectable on focus and on click
+    $root.on('focus click', function(e) {
+      // Toggle if meta key was down during the click.
+      var toggle = e.type == 'click' ? e.metaKey : false;
+      self.opts.onselect(self.id, toggle);
     });
 
     // MouseEvent multiplexing. Trigger click as usual, trigger
@@ -139,6 +139,8 @@
         case 'mousedown':
           // Stop propagation (i.e. triggering other handlers set by e.g. jsp)
           evt.stopPropagation();
+          // Prevent setting focus (which would trigger the select handler)
+          evt.preventDefault();
           self.root.addEventListener('mouseleave', self, true);
           self.root.addEventListener('mouseup', self, true);
           break;
