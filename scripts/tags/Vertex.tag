@@ -101,6 +101,7 @@
 
     // Make draggable
     jsp.draggable(vertexDiv, {
+      filter: ".ui-resizable-handle",
       start: function(params) {
         // Avoid setting listeners on vertices not being directly
         // dragged (i.e. dragged as part of selection but not under
@@ -114,6 +115,15 @@
           e.stopPropagation();
           this.removeEventListener('click', handler, true);
         }, true);
+      }
+    });
+
+    // Make resizable
+    $(self.vertexDiv).resizable({
+      resize: function(e, ui) {
+        // Clear the offset and size cache of jsp and repaint the vertex.
+        // This prevents endpoints from appearing at pre-resize offsets.
+        jsp.revalidate(ui.element.get(0));
       }
     });
 
@@ -167,9 +177,27 @@
   self.on('updated', function() {
     if (self.vertexDiv) {
       var selected = self.opts.isselected;
-      // Default drag behaviour when selected is resize & move.
+
+      /**  __________________________
+       *  | FUNCTION      | SELECTED |
+       *  | SourceEnabled | Off      |
+       *  | Draggable     | On       |
+       *  | Resizable     | On       |
+       *  | MouseEvent mux| Off      |
+       *   __________________________
+       */
+
+      // SourceEnabled
       jsp.setSourceEnabled(self.vertexDiv, !selected);
+
+      // Draggable
       jsp.setDraggable(self.vertexDiv, selected);
+
+      // Resizable
+      $(self.vertexDiv).resizable(selected ? 'enable' : 'disable');
+      $(self.vertexDiv).children('.ui-resizable-handle').toggle(selected);
+
+      // MouseEvent mux
       var modifyEventListener = selected ? removeEventListener : addEventListener;
       modifyEventListener.call(self.root, 'mousedown', this, true);
     }
