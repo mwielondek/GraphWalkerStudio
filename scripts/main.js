@@ -12,9 +12,9 @@ var config = {
   },
   map: {
     '*': {
-      'riot': 'riot_wip', // DEV: use latest Riot version
+      // 'riot': 'riot_wip', // DEV: use latest Riot version
       'jquery-ui': 'jquery-ui/jquery-ui'
-    } 
+    }
   },
   shim: {
     // Merge all the tag shims into tag/Studio
