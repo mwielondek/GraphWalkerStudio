@@ -55,6 +55,10 @@
   .label::selection {
     background-color: #00c7c0;
   }
+
+  .jsplumb-drag-hover {
+    border: 1px solid #21cfdf;
+  }
   </style>
 
   var $ = require('jquery');

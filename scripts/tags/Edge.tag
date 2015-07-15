@@ -1,5 +1,20 @@
 <edge>
 
+  <style>
+  .edge-label {
+    background-color: white;
+    opacity: 0.8;
+    padding: 5px;
+    border: 1px solid black;
+    min-width: 10px;
+    min-height: 8pt;
+  }
+
+  .edge-label:empty:not(:hover):not(:focus) {
+    opacity: 0;
+  }
+  </style>
+
   var $ = require('jquery');
   var jsp = require('jsplumb');
   var Constants = require('constants/EdgeConstants');

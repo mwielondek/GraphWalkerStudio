@@ -72,7 +72,6 @@
             curviness: 0,
             proximityLimit: 260
         }],
-        DropOptions: { hoverClass: 'drag-hover' },
         HoverPaintStyle: {strokeStyle: '#0b771b', lineWidth: 3 },
         PaintStyle: {strokeStyle: '#000000', lineWidth: 1 },
         ConnectionOverlays: [
