@@ -138,34 +138,34 @@
         case 'mousedown':
           // Stop propagation (i.e. triggering other handlers set by e.g. jsp)
           evt.stopPropagation();
-          self.root.addEventListener('mouseleave', this, true);
-          self.root.addEventListener('mouseup', this, true);
+          self.root.addEventListener('mouseleave', self, true);
+          self.root.addEventListener('mouseup', self, true);
           break;
 
         case 'mouseup':
-          self.root.removeEventListener('mouseleave', this, true);
-          self.root.removeEventListener('mouseup', this, true);
+          self.root.removeEventListener('mouseleave', self, true);
+          self.root.removeEventListener('mouseup', self, true);
           break;
 
         case 'mouseleave':
           // Don't trigger when hovering over child elements, e.g. label
           if (evt.target != self.root) break;
 
-          self.root.removeEventListener('mouseleave', this, true);
-          self.root.removeEventListener('mouseup', this, true);
+          self.root.removeEventListener('mouseleave', self, true);
+          self.root.removeEventListener('mouseup', self, true);
 
           // Allow the `mousedown` event to propagate
-          self.root.removeEventListener('mousedown', this, true);
+          self.root.removeEventListener('mousedown', self, true);
 
           // Re-trigger mousedown event
           self.root.dispatchEvent(new MouseEvent('mousedown', evt));
 
           // Reactivate our event multiplexer
-          self.root.addEventListener('mousedown', this, true);
+          self.root.addEventListener('mousedown', self, true);
           break;
       }
     };
-    self.root.addEventListener('mousedown', this, true);
+    self.root.addEventListener('mousedown', self, true);
 
     // Trigger `updated` to set draggable/source/resize properties and
     // revalidate to set the correct offset for dragging connections.
@@ -203,8 +203,8 @@
       $root.children('.ui-resizable-handle').toggle(selected && single);
 
       // MouseEvent mux
-      var modifyEventListener = selected ? removeEventListener : addEventListener;
-      modifyEventListener.call(self.root, 'mousedown', this, true);
+      var modifyEventListener = selected ? self.root.removeEventListener : self.root.addEventListener;
+      modifyEventListener.call(self.root, 'mousedown', self, true);
     }
   });
 </vertex>
