@@ -11,7 +11,10 @@ var config = {
     tag:    '../scripts/tags/js'
   },
   map: {
-    '*': { 'riot': 'riot_wip' } // DEV: use latest Riot version
+    '*': {
+      'riot': 'riot_wip', // DEV: use latest Riot version
+      'jquery-ui': 'jquery-ui/jquery-ui'
+    } 
   },
   shim: {
     // Merge all the tag shims into tag/Studio
@@ -19,7 +22,7 @@ var config = {
       var tagShims = {
         'tag/Canvas': ['riot', 'jquery', 'app/RiotControl', 'actions/VertexActions', 'actions/EdgeActions',
          'jsplumb'],
-        'tag/Vertex': ['riot', 'jquery', 'constants/VertexConstants', 'jsplumb'],
+        'tag/Vertex': ['riot', 'jquery', 'constants/VertexConstants', 'jsplumb', 'jquery-ui'],
         'tag/Edge': ['riot', 'jquery', 'constants/EdgeConstants', 'jsplumb'],
         'tag/ContextPane': ['riot', 'actions/ConnectionActions'] // TODO: extract settings to own tag?
       };
