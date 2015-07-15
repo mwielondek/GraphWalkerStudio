@@ -1,14 +1,10 @@
-<vertex>
-  <!-- TODO: remove dedicated vertex-div below and move attr to vertex tag above once riot/#924 fixed -->
-  <div class="vertex { selected: opts.selection[0] } { status.toLowerCase() }" tabindex="0"
-  id={ id } onclick={ onClickHandle }>
-    <div class="label-div">
-      <p class="label">{ label }</p>
-    </div>
+<vertex class="{ selected: opts.selection[0] } { status.toLowerCase() }" tabindex="0" id={ id } >
+  <div class="label-div">
+    <p class="label">{ label }</p>
   </div>
 
   <style>
-  .vertex {
+  vertex {
     background-clip: padding-box;
     border: 1px solid black;
     position: absolute;
@@ -16,23 +12,23 @@
     border-radius: 15px;
   }
 
-  .vertex:focus {
+  vertex:focus {
     outline: none;
   }
 
-  .vertex.selected {
+  vertex.selected {
     border: 1px solid #21cfdf;
   }
 
-  .vertex.unverified {
+  vertex.unverified {
     background-color: rgba(255, 163, 42, 0.85);
   }
 
-  .vertex.verified {
+  vertex.verified {
     background-color: rgba(20, 187, 107, 0.85);
   }
 
-  .vertex.error {
+  vertex.error {
     background-color: rgba(221, 72, 72, 0.85);
   }
 
@@ -65,8 +61,8 @@
   var jsp = require('jsplumb');
   var Constants = require('constants/VertexConstants');
 
-  var self = this
-  var $root = $(self.root);
+  var self = this;
+  var $root;
 
   self.defaults = {
     label: 'New Vertex',
@@ -85,6 +81,8 @@
   });
 
   self.on('mount', function() {
+    $root = $(self.root);
+
     // Set style
     var css = {
       'height': self.view.height,
@@ -92,15 +90,14 @@
       'top': self.view.centerY - (self.view.height / 2),
       'left': self.view.centerX - (self.view.width / 2)
     };
-    $root.children('.vertex').css(css);
+    $root.css(css);
 
     // Make into jsPlumb source & target
-    var vertexDiv = self.vertexDiv = $root.children('.vertex')[0];
-    jsPlumb.makeSource(vertexDiv);
-    jsPlumb.makeTarget(vertexDiv);
+    jsPlumb.makeSource(self.root);
+    jsPlumb.makeTarget(self.root);
 
     // Make draggable
-    jsp.draggable(vertexDiv, {
+    jsp.draggable(self.root, {
       filter: ".ui-resizable-handle",
       start: function(params) {
         // Avoid setting listeners on vertices not being directly
@@ -119,12 +116,19 @@
     });
 
     // Make resizable
-    $(self.vertexDiv).resizable({
+    $root.resizable({
       resize: function(e, ui) {
         // Clear the offset and size cache of jsp and repaint the vertex.
         // This prevents endpoints from appearing at pre-resize offsets.
         jsp.revalidate(ui.element.get(0));
       }
+    });
+
+    // Make selectable
+    self.root.addEventListener('click', function(e) {
+      // Select vertex, or toggle its selection state
+      // if meta key was down during the click.
+      self.opts.onselect(self.id, e.metaKey);
     });
 
     // MouseEvent multiplexing. Trigger click as usual, trigger
@@ -145,7 +149,7 @@
 
         case 'mouseleave':
           // Don't trigger when hovering over child elements, e.g. label
-          if (evt.target != vertexDiv) break;
+          if (evt.target != self.root) break;
 
           self.root.removeEventListener('mouseleave', this, true);
           self.root.removeEventListener('mouseup', this, true);
@@ -154,7 +158,7 @@
           self.root.removeEventListener('mousedown', this, true);
 
           // Re-trigger mousedown event
-          vertexDiv.dispatchEvent(new MouseEvent('mousedown', evt));
+          self.root.dispatchEvent(new MouseEvent('mousedown', evt));
 
           // Reactivate our event multiplexer
           self.root.addEventListener('mousedown', this, true);
@@ -169,13 +173,13 @@
       // Run inside setTimeout to schedule it at the end of the
       // event queue so that the DOM redrawing has a chance to
       // catch up.
-      jsp.revalidate(self.vertexDiv);
+      jsp.revalidate(self.root);
       self.trigger('updated');
     }, 0);
   });
 
   self.on('updated', function() {
-    if (self.vertexDiv) {
+    if ($root) {
       var selected = self.opts.selection[0];    // Is this vertex selected?
       var single = self.opts.selection[1] == 1; // Is it the only vertex selected?
 
@@ -185,28 +189,22 @@
        *  | Draggable     | On       |
        *  | Resizable     | On       |
        *  | MouseEvent mux| Off      |
-       *   __________________________
+       *   --------------------------
        */
 
       // SourceEnabled
-      jsp.setSourceEnabled(self.vertexDiv, !selected);
+      jsp.setSourceEnabled(self.root, !selected);
 
       // Draggable
-      jsp.setDraggable(self.vertexDiv, selected);
+      jsp.setDraggable(self.root, selected);
 
       // Resizable
-      $(self.vertexDiv).resizable(selected && single ? 'enable' : 'disable');
-      $(self.vertexDiv).children('.ui-resizable-handle').toggle(selected && single);
+      $root.resizable(selected && single ? 'enable' : 'disable');
+      $root.children('.ui-resizable-handle').toggle(selected && single);
 
       // MouseEvent mux
       var modifyEventListener = selected ? removeEventListener : addEventListener;
       modifyEventListener.call(self.root, 'mousedown', this, true);
     }
   });
-
-  onClickHandle(e) {
-    // Select vertex, or toggle its selection state
-    // if meta key was down during the click.
-    this.opts.onselect(this.id, e.metaKey);
-  }
 </vertex>
