@@ -98,6 +98,7 @@
 
     // Make draggable
     jsp.draggable(self.root, {
+      containment: true,
       filter: ".ui-resizable-handle",
       start: function(params) {
         // Avoid setting listeners on vertices not being directly
