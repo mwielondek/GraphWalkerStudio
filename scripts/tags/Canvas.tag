@@ -1,6 +1,6 @@
 <studio-canvas>
-  <vertex each={ vertices } isselected={ parent.opts.selection.indexOf(id) != -1 }
-    onselect={ parent.opts.onselect }/>
+  <vertex each={ vertices } selection={ [parent.opts.selection.indexOf(id) != -1,
+    parent.opts.selection.length] } onselect={ parent.opts.onselect }/>
   <edge each={ edges } />
 
   <style>

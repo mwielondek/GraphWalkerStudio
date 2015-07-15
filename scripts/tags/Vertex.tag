@@ -1,6 +1,6 @@
 <vertex>
   <!-- TODO: remove dedicated vertex-div below and move attr to vertex tag above once riot/#924 fixed -->
-  <div class="vertex { selected: opts.isselected } { status.toLowerCase() }" tabindex="0"
+  <div class="vertex { selected: opts.selection[0] } { status.toLowerCase() }" tabindex="0"
   id={ id } onclick={ onClickHandle }>
     <div class="label-div">
       <p class="label">{ label }</p>
@@ -176,7 +176,8 @@
 
   self.on('updated', function() {
     if (self.vertexDiv) {
-      var selected = self.opts.isselected;
+      var selected = self.opts.selection[0];    // Is this vertex selected?
+      var single = self.opts.selection[1] == 1; // Is it the only vertex selected?
 
       /**  __________________________
        *  | FUNCTION      | SELECTED |
@@ -194,8 +195,8 @@
       jsp.setDraggable(self.vertexDiv, selected);
 
       // Resizable
-      $(self.vertexDiv).resizable(selected ? 'enable' : 'disable');
-      $(self.vertexDiv).children('.ui-resizable-handle').toggle(selected);
+      $(self.vertexDiv).resizable(selected && single ? 'enable' : 'disable');
+      $(self.vertexDiv).children('.ui-resizable-handle').toggle(selected && single);
 
       // MouseEvent mux
       var modifyEventListener = selected ? removeEventListener : addEventListener;
