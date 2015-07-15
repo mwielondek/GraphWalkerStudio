@@ -7,7 +7,7 @@
   vertex {
     background-clip: padding-box;
     border: 1px solid black;
-    position: absolute;
+    position: absolute !important;
     display: table;
     border-radius: 15px;
   }
