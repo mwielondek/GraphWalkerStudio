@@ -187,13 +187,7 @@
 
     // Trigger `updated` to set draggable/source/resize properties and
     // revalidate to set the correct offset for dragging connections.
-    setTimeout(function() {
-      // Run inside setTimeout to schedule it at the end of the
-      // event queue so that the DOM redrawing has a chance to
-      // catch up.
-      jsp.revalidate(self.root);
-      self.trigger('updated');
-    }, 0);
+    self.trigger('updated');
   });
 
   self.on('updated', function() {
@@ -227,6 +221,13 @@
       // MouseEvent mux
       var modifyEventListener = selected ? self.root.removeEventListener : self.root.addEventListener;
       modifyEventListener.call(self.root, 'mousedown', self, true);
+
+      setTimeout(function() {
+        // Run inside setTimeout to schedule it at the end of the
+        // event queue so that the DOM redrawing has a chance to
+        // catch up.
+        jsp.revalidate(self.root);
+      }, 0);
     }
   });
 </vertex>
