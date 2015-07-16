@@ -25,7 +25,8 @@ var config = {
         'tag/Vertex'        : ['riot', 'jquery', 'constants/VertexConstants', 'jsplumb', 'jquery-ui'],
         'tag/Edge'          : ['riot', 'jquery', 'constants/EdgeConstants', 'jsplumb'],
         'tag/ContextPane'   : ['riot'],
-        'tag/ConnectionPane': ['actions/ConnectionActions']
+        'tag/PropertiesPane': ['riot', 'actions/VertexActions'],
+        'tag/ConnectionPane': ['riot', 'actions/ConnectionActions']
       };
       var compiledShim = [];
       for (var prop in tagShims) {

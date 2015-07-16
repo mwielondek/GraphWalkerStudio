@@ -23,16 +23,34 @@ define(['riot', 'constants/VertexConstants', 'app/RiotControl', 'jquery'], funct
     });
 
     self.on(CALLS.CHANGE_VERTEX, function(query, props) {
-      if (query !== null && typeof query === 'object') {
-        // Search by object
-        var vertex = self.vertices.filter(function(el) { return el === query })[0];
-      } else if (typeof query === 'string') {
-        // Search by ID
-        var vertex = self.vertices.filter(function(el) { return el.id === query })[0];
-      }
+      var vertex = _getVertex(query);
       $.extend(true, vertex, props);
       self.trigger(EMIT_CHANGE, self.vertices);
-    })
+    });
+
+    self.on(CALLS.REMOVE_VERTEX, function(query) {
+      var vertex = _getVertex(query);
+
+      // Remove vertex from the array
+      var index = self.vertices.indexOf(vertex);
+      console.assert(index !== -1, 'Trying to remove a vertice that doesn\'t exist');
+      // FIXME: removes wrong vertix!
+      self.vertices.splice(index, 1);
+      self.trigger(EMIT_CHANGE, self.vertices);
+    });
+
+    // Helper functions
+
+    // Get vertex either by object or by ID
+    var _getVertex = function(query) {
+      if (query !== null && typeof query === 'object') {
+        // If query is the vertex object, return it
+        return query
+      } else if (typeof query === 'string') {
+        // Search by ID
+        return self.vertices.filter(function(el) { return el.id === query })[0];
+      }
+    };
   }
 
   return new VertexStore();

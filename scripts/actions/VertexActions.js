@@ -22,6 +22,7 @@ define(['app/RiotControl', 'constants/VertexConstants', './ConnectionActions',
         newVertex.id = 'v_' + Math.random().toString(16).substr(2);
       }
       RiotControl.trigger(CALLS.ADD_VERTEX, newVertex);
+      // TODO: refactor below into reusable method
       // Prepare message to server
       var request = JSON.stringify({
         type: GW.ADDVERTEX
@@ -42,6 +43,10 @@ define(['app/RiotControl', 'constants/VertexConstants', './ConnectionActions',
     },
     setProps: function(query, props) {
       RiotControl.trigger(CALLS.CHANGE_VERTEX, query, props);
+    },
+    remove: function(query) {
+      RiotControl.trigger(CALLS.REMOVE_VERTEX, query);
+      // TODO: add GW connection request
     }
   }
 });
