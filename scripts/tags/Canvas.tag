@@ -1,6 +1,6 @@
 <studio-canvas>
   <vertex each={ vertices } selection={ [parent.opts.selection.indexOf(id) != -1,
-    parent.opts.selection.length] } onselect={ parent.opts.onselect }/>
+    parent.opts.selection.length] } selectvertex={ parent.opts.selectvertex }/>
   <edge each={ edges } />
 
   <style>
@@ -101,7 +101,7 @@
       })
       // Deselect vertices on click
       .on('click', function(e) {
-        if (e.target == this) self.opts.onselect(0);
+        if (e.target == this) self.opts.selectvertex(0);
       })
       // Create a selection rubberband on click-n-drag
       .on('mousedown', function(evt) {
@@ -133,7 +133,7 @@
             var append = eup.metaKey;
             // Select vertices that (fully) fall inside the rubberband
             var selectedVertices = getSelectedVertices(rb[0]);
-            self.opts.onselect(selectedVertices.map(function(el) {
+            self.opts.selectvertex(selectedVertices.map(function(el) {
               return el.id;
             }), append);
 

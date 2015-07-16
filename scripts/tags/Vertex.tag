@@ -133,7 +133,7 @@
     $root.on('focus click', function(e) {
       // Toggle if meta key was down during the click.
       var toggle = e.type == 'click' ? e.metaKey : false;
-      self.opts.onselect(self.id, toggle);
+      self.opts.selectvertex(self.id, toggle);
     });
 
     // MouseEvent multiplexing. Trigger click as usual, trigger

@@ -1,7 +1,7 @@
 <studio>
   <p>Studio</p>
   <studio-contextpane selection={ selection } />
-  <studio-canvas options={ opts.canvas } selection={ selection } onselect={ updateSelection } />
+  <studio-canvas options={ opts.canvas } selection={ selection } selectvertex={ updateSelection } />
 
   <style>
     studio {
