@@ -115,11 +115,14 @@
         var rb = $("<div/>").attr("id", "rubberband").css({
           top: startpos.Y,
           left: startpos.X
-        }).appendTo(this);
+        }).hide().appendTo(this);
 
         // Append temporary handlers
         $(this)
           .on("mousemove", function(emv) {
+            // Don't display the rubberband until user moves the cursor
+            rb.show();
+
             // Update dimensions
             rb.css({
               "top":    Math.min(startpos.Y, emv.pageY - this.offsetTop),
@@ -131,18 +134,15 @@
           .on("mouseup", function(eup) {
             // Add to existing selection if meta key is down
             var append = eup.metaKey;
+
             // Select vertices that (fully) fall inside the rubberband
             var selectedVertices = getSelectedVertices(rb[0]);
             self.opts.selectvertex(selectedVertices.map(function(el) {
               return el.id;
             }), append);
 
-
             // Remove rubberband
-            setTimeout(function() {
-              rb.remove(); // HACK: if we call `remove` without `setTimeout`
-                           // it will prevent the click from falling through.
-            }, 0);
+            rb.remove();
 
             // Remove handlers
             $(this).off("mouseup mousemove");
