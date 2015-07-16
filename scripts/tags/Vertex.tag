@@ -133,6 +133,10 @@
         // Clear the offset and size cache of jsp and repaint the vertex.
         // This prevents endpoints from appearing at pre-resize offsets.
         jsp.revalidate(ui.element.get(0));
+      },
+      stop: function(e, ui) {
+        // Update the vertex dimensions
+        VertexActions.setProps(self, {view: ui.size});
       }
     });
 
