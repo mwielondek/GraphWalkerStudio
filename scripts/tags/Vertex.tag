@@ -123,9 +123,10 @@
         }, true);
       },
       stop: function(params) {
-        setTimeout(function() {
+        var updatePositionInModel = function() {
           VertexActions.setProps(params.el.id, {view: {left: params.pos[0], top: params.pos[1]}});
-        }, 0);
+        };
+        VertexActions.bufferedAction(updatePositionInModel, 'jsp.draggable.stop', params.selection.length);
       }
     });
 
