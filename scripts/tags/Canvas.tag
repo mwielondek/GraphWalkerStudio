@@ -105,6 +105,10 @@
       })
       // Create a selection rubberband on click-n-drag
       .on('mousedown', function(evt) {
+        // Trigger only when clicked directly on canvas to prevent
+        // rubberband appearing when e.g. resizing vertices.
+        if (evt.target !== this) return;
+
         // Record the starting point
         var startpos = {
           Y: evt.pageY - this.offsetTop,
