@@ -4,11 +4,11 @@ window.debug = (window.location.hostname == 'localhost' ? true : false)
 var config = {
   baseUrl: 'lib',
   paths: {
-    app:    '../scripts',
-    actions: '../scripts/actions',
+    app      : '../scripts',
+    actions  : '../scripts/actions',
     constants: '../scripts/constants',
-    store:  '../scripts/stores',
-    tag:    '../scripts/tags/js'
+    store    : '../scripts/stores',
+    tag      : '../scripts/tags/js'
   },
   map: {
     '*': {
@@ -20,11 +20,12 @@ var config = {
     // Merge all the tag shims into tag/Studio
     'tag/Studio': (function() {
       var tagShims = {
-        'tag/Canvas': ['riot', 'jquery', 'app/RiotControl', 'actions/VertexActions', 'actions/EdgeActions',
-         'jsplumb'],
-        'tag/Vertex': ['riot', 'jquery', 'constants/VertexConstants', 'jsplumb', 'jquery-ui'],
-        'tag/Edge': ['riot', 'jquery', 'constants/EdgeConstants', 'jsplumb'],
-        'tag/ContextPane': ['riot', 'actions/ConnectionActions'] // TODO: extract settings to own tag?
+        'tag/Canvas'        : ['riot', 'jquery', 'app/RiotControl', 'actions/VertexActions',
+                               'actions/EdgeActions', 'jsplumb'],
+        'tag/Vertex'        : ['riot', 'jquery', 'constants/VertexConstants', 'jsplumb', 'jquery-ui'],
+        'tag/Edge'          : ['riot', 'jquery', 'constants/EdgeConstants', 'jsplumb'],
+        'tag/ContextPane'   : ['riot'],
+        'tag/ConnectionPane': ['actions/ConnectionActions']
       };
       var compiledShim = [];
       for (var prop in tagShims) {
