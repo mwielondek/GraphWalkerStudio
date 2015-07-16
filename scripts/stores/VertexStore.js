@@ -34,7 +34,6 @@ define(['riot', 'constants/VertexConstants', 'app/RiotControl', 'jquery'], funct
       // Remove vertex from the array
       var index = self.vertices.indexOf(vertex);
       console.assert(index !== -1, 'Trying to remove a vertice that doesn\'t exist');
-      // FIXME: removes wrong vertix!
       self.vertices.splice(index, 1);
       self.trigger(EMIT_CHANGE, self.vertices);
     });
