@@ -123,7 +123,9 @@
         }, true);
       },
       stop: function(params) {
-        VertexActions.setProps(self, {view: {left: params.pos[0], top: params.pos[1]}});
+        setTimeout(function() {
+          VertexActions.setProps(params.el.id, {view: {left: params.pos[0], top: params.pos[1]}});
+        }, 0);
       }
     });
 
