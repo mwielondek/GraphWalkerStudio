@@ -22,7 +22,8 @@ var config = {
       var tagShims = {
         'tag/Canvas'        : ['riot', 'jquery', 'app/RiotControl', 'actions/VertexActions',
                                'actions/EdgeActions', 'jsplumb'],
-        'tag/Vertex'        : ['riot', 'jquery', 'constants/VertexConstants', 'jsplumb', 'jquery-ui'],
+        'tag/Vertex'        : ['riot', 'jquery', 'constants/VertexConstants', 'jsplumb', 'jquery-ui',
+                               'actions/VertexActions'],
         'tag/Edge'          : ['riot', 'jquery', 'constants/EdgeConstants', 'jsplumb'],
         'tag/ContextPane'   : ['riot'],
         'tag/PropertiesPane': ['riot', 'actions/VertexActions'],

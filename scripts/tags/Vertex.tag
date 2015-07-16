@@ -61,15 +61,16 @@
   }
   </style>
 
-  var $ = require('jquery');
-  var jsp = require('jsplumb');
-  var Constants = require('constants/VertexConstants');
+  var $             = require('jquery');
+  var jsp           = require('jsplumb');
+  var Constants     = require('constants/VertexConstants');
+  var VertexActions = require('actions/VertexActions');
 
   var self = this;
   var $root;
 
   self.defaults = {
-    label: 'New Vertex',
+    label: 'Unlabeled vertex',
     status: Constants.status.UNVERIFIED,
     view: {
       width: 120,
@@ -87,14 +88,17 @@
   self.on('mount', function() {
     $root = $(self.root);
 
-    // Set style
+    // Hide the element until everything is set, especially dimensions and offset
+    $root.hide();
+
+    // Set dimensions and offset
     var css = {
       'height': self.view.height,
       'width': self.view.width,
       'top': self.view.centerY - (self.view.height / 2),
       'left': self.view.centerX - (self.view.width / 2)
     };
-    $root.css(css);
+    VertexActions.setProps(self, {view: css});
 
     // Make into jsPlumb source & target
     jsPlumb.makeSource(self.root);
@@ -117,6 +121,11 @@
           e.stopPropagation();
           this.removeEventListener('click', handler, true);
         }, true);
+      },
+      stop: function(params) {
+        setTimeout(function() {
+          VertexActions.setProps(params.el.id, {view: {left: params.pos[0], top: params.pos[1]}});
+        }, 0);
       }
     });
 
@@ -126,6 +135,10 @@
         // Clear the offset and size cache of jsp and repaint the vertex.
         // This prevents endpoints from appearing at pre-resize offsets.
         jsp.revalidate(ui.element.get(0));
+      },
+      stop: function(e, ui) {
+        // Update the vertex dimensions
+        VertexActions.setProps(self, {view: ui.size});
       }
     });
 
@@ -176,17 +189,15 @@
 
     // Trigger `updated` to set draggable/source/resize properties and
     // revalidate to set the correct offset for dragging connections.
-    setTimeout(function() {
-      // Run inside setTimeout to schedule it at the end of the
-      // event queue so that the DOM redrawing has a chance to
-      // catch up.
-      jsp.revalidate(self.root);
-      self.trigger('updated');
-    }, 0);
+    self.trigger('updated');
   });
 
   self.on('updated', function() {
     if ($root) {
+      // Update dimenions and offset
+      $root.show().css(self.view);
+
+      // Selection-based settings
       var selected = self.opts.selection[0];    // Is this vertex selected?
       var single = self.opts.selection[1] == 1; // Is it the only vertex selected?
 
@@ -212,6 +223,13 @@
       // MouseEvent mux
       var modifyEventListener = selected ? self.root.removeEventListener : self.root.addEventListener;
       modifyEventListener.call(self.root, 'mousedown', self, true);
+
+      setTimeout(function() {
+        // Run inside setTimeout to schedule it at the end of the
+        // event queue so that the DOM redrawing has a chance to
+        // catch up.
+        jsp.revalidate(self.root);
+      }, 0);
     }
   });
 </vertex>
