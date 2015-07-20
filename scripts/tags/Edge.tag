@@ -18,6 +18,7 @@
   var $ = require('jquery');
   var jsp = require('jsplumb');
   var Constants = require('constants/EdgeConstants');
+  var EdgeActions = require('actions/EdgeActions');
 
   var self = this;
   self.defaults = {
@@ -36,6 +37,8 @@
     self.connection = jsp.connect({source: self.sourceVertexId, target: self.targetVertexId});
     self.connection.getOverlay('label').setLabel(self.label);
     self.connection.setParameter('edge_id', self.id);
+
+    EdgeActions.setProps(self.id, {_js_connection: self.connection});
   });
 
   // don't do this for now.. riot/#1003

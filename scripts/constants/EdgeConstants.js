@@ -14,6 +14,7 @@ define(function() {
   // changing the key in case of value collisions. Applies to all Constants files.
   constants.calls = new Enum([
     'GET_ALL_EDGES',
+    'GET_EDGE',
     'ADD_EDGE',
     'REMOVE_EDGE',
     'CHANGE_EDGE'

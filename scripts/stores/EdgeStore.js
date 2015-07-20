@@ -17,34 +17,35 @@ define(['riot', 'constants/EdgeConstants', 'app/RiotControl', 'jquery'], functio
       callback(self.edges)
     });
 
+    self.on(CALLS.GET_EDGE, function(edgeId, callback) {
+      console.log(self.edges, edgeId, self.edges.filter(function(el) { return el.id === edgeId})[0]);
+      callback(self.edges.filter(function(el) { return el.id === edgeId})[0]);
+    });
+
     self.on(CALLS.ADD_EDGE, function(edge) {
       self.edges.push(edge)
       self.trigger(EMIT_CHANGE, self.edges)
     });
 
     self.on(CALLS.CHANGE_EDGE, function(query, props) {
-      if (query !== null && typeof query === 'object') {
-        // Search by object
-        var edge = self.edges.filter(function(el) { return el === query })[0];
-      } else if (typeof query === 'string') {
-        // Search by ID
-        var edge = self.edges.filter(function(el) { return el.id === query })[0];
-      }
+      var edge = _getEdge(query);
       $.extend(true, edge, props);
-      self.trigger(EMIT_CHANGE, self.edges);
     });
 
     self.on(CALLS.REMOVE_EDGE, function(query) {
-      if (query !== null && typeof query === 'object') {
-        // Search by object
-        var edge = self.edges.filter(function(el) { return el === query })[0];
-      } else if (typeof query === 'string') {
-        // Search by ID
-        var edge = self.edges.filter(function(el) { return el.id === query })[0];
-      }
-      self.edges.splice(self.edges.indexOf(edge),1);
+      var edge = _getEdge(query);
+      self.edges.splice(self.edges.indexOf(edge), 1);
       self.trigger(EMIT_CHANGE, self.edges);
     });
+
+    // Helper functions
+    var _getEdge = function(query) {
+      if (query !== null && typeof query === 'object') {
+        query = query.id
+      }
+      // Search by ID
+      return self.edges.filter(function(el) { return el.id === query })[0];
+    };
   }
 
   return new EdgeStore();
