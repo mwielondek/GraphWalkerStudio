@@ -70,7 +70,7 @@
   var $root;
 
   self.defaults = {
-    label: 'Unlabeled vertex',
+    label: self.id,
     status: Constants.status.UNVERIFIED,
     view: {
       width: 120,
@@ -98,7 +98,8 @@
       'top': self.view.centerY - (self.view.height / 2),
       'left': self.view.centerX - (self.view.width / 2)
     };
-    VertexActions.setProps(self, {view: css});
+    // Store dimensions and offset, and a reference to the DOM element in the model
+    VertexActions.setProps(self, {view: css, dom: self.root});
 
     // Make into jsPlumb source & target
     jsPlumb.makeSource(self.root);

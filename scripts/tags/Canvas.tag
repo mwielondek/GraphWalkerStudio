@@ -17,7 +17,7 @@
   var jsp           = require('jsplumb');
   var RiotControl   = require('app/RiotControl');
   var VertexActions = require('actions/VertexActions');
-  var EdgeActions = require('actions/EdgeActions');
+  var EdgeActions   = require('actions/EdgeActions');
 
   var self = this
 
@@ -38,8 +38,8 @@
 
   addEdge(sourceId, targetId) {
     var edge = {
-      source: sourceId,
-      target: targetId
+      sourceVertexId: sourceId,
+      targetVertexId: targetId
     };
     EdgeActions.add(edge);
   }

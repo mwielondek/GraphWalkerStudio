@@ -1,4 +1,4 @@
-<edge>
+<edge id="{ id }" source="{ sourceVertexId }" target="{ targetVertexId }">
 
   <style>
   .edge-label {
@@ -21,7 +21,7 @@
 
   var self = this;
   self.defaults = {
-    label: 'New Edge',
+    label: self.id + ': ' + self.sourceVertexId + '<->' + self.targetVertexId,
     status: Constants.status.UNVERIFIED
   };
 
@@ -33,11 +33,12 @@
   });
 
   self.on('mount', function() {
-    var connection = jsp.connect({source: self.source, target: self.target});
-    connection.getOverlay('label').setLabel(self.label);
+    self.connection = jsp.connect({source: self.sourceVertexId, target: self.targetVertexId});
+    self.connection.getOverlay('label').setLabel(self.label);
   });
 
-  self.on('unmount', function() {
-    jsp.detach({source: self.source, target: self.target});
-  });
+  // don't do this for now.. riot/#1003
+  // self.on('unmount', function() {
+  //   jsp.detach(self.connection);
+  // });
 </edge>
