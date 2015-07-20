@@ -1,10 +1,13 @@
 define(['app/RiotControl', 'constants/VertexConstants', './ConnectionActions',
-'jquery', 'constants/GWConstants'], function(RiotControl, Constants, connection, $) {
+'jquery', 'constants/GWConstants', './EdgeActions'], function(RiotControl, Constants, connection, $) {
 
-  var CALLS = Constants.calls;
-  var EVENTS = Constants.events;
-  var STATUS = Constants.status;
-  var GW = require('constants/GWConstants').methods;
+  var CALLS       = Constants.calls;
+  var EVENTS      = Constants.events;
+  var STATUS      = Constants.status;
+  var GW          = require('constants/GWConstants').methods;
+  var EdgeActions = require('actions/EdgeActions');
+
+  var counter = 65;
 
   return {
     // Listeners
@@ -19,7 +22,7 @@ define(['app/RiotControl', 'constants/VertexConstants', './ConnectionActions',
     add: function(newVertex) {
       // give vertex temporary ID if not already set
       if (!newVertex.id) {
-        newVertex.id = 'v_' + Math.random().toString(16).substr(2);
+        newVertex.id = 'v_' + String.fromCharCode(counter++);//Math.random().toString(16).substr(2);
       }
       RiotControl.trigger(CALLS.ADD_VERTEX, newVertex);
       // TODO: refactor below into reusable method
@@ -45,8 +48,17 @@ define(['app/RiotControl', 'constants/VertexConstants', './ConnectionActions',
       RiotControl.trigger(CALLS.CHANGE_VERTEX, query, props);
     },
     remove: function(query) {
-      RiotControl.trigger(CALLS.REMOVE_VERTEX, query);
-      // TODO: add GW connection request
+      // HACK: riot/#1003 work-around. TODO fix once issue's been resolved.
+
+      jsPlumb.remove(query); // Removes vertice and all connections
+
+      // Remove edge tags
+      EdgeActions.removeForVertex(query);
+
+      this.setProps(query, {_deleted: true});
+
+      // RiotControl.trigger(CALLS.REMOVE_VERTEX, query)
+      // // TODO: add GW connection request
     },
 
     // Helpers

@@ -32,7 +32,19 @@ define(['riot', 'constants/EdgeConstants', 'app/RiotControl', 'jquery'], functio
       }
       $.extend(true, edge, props);
       self.trigger(EMIT_CHANGE, self.edges);
-    })
+    });
+
+    self.on(CALLS.REMOVE_EDGE, function(query) {
+      if (query !== null && typeof query === 'object') {
+        // Search by object
+        var edge = self.edges.filter(function(el) { return el === query })[0];
+      } else if (typeof query === 'string') {
+        // Search by ID
+        var edge = self.edges.filter(function(el) { return el.id === query })[0];
+      }
+      self.edges.splice(self.edges.indexOf(edge),1);
+      self.trigger(EMIT_CHANGE, self.edges);
+    });
   }
 
   return new EdgeStore();

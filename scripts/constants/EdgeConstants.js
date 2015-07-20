@@ -15,7 +15,7 @@ define(function() {
   constants.calls = new Enum([
     'GET_ALL_EDGES',
     'ADD_EDGE',
-    'DEL_EDGE',
+    'REMOVE_EDGE',
     'CHANGE_EDGE'
   ]);
 
