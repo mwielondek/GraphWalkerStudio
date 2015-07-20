@@ -198,7 +198,7 @@
 
   self.on('update', function() {
     // TODO: figure out why it's triggered twice on selection
-    var selection = self.opts.selection;
+    var selection = self.opts.selection.mapBy('id');
     jsp.clearDragSelection();
     jsp.addToDragSelection(selection);
   });
