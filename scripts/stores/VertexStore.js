@@ -43,12 +43,11 @@ define(['riot', 'constants/VertexConstants', 'app/RiotControl', 'jquery'], funct
     // Get vertex either by object or by ID
     var _getVertex = function(query) {
       if (query !== null && typeof query === 'object') {
-        // If query is the vertex object, return it
-        return query
-      } else if (typeof query === 'string') {
-        // Search by ID
-        return self.vertices.filter(function(el) { return el.id === query })[0];
+        // Extract id
+        query = query.id;
       }
+      // Search by ID
+      return self.vertices.filter(function(el) { return el.id === query })[0];
     };
   }
 
