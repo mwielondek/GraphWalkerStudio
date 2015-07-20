@@ -48,16 +48,9 @@ define(['app/RiotControl', 'constants/VertexConstants', './ConnectionActions',
       RiotControl.trigger(CALLS.CHANGE_VERTEX, query, props);
     },
     remove: function(query) {
-      // HACK: riot/#1003 work-around. TODO fix once issue's been resolved.
-
-      jsPlumb.remove(query); // Removes vertice and all connections
-
       // Remove edge tags
       EdgeActions.removeForVertex(query);
-
-      this.setProps(query, {_deleted: true});
-
-      // RiotControl.trigger(CALLS.REMOVE_VERTEX, query)
+      RiotControl.trigger(CALLS.REMOVE_VERTEX, query)
       // // TODO: add GW connection request
     },
 

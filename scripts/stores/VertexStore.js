@@ -25,7 +25,6 @@ define(['riot', 'constants/VertexConstants', 'app/RiotControl', 'jquery'], funct
     self.on(CALLS.CHANGE_VERTEX, function(query, props) {
       var vertex = _getVertex(query);
       $.extend(true, vertex, props);
-      self.trigger(EMIT_CHANGE, self.vertices);
     });
 
     self.on(CALLS.REMOVE_VERTEX, function(query) {
@@ -34,7 +33,12 @@ define(['riot', 'constants/VertexConstants', 'app/RiotControl', 'jquery'], funct
       // Remove vertex from the array
       var index = self.vertices.indexOf(vertex);
       console.assert(index !== -1, 'Trying to remove a vertice that doesn\'t exist');
-      self.vertices.splice(index, 1);
+      // self.vertices.splice(index, 1);
+
+      // HACK: riot/#1003 work-around. TODO fix once issue's been resolved.
+      jsPlumb.remove(query); // Removes vertice and all connections
+      self.trigger(CALLS.CHANGE_VERTEX, query, {_deleted: true});
+
       self.trigger(EMIT_CHANGE, self.vertices);
     });
 
