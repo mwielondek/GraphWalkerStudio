@@ -1,10 +1,10 @@
 define(['app/RiotControl', 'constants/EdgeConstants', './ConnectionActions',
 'jquery', 'constants/GWConstants', 'jsplumb'], function(RiotControl, Constants, connection, $) {
 
-  var CALLS = Constants.calls;
+  var CALLS  = Constants.calls;
   var EVENTS = Constants.events;
   var STATUS = Constants.status;
-  var GW = require('constants/GWConstants').methods;
+  var GW     = require('constants/GWConstants').methods;
 
   var jsp = require('jsplumb');
 

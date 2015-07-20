@@ -4,7 +4,7 @@ function(riot, RiotControl, Constants) {
     var self = riot.observable(this)
 
     var EVENTS = Constants.events;
-    var CALLS = Constants.calls;
+    var CALLS  = Constants.calls;
 
     // Register store with RiotControl. All subsequent `trigger` and `on` method calls through
     // RiotControl will be passed on to this store.

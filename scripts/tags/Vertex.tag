@@ -103,8 +103,8 @@
     VertexActions.setProps(self, {view: css, dom: self.root});
 
     // Make into jsPlumb source & target
-    jsPlumb.makeSource(self.root);
-    jsPlumb.makeTarget(self.root);
+    jsp.makeSource(self.root);
+    jsp.makeTarget(self.root);
 
     // Make draggable
     jsp.draggable(self.root, {

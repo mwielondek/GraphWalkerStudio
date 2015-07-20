@@ -1,4 +1,8 @@
-define(['riot', 'constants/VertexConstants', 'app/RiotControl', 'jquery'], function(riot, Constants, RiotControl, $) {
+define(['riot', 'constants/VertexConstants', 'app/RiotControl', 'jquery', 'jsplumb'],
+ function(riot, Constants, RiotControl, $) {
+
+  var jsp = require('jsplumb');
+
   function VertexStore() {
     var self = riot.observable(this);
 
@@ -36,7 +40,7 @@ define(['riot', 'constants/VertexConstants', 'app/RiotControl', 'jquery'], funct
       // self.vertices.splice(index, 1);
 
       // HACK: riot/#1003 work-around. TODO fix once issue's been resolved.
-      jsPlumb.remove(query); // Removes vertice and all connections
+      jsp.remove(query); // Removes vertice and all connections
       self.trigger(CALLS.CHANGE_VERTEX, query, {_deleted: true});
 
       self.trigger(EMIT_CHANGE, self.vertices);

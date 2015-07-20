@@ -18,7 +18,6 @@ define(['riot', 'constants/EdgeConstants', 'app/RiotControl', 'jquery'], functio
     });
 
     self.on(CALLS.GET_EDGE, function(edgeId, callback) {
-      console.log(self.edges, edgeId, self.edges.filter(function(el) { return el.id === edgeId})[0]);
       callback(self.edges.filter(function(el) { return el.id === edgeId})[0]);
     });
 

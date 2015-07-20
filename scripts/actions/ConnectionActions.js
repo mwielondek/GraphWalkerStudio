@@ -1,6 +1,6 @@
 define(['app/RiotControl', 'constants/ConnectionConstants'], function(RiotControl, Constants) {
 
-  var CALLS = Constants.calls;
+  var CALLS  = Constants.calls;
   var EVENTS = Constants.events;
 
   return {
