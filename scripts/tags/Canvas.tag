@@ -49,7 +49,7 @@
   });
   VertexActions.addChangeListener(function(vertices) {
     self.vertices = vertices;
-    self.update();
+    self.opts.selectvertex(0);
   });
 
   EdgeActions.getAll(function(edges) {
@@ -57,7 +57,7 @@
   });
   EdgeActions.addChangeListener(function(edges) {
     self.edges = edges;
-    self.update();
+    self.opts.selectvertex(0);
   });
 
   self.on('mount', function() {
