@@ -21,12 +21,13 @@ var config = {
     'tag/Studio': (function() {
       var tagShims = {
         'tag/Canvas'        : ['riot', 'jquery', 'app/RiotControl', 'actions/VertexActions',
-                               'actions/EdgeActions', 'jsplumb'],
+                               'actions/EdgeActions', 'jsplumb', 'constants/ElementConstants'],
         'tag/Vertex'        : ['riot', 'jquery', 'constants/VertexConstants', 'jsplumb', 'jquery-ui',
-                               'actions/VertexActions'],
+                               'actions/VertexActions', 'constants/ElementConstants'],
         'tag/Edge'          : ['riot', 'jquery', 'constants/EdgeConstants', 'jsplumb'],
         'tag/ContextPane'   : ['riot'],
-        'tag/PropertiesPane': ['riot', 'actions/VertexActions'],
+        'tag/PropertiesPane': ['riot', 'actions/VertexActions', 'actions/EdgeActions',
+                               'constants/ElementConstants'],
         'tag/ConnectionPane': ['riot', 'actions/ConnectionActions']
       };
       var compiledShim = [];

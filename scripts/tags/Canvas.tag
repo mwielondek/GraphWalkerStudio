@@ -1,6 +1,6 @@
 <studio-canvas>
-  <vertex each={ vertices } selection={ [parent.opts.selection.indexOf(id) != -1,
-    parent.opts.selection.length] } selectvertex={ parent.opts.selectvertex }/>
+  <vertex each={ vertices } selection={ [parent.opts.selection.mapBy('id').indexOf(id) != -1,
+    parent.opts.selection.length] } updateselection={ parent.opts.updateselection }/>
   <edge each={ edges } />
 
   <style>
@@ -13,11 +13,12 @@
   }
   </style>
 
-  var $             = require('jquery');
-  var jsp           = require('jsplumb');
-  var RiotControl   = require('app/RiotControl');
-  var VertexActions = require('actions/VertexActions');
-  var EdgeActions   = require('actions/EdgeActions');
+  var $                = require('jquery');
+  var jsp              = require('jsplumb');
+  var RiotControl      = require('app/RiotControl');
+  var VertexActions    = require('actions/VertexActions');
+  var EdgeActions      = require('actions/EdgeActions');
+  var ElementConstants = require('constants/ElementConstants');
 
   var self = this
 
@@ -27,6 +28,7 @@
   addVertex(e) {
     // Prepare vertex object
     var vertex = {
+      type: ElementConstants.T_VERTEX,
       view: {
         centerY: e.pageY - self.root.offsetTop,
         centerX: e.pageX - self.root.offsetLeft
@@ -38,6 +40,7 @@
 
   addEdge(sourceId, targetId) {
     var edge = {
+      type: ElementConstants.T_EDGE,
       sourceVertexId: sourceId,
       targetVertexId: targetId
     };
@@ -49,7 +52,7 @@
   });
   VertexActions.addChangeListener(function(vertices) {
     self.vertices = vertices;
-    self.opts.selectvertex(0);
+    self.opts.updateselection(0);
   });
 
   EdgeActions.getAll(function(edges) {
@@ -57,7 +60,7 @@
   });
   EdgeActions.addChangeListener(function(edges) {
     self.edges = edges;
-    self.opts.selectvertex(0);
+    self.opts.updateselection(0);
   });
 
   self.on('mount', function() {
@@ -84,12 +87,20 @@
             [ 'Label', { id: 'label', cssClass: 'edge-label' }]
         ]
       });
+
       // Set canvas as container
       jsp.setContainer(self.root);
-      // Handle connections => edge tag
+
+      // Move connection creation logic to `edge` tag.
       jsp.bind('beforeDrop', function(params) {
         self.addEdge(params.sourceId, params.targetId);
         return false;
+      });
+
+      // Selecting edges
+      jsp.bind('click', function(params) {
+        var edgeId = params.getParameter('edge_id');
+        self.opts.updateselection(edgeId, ElementConstants.T_EDGE);
       });
     });
 
@@ -101,7 +112,7 @@
       })
       // Deselect vertices on click
       .on('click', function(e) {
-        if (e.target == this) self.opts.selectvertex(0);
+        if (e.target == this) self.opts.updateselection(0);
       })
       // Create a selection rubberband on click-n-drag
       .on('mousedown', function(evt) {
@@ -141,9 +152,9 @@
 
             // Select vertices that (fully) fall inside the rubberband
             var selectedVertices = getSelectedVertices(rb[0]);
-            self.opts.selectvertex(selectedVertices.map(function(el) {
+            self.opts.updateselection(selectedVertices.map(function(el) {
               return el.id;
-            }), append);
+            }), ElementConstants.T_VERTEX, append);
 
             // Remove rubberband
             rb.remove();

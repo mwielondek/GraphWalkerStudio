@@ -35,6 +35,7 @@
   self.on('mount', function() {
     self.connection = jsp.connect({source: self.sourceVertexId, target: self.targetVertexId});
     self.connection.getOverlay('label').setLabel(self.label);
+    self.connection.setParameter('edge_id', self.id);
   });
 
   // don't do this for now.. riot/#1003
