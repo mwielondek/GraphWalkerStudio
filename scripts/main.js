@@ -8,7 +8,8 @@ var config = {
     actions  : '../scripts/actions',
     constants: '../scripts/constants',
     store    : '../scripts/stores',
-    tag      : '../scripts/tags/js'
+    tag      : '../scripts/tags/js',
+    tests    : '../scripts/tests'
   },
   map: {
     '*': {
@@ -21,7 +22,8 @@ var config = {
     'tag/Studio': (function() {
       var tagShims = {
         'tag/Canvas'        : ['riot', 'jquery', 'app/RiotControl', 'actions/VertexActions',
-                               'actions/EdgeActions', 'jsplumb', 'constants/ElementConstants'],
+                               'actions/EdgeActions', 'jsplumb', 'constants/ElementConstants',
+                               'tests/CanvasTest'],
         'tag/Vertex'        : ['riot', 'jquery', 'constants/VertexConstants', 'jsplumb', 'jquery-ui',
                                'actions/VertexActions', 'constants/ElementConstants'],
         'tag/Edge'          : ['riot', 'jquery', 'constants/EdgeConstants', 'jsplumb', 'actions/EdgeActions'],
