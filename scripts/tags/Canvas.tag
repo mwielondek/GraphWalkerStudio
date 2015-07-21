@@ -1,6 +1,6 @@
 <studio-canvas>
-  <vertex each={ vertices } selection={ [parent.opts.selection.mapBy('id').indexOf(id) != -1,
-    parent.opts.selection.length] } updateselection={ parent.opts.updateselection }/>
+  <vertex each={ vertices } isselected={ parent.opts.selection.mapBy('id').indexOf(id) != -1 }
+  resizable={ parent.opts.selection.length == 1 } updateselection={ parent.opts.updateselection }/>
   <edge each={ edges } isselected={ parent.opts.selection.mapBy('id').indexOf(id) != -1 }/>
 
   <style>

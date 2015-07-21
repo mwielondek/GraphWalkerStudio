@@ -1,4 +1,4 @@
-<vertex class="{ selected: opts.selection[0] } { status.toLowerCase() }" tabindex="1" id={ id } >
+<vertex class="{ selected: opts.isselected } { status.toLowerCase() }" tabindex="1" id="{ id }" >
   <div class="label-div">
     <p class="label">{ label }</p>
   </div>
@@ -201,8 +201,8 @@
       $root.show().css(self.view);
 
       // Selection-based settings
-      var selected = self.opts.selection[0];    // Is this vertex selected?
-      var single = self.opts.selection[1] == 1; // Is it the only vertex selected?
+      var selected = opts.isselected;
+      var resizable = selected && opts.resizable;
 
       /**  __________________________
        *  | FUNCTION      | SELECTED |
@@ -220,8 +220,8 @@
       jsp.setDraggable(self.root, selected);
 
       // Resizable
-      $root.resizable(selected && single ? 'enable' : 'disable');
-      $root.children('.ui-resizable-handle').toggle(selected && single);
+      $root.resizable(resizable ? 'enable' : 'disable');
+      $root.children('.ui-resizable-handle').toggle(resizable);
 
       // MouseEvent mux
       var modifyEventListener = selected ? self.root.removeEventListener : self.root.addEventListener;
