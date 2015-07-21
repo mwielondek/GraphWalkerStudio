@@ -1,7 +1,7 @@
 <studio-canvas>
   <vertex each={ vertices } selection={ [parent.opts.selection.mapBy('id').indexOf(id) != -1,
     parent.opts.selection.length] } updateselection={ parent.opts.updateselection }/>
-  <edge each={ edges } />
+  <edge each={ edges } isselected={ parent.opts.selection.mapBy('id').indexOf(id) != -1 }/>
 
   <style>
   studio-canvas {
@@ -88,6 +88,12 @@
         ]
       });
 
+      // Register connection types
+      jsPlumb.registerConnectionType('selected', {
+        // Same as HoverPaintStyle
+        paintStyle: {strokeStyle: '#0b771b', lineWidth: 3 }
+      });
+
       // Set canvas as container
       jsp.setContainer(self.root);
 
@@ -98,8 +104,8 @@
       });
 
       // Selecting edges
-      jsp.bind('click', function(params) {
-        var edgeId = params.getParameter('edge_id');
+      jsp.bind('click', function(connection) {
+        var edgeId = connection.getParameter('edge_id');
         self.opts.updateselection(edgeId, ElementConstants.T_EDGE);
       });
     });

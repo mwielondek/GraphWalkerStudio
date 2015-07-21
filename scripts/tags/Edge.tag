@@ -41,6 +41,16 @@
     EdgeActions.setProps(self.id, {_js_connection: self.connection});
   });
 
+  self.on('updated', function() {
+    // Set proper style when selected
+    var connection = self.connection;
+    var SELECTED = 'selected';
+    if (connection) {
+      if (opts.isselected && !connection.hasType(SELECTED)) connection.addType(SELECTED);
+      if (!opts.isselected && connection.hasType(SELECTED)) connection.removeType(SELECTED);
+    }
+  })
+
   // don't do this for now.. riot/#1003
   // self.on('unmount', function() {
   //   jsp.detach(self.connection);
