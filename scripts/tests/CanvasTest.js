@@ -35,7 +35,7 @@ function(riot, jsp, $) {
         this.addVertex(mockMouseEvent);
       }
     }
-    if (n > i*j) console.log('Mounted', (n - i*j), 'less vertices than the request', n, 'due to canvas size');
+    if (n > counter) console.log('Mounted', (n - counter), 'less vertices than the request', n, 'due to canvas size');
   }
 
   var testAddEdge = function(m) {

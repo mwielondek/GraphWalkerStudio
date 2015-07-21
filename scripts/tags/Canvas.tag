@@ -210,8 +210,8 @@
   });
 
   // RUN TEST
-  self.one('mount', function() {
-    var Test = require('tests/CanvasTest')(this);
-    Test.testAll(26,30);
-  })
+  // self.one('mount', function() {
+  //   var Test = require('tests/CanvasTest')(this);
+  //   Test.testAll(26,30);
+  // })
 </studio-canvas>
