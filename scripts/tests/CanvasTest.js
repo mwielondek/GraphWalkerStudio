@@ -2,15 +2,15 @@ define(['riot', 'jsplumb', 'jquery'],
 function(riot, jsp, $) {
 
   var testAll = function(n,m) {
+    console.profile('testAll');
+    console.time('testAll');
     testAddVertex.call(this, n);
     testAddEdge.call(this, m);
+    console.timeEnd('testAll');
+    console.profileEnd();
   }
 
   var testAddVertex = function(n) {
-    /////////////////////////
-    // Create `n` vertices //
-    /////////////////////////
-
     // Get canvas width & height
     var padding      = 40;
     var vertexHeight = 80;
