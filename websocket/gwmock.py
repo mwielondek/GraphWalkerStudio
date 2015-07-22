@@ -30,7 +30,7 @@ class Mock(WebSocket):
                     response['msg'] = 'Failed to create Vertex'
 
             # simulate delay
-            time.sleep(0.5);
+            time.sleep(float(sys.argv[1]));
             self.sendMessage(json.dumps(response))
         except Exception as e:
             print "Couldn't decipher request: %s" % e
@@ -43,7 +43,7 @@ class Mock(WebSocket):
 
 def main():
     try:
-        port = int(sys.argv[1])
+        port = int(sys.argv[2])
     except:
         port = DEFAULT_PORT
 
