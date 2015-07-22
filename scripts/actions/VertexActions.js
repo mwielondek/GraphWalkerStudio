@@ -50,14 +50,17 @@ define(['app/RiotControl', 'constants/VertexConstants', './ConnectionActions',
     setProps: function(query, props) {
       RiotControl.trigger(CALLS.CHANGE_VERTEX, query, props);
     },
-    remove: function(vertexId) {
-      // Remove edge tags
-      this.getDomId(vertexId, function(domId) {
-        var vertexDomId = domId[vertexId];
-        EdgeActions.removeForVertex(vertexDomId);
-        RiotControl.trigger(CALLS.REMOVE_VERTEX, vertexId)
-      })
-      // // TODO: add GW connection request
+    remove: function(vertexIds) {
+      if (!Array.isArray(vertexIds)) vertexIds = [vertexIds];
+      this.getDomId(vertexIds, function(domId) {
+        vertexIds.forEach(function(vertexId) {
+          var vertexDomId = domId[vertexId];
+          // Remove edge tags
+          EdgeActions.removeForVertex(vertexDomId);
+          RiotControl.trigger(CALLS.REMOVE_VERTEX, vertexId)
+        });
+      });
+      // TODO: add GW connection request
     },
     getDomId: function(idArray, callback) {
       if (!idArray || idArray.length == 0) {

@@ -21,6 +21,14 @@
     return this.map(function(el) { return el[prop] });
   }
 
+  // Pluralize known words
+  String.prototype.pluralize = function(flag) {
+    var WORDS = {
+      'vertex' : 'vertices'
+    };
+    return flag ? WORDS[this] : this;
+  }
+
   updateSelection(elements, type, toggle) {
     // If `elements` is falsy, clear selection
     if (!elements) {

@@ -1,7 +1,7 @@
 <studio-contextpane>
   <div id="contextpane">
     <!-- TODO: change below to rg-tabs, once updated for riot 2.2 -->
-    <properties-pane show={ opts.selection.length == 1 } selection={ opts.selection} />
+    <properties-pane show={ opts.selection.length != 0 } selection={ opts.selection } />
     <connection-pane />
   </div>
 
