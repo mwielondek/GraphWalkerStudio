@@ -1,4 +1,5 @@
-<vertex class="{ selected: opts.isselected } { status.toLowerCase() }" tabindex="1" id="{ id }" >
+<vertex id="{ view.domId }" class="{ selected: opts.isselected } { status.toLowerCase() }" tabindex="1"
+  vertex-id="{ id }">
   <div class="label-div">
     <p class="label">{ label }</p>
   </div>
@@ -74,6 +75,7 @@
     label: self.id,
     status: Constants.status.UNVERIFIED,
     view: {
+      domId: 'd_'+self.id,
       width: 120,
       height: 80
     }
@@ -126,7 +128,7 @@
       },
       stop: function(params) {
         var updatePositionInModel = function() {
-          VertexActions.setProps(params.el.id, {view: {left: params.pos[0], top: params.pos[1]}});
+          VertexActions.setProps(self.id, {view: {left: params.pos[0], top: params.pos[1]}});
         };
         VertexActions.bufferedAction(updatePositionInModel, 'jsp.draggable.stop', params.selection.length);
       }
@@ -141,7 +143,7 @@
       },
       stop: function(e, ui) {
         // Update the vertex dimensions
-        VertexActions.setProps(self, {view: ui.size});
+        VertexActions.setProps(self.id, {view: ui.size});
       }
     });
 
@@ -205,6 +207,9 @@
     if ($root) {
       // Update dimenions and offset
       $root.show().css(self.view);
+
+      // Set vertex id on the DOM element (used e.g. in rubberband selection)
+      self.root['_vertexId'] = self.id;
 
       // Selection-based settings
       var selected = opts.isselected;

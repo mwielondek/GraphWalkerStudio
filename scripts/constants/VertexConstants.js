@@ -12,6 +12,7 @@ define(function() {
 
   constants.calls = new Enum([
     'GET_ALL',
+    'GET_VERTEX',
     'ADD_VERTEX',
     'REMOVE_VERTEX',
     'CHANGE_VERTEX'

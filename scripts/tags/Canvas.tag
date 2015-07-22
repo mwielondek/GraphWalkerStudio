@@ -38,11 +38,15 @@
     VertexActions.add(vertex);
   }
 
-  addEdge(sourceId, targetId) {
+  addEdge(sourceDomId, targetDomId) {
+    var sourceVertexId = $('#'+sourceDomId).attr('vertex-id');
+    var targetVertexId = $('#'+targetDomId).attr('vertex-id');
     var edge = {
       type: ElementConstants.T_EDGE,
-      sourceVertexId: sourceId,
-      targetVertexId: targetId
+      sourceDomId: sourceDomId,
+      targetDomId: targetDomId,
+      sourceVertexId: sourceVertexId,
+      targetVertexId: targetVertexId
     };
     EdgeActions.add(edge);
   }
@@ -159,7 +163,7 @@
             // Select vertices that (fully) fall inside the rubberband
             var selectedVertices = getSelectedVertices(rb[0]);
             self.opts.updateselection(selectedVertices.map(function(el) {
-              return el.id;
+              return el['_vertexId'];
             }), ElementConstants.T_VERTEX, append);
 
             // Remove rubberband
@@ -187,7 +191,7 @@
       var getSelectedVertices = function(rubberband) {
         var selectedVertices = [];
         var rubberbandOffset = getElementOffset(rubberband);
-        $("vertex").each(function(i,el) {
+        $("vertex").each(function() {
           var itemOffset = getElementOffset(this);
           // Check if vertex falls inside the rubberband
           if(itemOffset.top > rubberbandOffset.top &&
@@ -204,7 +208,7 @@
 
   self.on('update', function() {
     // TODO: figure out why it's triggered twice on selection
-    var selection = self.opts.selection.mapBy('id');
+    var selection = self.opts.selection.mapBy('domId');
     jsp.clearDragSelection();
     jsp.addToDragSelection(selection);
   });

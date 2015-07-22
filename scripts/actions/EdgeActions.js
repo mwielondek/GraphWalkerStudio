@@ -1,5 +1,6 @@
 define(['app/RiotControl', 'constants/EdgeConstants', './ConnectionActions',
-'jquery', 'constants/GWConstants', 'jsplumb'], function(RiotControl, Constants, connection, $) {
+'jquery', 'constants/GWConstants', 'jsplumb'],
+function(RiotControl, Constants, connection, $) {
 
   var CALLS  = Constants.calls;
   var EVENTS = Constants.events;
@@ -38,20 +39,21 @@ define(['app/RiotControl', 'constants/EdgeConstants', './ConnectionActions',
     },
     remove: function(edgeId) {
       var connection = this.getById(edgeId, function(edge) {
-        var connection = edge._js_connection;
+        var connection = edge._jsp_connection;
         jsp.detach(connection);
-      })
+      });
       RiotControl.trigger(CALLS.REMOVE_EDGE, edgeId);
     },
-    removeForVertex: function(vertexId) {
+    removeForVertex: function(vertexDomId) {
       var _this = this;
       this.getAll(function(allEdges) {
         var edgesToRemove = allEdges.filter(function(el) {
-          return el.sourceVertexId === vertexId || el.targetVertexId === vertexId });
+          return el.sourceVertexId === vertexDomId || el.targetVertexId === vertexDomId;
+        });
 
         // TODO: instead refactor the store method to accept multiple edges...
         for (var i = 0; i < edgesToRemove.length; i++) {
-          RiotControl.trigger(CALLS.REMOVE_EDGE, edgesToRemove[i]);
+          _this.remove(edgesToRemove[i].id);
         }
       });
     }

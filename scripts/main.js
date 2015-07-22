@@ -30,7 +30,8 @@ var config = {
         'tag/ContextPane'   : ['riot'],
         'tag/PropertiesPane': ['riot', 'actions/VertexActions', 'actions/EdgeActions',
                                'constants/ElementConstants'],
-        'tag/ConnectionPane': ['riot', 'actions/ConnectionActions']
+        'tag/ConnectionPane': ['riot', 'actions/ConnectionActions'],
+        'tag/Studio'        : ['actions/VertexActions', 'constants/ElementConstants']
       };
       var compiledShim = [];
       for (var prop in tagShims) {

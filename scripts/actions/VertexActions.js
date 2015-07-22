@@ -19,6 +19,9 @@ define(['app/RiotControl', 'constants/VertexConstants', './ConnectionActions',
     getAll: function(callback) {
       RiotControl.trigger(CALLS.GET_ALL, callback);
     },
+    get: function(vertexId, callback) {
+      RiotControl.trigger(CALLS.GET_VERTEX, vertexId, callback);
+    },
     add: function(newVertex) {
       // give vertex temporary ID if not already set
       if (!newVertex.id) {
@@ -36,7 +39,7 @@ define(['app/RiotControl', 'constants/VertexConstants', './ConnectionActions',
       connection.readUntil(function(message) {
         if (message.type == GW.ADDVERTEX) {
           if (message.success) {
-            _this.setProps(newVertex, {id: message.id, status: STATUS.VERIFIED});
+            _this.setProps(newVertex, {label: message.id, id: message.id, status: STATUS.VERIFIED});
           } else {
             _this.setProps(newVertex, {id: message.id, status: STATUS.ERROR});
           }
@@ -47,11 +50,31 @@ define(['app/RiotControl', 'constants/VertexConstants', './ConnectionActions',
     setProps: function(query, props) {
       RiotControl.trigger(CALLS.CHANGE_VERTEX, query, props);
     },
-    remove: function(query) {
+    remove: function(vertexId) {
       // Remove edge tags
-      EdgeActions.removeForVertex(query);
-      RiotControl.trigger(CALLS.REMOVE_VERTEX, query)
+      this.getDomId(vertexId, function(domId) {
+        var vertexDomId = domId[vertexId];
+        EdgeActions.removeForVertex(vertexDomId);
+        RiotControl.trigger(CALLS.REMOVE_VERTEX, vertexId)
+      })
       // // TODO: add GW connection request
+    },
+    getDomId: function(idArray, callback) {
+      if (!idArray || idArray.length == 0) {
+        callback([]);
+        return;
+      };
+      if (!Array.isArray(idArray)) idArray = [idArray];
+      // TODO instead of using a counter, use promises
+      var DomIdDictionary = {_counter: 0};
+      var _this = this;
+      idArray.forEach(function(el) {
+        _this.get(el, function(vertex) {
+          console.assert(vertex, 'Couldn\'t fetch vertex for id', el);
+          DomIdDictionary[el] = vertex.view.domId;
+          if (++DomIdDictionary._counter == idArray.length) callback(DomIdDictionary);
+        });
+      });
     },
 
     // Helpers

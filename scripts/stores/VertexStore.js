@@ -21,14 +21,19 @@ define(['riot', 'constants/VertexConstants', 'app/RiotControl', 'jquery', 'jsplu
       callback(self.vertices)
     });
 
+    self.on(CALLS.GET_VERTEX, function(vertexId, callback) {
+      callback(_getVertex(vertexId));
+    });
+
     self.on(CALLS.ADD_VERTEX, function(vertex) {
-      self.vertices.push(vertex)
-      self.trigger(EMIT_CHANGE, self.vertices)
+      self.vertices.push(vertex);
+      self.trigger(EMIT_CHANGE, self.vertices);
     });
 
     self.on(CALLS.CHANGE_VERTEX, function(query, props) {
       var vertex = _getVertex(query);
       $.extend(true, vertex, props);
+      self.trigger(EMIT_CHANGE, self.vertices);
     });
 
     self.on(CALLS.REMOVE_VERTEX, function(query) {
@@ -40,7 +45,7 @@ define(['riot', 'constants/VertexConstants', 'app/RiotControl', 'jquery', 'jsplu
       // self.vertices.splice(index, 1);
 
       // HACK: riot/#1003 work-around. TODO fix once issue's been resolved.
-      jsp.remove(query); // Removes vertice and all connections
+      jsp.remove(vertex.view.domId); // Removes vertice and all connections
       self.trigger(CALLS.CHANGE_VERTEX, query, {_deleted: true});
 
       self.trigger(EMIT_CHANGE, self.vertices);

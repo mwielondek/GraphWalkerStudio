@@ -10,6 +10,9 @@
     }
   </style>
 
+  var VertexActions    = require('actions/VertexActions');
+  var ElementConstants = require('constants/ElementConstants');
+
   // STATE
   this.selection = [];
 
@@ -23,7 +26,8 @@
     if (!elements) {
       this.selection = [];
     } else {
-      if (!Array.isArray(elements)) elements = [elements];
+      if (!Array.isArray(elements)) elements = [elements]; // Wrap single element into array
+
       if (toggle) {
         var _this = this;
         elements.forEach(function(element) {
@@ -39,8 +43,22 @@
       } else {
         this.selection = elements.map(function(element) { return {id: element, type: type}});
       }
+
     }
-    this.update();
+    if (type !== ElementConstants.T_VERTEX) {
+      this.update();
+      return;
+    }
+    // Augment selection array with domIds
+    var noDomId = this.selection.filter(function(el) { return !el.domId }).mapBy('id');
+    var _this = this;
+    VertexActions.getDomId(noDomId, function(domId) {
+      _this.selection.forEach(function(el) {
+        if (domId[el.id])
+          el['domId'] = domId[el.id];
+      });
+      _this.update();
+    });
   }
 
 </studio>

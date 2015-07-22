@@ -22,7 +22,7 @@
 
   var self = this;
   self.defaults = {
-    label: self.id + ': ' + self.sourceVertexId + '<->' + self.targetVertexId,
+    label: self.id + ': ' + self.sourceVertexId + '->' + self.targetVertexId,
     status: Constants.status.UNVERIFIED
   };
 
@@ -34,25 +34,26 @@
   });
 
   self.on('mount', function() {
-    self.connection = jsp.connect({source: self.sourceVertexId, target: self.targetVertexId});
+    self.connection = jsp.connect({source: self.sourceDomId, target: self.targetDomId});
     self.connection.getOverlay('label').setLabel(self.label);
     self.connection.setParameter('edge_id', self.id);
 
-    EdgeActions.setProps(self.id, {_js_connection: self.connection});
+    EdgeActions.setProps(self.id, {_jsp_connection: self.connection});
   });
 
   self.on('updated', function() {
     // Set proper style when selected
     var connection = self.connection;
     var SELECTED = 'selected';
-    if (connection) {
+    if (connection && connection.connector) {
       if (opts.isselected && !connection.hasType(SELECTED)) connection.addType(SELECTED);
       if (!opts.isselected && connection.hasType(SELECTED)) connection.removeType(SELECTED);
     }
   })
 
-  // don't do this for now.. riot/#1003
-  // self.on('unmount', function() {
-  //   jsp.detach(self.connection);
-  // });
+  self.on('unmount', function() {
+    // don't do this for now.. riot/#1003
+    // jsp.detach(self.connection);
+    delete self.connection;
+  });
 </edge>
