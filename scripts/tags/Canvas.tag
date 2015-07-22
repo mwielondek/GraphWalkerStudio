@@ -13,12 +13,13 @@
   }
   </style>
 
-  var $                = require('jquery');
-  var jsp              = require('jsplumb');
-  var RiotControl      = require('app/RiotControl');
-  var VertexActions    = require('actions/VertexActions');
-  var EdgeActions      = require('actions/EdgeActions');
-  var ElementConstants = require('constants/ElementConstants');
+  var $                 = require('jquery');
+  var jsp               = require('jsplumb');
+  var RiotControl       = require('app/RiotControl');
+  var VertexActions     = require('actions/VertexActions');
+  var EdgeActions       = require('actions/EdgeActions');
+  var ElementConstants  = require('constants/ElementConstants');
+  var ConnectionActions = require('actions/ConnectionActions');
 
   var self = this
 
@@ -216,6 +217,8 @@
   // RUN TEST
   // self.one('mount', function() {
   //   var Test = require('tests/CanvasTest')(this);
-  //   Test.testAll(26,30);
+  //   ConnectionActions.connect('ws://localhost:9999', function() {
+  //     Test.testAll(26,30);
+  //   });
   // })
 </studio-canvas>
