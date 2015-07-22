@@ -33,17 +33,12 @@ define(['app/RiotControl', 'constants/VertexConstants', './ConnectionActions',
       var request = {
         command: GW.ADDVERTEX
       };
-      connection.sendRequest(request);
-      // Wait for relevant response
       var _this = this;
-      connection.readUntil(function(message) {
-        if (message.command == GW.ADDVERTEX) {
-          if (message.success) {
-            _this.setProps(newVertex, {label: message.id, id: message.id, status: STATUS.VERIFIED});
-          } else {
-            _this.setProps(newVertex, {id: message.id, status: STATUS.ERROR});
-          }
-          return true; // stop listening
+      connection.sendRequest(request, function(response) {
+        if (response.success) {
+          _this.setProps(newVertex, {label: response.id, id: response.id, status: STATUS.VERIFIED});
+        } else {
+          _this.setProps(newVertex, {id: response.id, status: STATUS.ERROR});
         }
       });
     },
