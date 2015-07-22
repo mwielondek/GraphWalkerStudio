@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import sys, json, random, time
 from SimpleWebSocketServer import WebSocket, SimpleWebSocketServer
 
@@ -30,7 +32,7 @@ class Mock(WebSocket):
                     response['msg'] = 'Failed to create Vertex'
 
             # simulate delay
-            time.sleep(float(sys.argv[1]));
+            time.sleep(float(sys.argv[1])/1000);
             self.sendMessage(json.dumps(response))
         except Exception as e:
             print "Couldn't decipher request: %s" % e
@@ -42,6 +44,9 @@ class Mock(WebSocket):
         print "Connection closed"
 
 def main():
+    if len(sys.argv) < 2:
+        print "Usage: %s %s" % (sys.argv[0], '<simulated time delay in ms> [port]')
+        sys.exit(1)
     try:
         port = int(sys.argv[2])
     except:
@@ -53,6 +58,7 @@ def main():
     except KeyboardInterrupt:
         print "Shutting down server.."
         server.close()
+        sys.exit(0)
 
 
 if __name__ == '__main__':
