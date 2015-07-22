@@ -48,7 +48,13 @@ define(['app/RiotControl', 'constants/ConnectionConstants'], function(RiotContro
       if (callback) this.addConnectionListener({onclose: callback});
     },
     send: function(message) {
+      console.log('sending', message);
       RiotControl.trigger(CALLS.SEND, message);
+    },
+    sendRequest: function(request) {
+      // Add unique request ID
+      request['request-id'] = Math.random().toString(36).substr(2);
+      this.send(JSON.stringify(request));
     },
     startReading: function(callback) {
       RiotControl.on(EVENTS.INCOMING_MESSAGE, callback);

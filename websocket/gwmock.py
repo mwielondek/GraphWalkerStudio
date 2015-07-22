@@ -19,10 +19,11 @@ class Mock(WebSocket):
 
             # Prepare mock response
             response = {}
-            # response type always the same as request type
-            response['type'] = request['type']
+            # response command and ID always the same as request
+            response['command']    = request['command']
+            response['request-id'] = request['request-id']
 
-            if request['type'] == "ADDVERTEX":
+            if request['command'] == "addVertex":
                 if not request.get('forcefail'):
                     response['success'] = True
                     # generate random ID
