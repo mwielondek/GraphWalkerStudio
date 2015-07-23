@@ -48,7 +48,6 @@ define(['app/RiotControl', 'constants/ConnectionConstants'], function(RiotContro
       if (callback) this.addConnectionListener({onclose: callback});
     },
     send: function(message) {
-      console.log('sending', message);
       RiotControl.trigger(CALLS.SEND, message);
     },
     sendRequest: function(request, callback) {

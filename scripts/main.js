@@ -1,4 +1,5 @@
 window.debug = (window.location.hostname == 'localhost' ? true : false)
+window.debug.disableCache = false;
 
 // RequireJS config
 var config = {
@@ -9,7 +10,8 @@ var config = {
     constants: '../scripts/constants',
     store    : '../scripts/stores',
     tag      : '../scripts/tags/js',
-    tests    : '../scripts/tests'
+    tests    : '../scripts/tests',
+    utils    : '../scripts/utils'
   },
   map: {
     '*': {
@@ -23,7 +25,7 @@ var config = {
       var tagShims = {
         'tag/Canvas'        : ['riot', 'jquery', 'app/RiotControl', 'actions/VertexActions',
                                'actions/EdgeActions', 'jsplumb', 'constants/ElementConstants',
-                               'tests/CanvasTest'],
+                               'tests/CanvasTest', 'utils/rubberband'],
         'tag/Vertex'        : ['riot', 'jquery', 'constants/VertexConstants', 'jsplumb', 'jquery-ui',
                                'actions/VertexActions', 'constants/ElementConstants'],
         'tag/Edge'          : ['riot', 'jquery', 'constants/EdgeConstants', 'jsplumb', 'actions/EdgeActions'],
@@ -46,7 +48,7 @@ var config = {
 };
 
 // Prevent browser caching
-if (window.debug) config.urlArgs = "bust=" +  (new Date()).getTime();
+if (window.debug.disableCache) config.urlArgs = "bust=" +  (new Date()).getTime();
 requirejs.config(config);
 
 requirejs(['app/StudioApp'], function(StudioApp) {

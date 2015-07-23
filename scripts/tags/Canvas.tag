@@ -20,6 +20,7 @@
   var EdgeActions       = require('actions/EdgeActions');
   var ElementConstants  = require('constants/ElementConstants');
   var ConnectionActions = require('actions/ConnectionActions');
+  var rubberband        = require('utils/rubberband');
 
   var self = this
 
@@ -57,7 +58,7 @@
   });
   VertexActions.addChangeListener(function(vertices) {
     self.vertices = vertices;
-    self.opts.updateselection(0);
+    self.update();
   });
 
   EdgeActions.getAll(function(edges) {
@@ -65,7 +66,7 @@
   });
   EdgeActions.addChangeListener(function(edges) {
     self.edges = edges;
-    self.opts.updateselection(0);
+    self.update();
   });
 
   self.on('mount', function() {
@@ -115,6 +116,17 @@
       });
     });
 
+    // Create a selection rubberband on click-n-drag
+    rubberband(self.root, function(selectedVertices, append) {
+      // Dispatch it to end of event queue so that it reaches
+      // the selection buffer last.
+      setTimeout(function() {
+        self.opts.updateselection(selectedVertices.map(function(el) {
+          return el['_vertexId'];
+        }), ElementConstants.T_VERTEX, append);
+      }, 0);
+    });
+
     // Set up event listeners
     $(self.root)
       // Add new vertices on double click
@@ -124,87 +136,8 @@
       // Deselect vertices on click
       .on('click', function(e) {
         if (e.target == this) self.opts.updateselection(0);
-      })
-      // Create a selection rubberband on click-n-drag
-      .on('mousedown', function(evt) {
-        // Trigger only when clicked directly on canvas to prevent
-        // rubberband appearing when e.g. resizing vertices.
-        if (evt.target !== this) return;
-
-        // Record the starting point
-        var startpos = {
-          Y: evt.pageY - this.offsetTop,
-          X: evt.pageX - this.offsetLeft
-        };
-
-        // Create the rubberband div and append it to container
-        var rb = $("<div/>").attr("id", "rubberband").css({
-          top: startpos.Y,
-          left: startpos.X
-        }).hide().appendTo(this);
-
-        // Append temporary handlers
-        $(this)
-          .on("mousemove", function(emv) {
-            // Don't display the rubberband until user moves the cursor
-            rb.show();
-
-            // Update dimensions
-            rb.css({
-              "top":    Math.min(startpos.Y, emv.pageY - this.offsetTop),
-              "left":   Math.min(startpos.X, emv.pageX - this.offsetLeft),
-              "width":  Math.abs(startpos.X - emv.pageX + this.offsetLeft),
-              "height": Math.abs(startpos.Y - emv.pageY + this.offsetTop)
-            });
-          })
-          .on("mouseup", function(eup) {
-            // Add to existing selection if meta key is down
-            var append = eup.metaKey;
-
-            // Select vertices that (fully) fall inside the rubberband
-            var selectedVertices = getSelectedVertices(rb[0]);
-            self.opts.updateselection(selectedVertices.map(function(el) {
-              return el['_vertexId'];
-            }), ElementConstants.T_VERTEX, append);
-
-            // Remove rubberband
-            rb.remove();
-
-            // Remove handlers
-            $(this).off("mouseup mousemove");
-          });
       });
 
-      // Rubberband helper functions
-      var getElementOffset = function(element) {
-        var elementOffset = {};
-        elementOffset.left = element.offsetLeft;
-        elementOffset.top =  element.offsetTop;
-
-        // Distance to the right is: left + width
-        elementOffset.right = elementOffset.left + element.offsetWidth;
-
-        // Distance to the bottom is: top + height
-        elementOffset.bottom = elementOffset.top + element.offsetHeight;
-
-        return elementOffset;
-      };
-      var getSelectedVertices = function(rubberband) {
-        var selectedVertices = [];
-        var rubberbandOffset = getElementOffset(rubberband);
-        $("vertex").each(function() {
-          var itemOffset = getElementOffset(this);
-          // Check if vertex falls inside the rubberband
-          if(itemOffset.top > rubberbandOffset.top &&
-            itemOffset.left > rubberbandOffset.left &&
-            itemOffset.right < rubberbandOffset.right &&
-            itemOffset.bottom < rubberbandOffset.bottom) {
-              // If it does, add it to selection
-              selectedVertices.push(this);
-            }
-        });
-        return selectedVertices;
-      };
   });
 
   self.on('update', function() {

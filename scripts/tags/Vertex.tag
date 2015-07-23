@@ -9,7 +9,7 @@
     background-clip: padding-box;
     border: 1px solid black;
     position: absolute !important;
-    display: table;
+    display: table !important;
     border-radius: 15px;
   }
 
