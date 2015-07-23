@@ -31,7 +31,7 @@ var config = {
         'tag/Edge'          : ['riot', 'jquery', 'constants/EdgeConstants', 'jsplumb', 'actions/EdgeActions'],
         'tag/ContextPane'   : ['riot'],
         'tag/PropertiesPane': ['riot', 'actions/VertexActions', 'actions/EdgeActions',
-                               'constants/ElementConstants'],
+                               'constants/ElementConstants', 'utils/mixins'],
         'tag/ConnectionPane': ['riot', 'actions/ConnectionActions'],
         'tag/Studio'        : ['actions/VertexActions', 'constants/ElementConstants']
       };

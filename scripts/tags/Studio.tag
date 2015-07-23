@@ -16,31 +16,6 @@
   // STATE
   this.selection = [];
 
-  // Helper function for object arrays like `selection`
-  Array.prototype.mapBy = function(prop) {
-    return this.map(function(el) { return el[prop] });
-  }
-
-  // Pluralize known words
-  String.prototype.pluralize = function(flag) {
-    var WORDS = {
-      'vertex' : 'vertices'
-    };
-    return flag ? WORDS[this] : this;
-  }
-
-  // Compare two arrays
-  $.fn.isSameAs = function(compareTo) {
-    var len = this.length;
-    if (!compareTo || len != compareTo.length) return false;
-    for (var i = 0; i < len; ++i) {
-      if (this[i] !== compareTo[i]) return false;
-    }
-    return true;
-  };
-
-
-
   // TODO: refactor using promises
   updateSelection(elements, type, toggle) {
     // If `elements` is falsy, clear selection
