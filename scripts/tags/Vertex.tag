@@ -21,6 +21,10 @@
     border: 1px solid #21cfdf;
   }
 
+  vertex.rubberband-hover {
+    border: 1px solid #21cfdf;
+  }
+
   vertex.unverified {
     background-color: rgba(255, 163, 42, 0.85);
   }

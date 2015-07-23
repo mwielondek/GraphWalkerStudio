@@ -67,6 +67,14 @@ define(['jquery'], function($) {
               "width":  Math.abs(startpos.X - emv.pageX + this.offsetLeft),
               "height": Math.abs(startpos.Y - emv.pageY + this.offsetTop)
             });
+
+            // Add hover class to elements currently in selection
+            var oldSelection = $('.rubberband-hover');
+            var newSelection = $(_getSelectedVertices(rb[0]));
+            if (!oldSelection.isSameAs(newSelection)) {
+              oldSelection.removeClass('rubberband-hover');
+              newSelection.addClass('rubberband-hover');
+            }
           })
           .on("mouseup", function eupHandler(eup) {
             if (mouseMoved) {
@@ -76,6 +84,12 @@ define(['jquery'], function($) {
               // Select vertices that (fully) fall inside the rubberband
               var selectedVertices = _getSelectedVertices(rb[0]);
               fn(selectedVertices, append);
+
+              // Clear hover class. Add time out to allow the new
+              // selection class to be set on the elements
+              setTimeout(function() {
+                $('.rubberband-hover').removeClass('rubberband-hover');
+              }, 200);
             }
 
             // Remove rubberband

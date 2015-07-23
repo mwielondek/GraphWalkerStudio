@@ -29,6 +29,16 @@
     return flag ? WORDS[this] : this;
   }
 
+  // Compare two arrays
+  $.fn.isSameAs = function(compareTo) {
+    var len = this.length;
+    if (!compareTo || len != compareTo.length) return false;
+    for (var i = 0; i < len; ++i) {
+      if (this[i] !== compareTo[i]) return false;
+    }
+    return true;
+  };
+
   // Buffers `updateSelection` calls and runs only the last one.
   // This is helpful when sometimes `updateSelection` gets called
   // many times due to various event handlers, but in the end we're
