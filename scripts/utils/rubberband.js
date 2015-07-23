@@ -51,6 +51,7 @@ define(['jquery'], function($) {
         var mouseMoved = false;
 
         // Append temporary handlers
+        var eupHandler, emvHandler;
         $(this)
           .one("mousemove", function() {
             mouseMoved = true;
@@ -58,7 +59,7 @@ define(['jquery'], function($) {
             // Don't display the rubberband until user moves the cursor
             rb.show();
           })
-          .on("mousemove", function(emv) {
+          .on("mousemove", function emvHandler(emv) {
             // Update dimensions
             rb.css({
               "top":    Math.min(startpos.Y, emv.pageY - this.offsetTop),
@@ -67,7 +68,7 @@ define(['jquery'], function($) {
               "height": Math.abs(startpos.Y - emv.pageY + this.offsetTop)
             });
           })
-          .on("mouseup", function(eup) {
+          .on("mouseup", function eupHandler(eup) {
             if (mouseMoved) {
               // Add to existing selection if meta key is down
               var append = eup.metaKey;
@@ -81,7 +82,8 @@ define(['jquery'], function($) {
             rb.remove();
 
             // Remove handlers
-            $(this).off("mouseup mousemove");
+            $(this).off("mouseup", eupHandler);
+            $(this).off("mousemove", emvHandler);
           });
       });
     };
