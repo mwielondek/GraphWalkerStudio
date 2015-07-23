@@ -118,8 +118,8 @@
 
     // Create a selection rubberband on click-n-drag
     rubberband(self.root, function(selectedVertices, append) {
-      // Dispatch it to end of event queue so that it reaches
-      // the selection buffer last.
+      // Dispatch it to end of event queue so that it is not
+      // overriden by the onClick handler below.
       setTimeout(function() {
         self.opts.updateselection(selectedVertices.map(function(el) {
           return el['_vertexId'];

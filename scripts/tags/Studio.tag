@@ -1,7 +1,7 @@
 <studio>
   <p>Studio</p>
   <studio-contextpane selection={ selection } />
-  <studio-canvas options={ opts.canvas } selection={ selection } updateselection={ updateBuffer } />
+  <studio-canvas options={ opts.canvas } selection={ selection } updateselection={ updateSelection } />
 
   <style>
     studio {
@@ -39,22 +39,6 @@
     return true;
   };
 
-  // Buffers `updateSelection` calls and runs only the last one.
-  // This is helpful when sometimes `updateSelection` gets called
-  // many times due to various event handlers, but in the end we're
-  // only interested in the last one.
-  this.updateBuffer = (function(_this, timeout) {
-    var _buffer = [];
-    return function() {
-      if (_buffer.length == 0) {
-        setTimeout(function() {
-          _this.updateSelection.apply(_this, _buffer);
-          _buffer = [];
-        }, timeout);
-      }
-      _buffer = arguments;
-    }
-  })(this, 180);
 
 
   // TODO: refactor using promises
