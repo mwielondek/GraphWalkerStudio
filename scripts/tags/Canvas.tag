@@ -141,7 +141,6 @@
   });
 
   self.on('update', function() {
-    // TODO: figure out why it's triggered twice on selection
     var selection = self.opts.selection.mapBy('domId');
     jsp.clearDragSelection();
     jsp.addToDragSelection(selection);

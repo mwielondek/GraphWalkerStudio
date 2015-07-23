@@ -28,19 +28,22 @@ define(['app/RiotControl', 'constants/VertexConstants', './ConnectionActions',
         newVertex.id = 'v_' + String.fromCharCode(counter++);
       }
       RiotControl.trigger(CALLS.ADD_VERTEX, newVertex);
-      // TODO: refactor below into reusable method
-      // Prepare message to server
+
+      // Prepare server request
       var request = {
         command: GW.ADDVERTEX
       };
       var _this = this;
-      connection.sendRequest(request, function(response) {
-        if (response.success) {
+      connection.sendRequest(request,
+        // On success
+        function(response) {
           _this.setProps(newVertex, {label: response.id, id: response.id, status: STATUS.VERIFIED});
-        } else {
+        },
+        // On error
+        function(response) {
           _this.setProps(newVertex, {id: response.id, status: STATUS.ERROR});
         }
-      });
+      );
     },
     setProps: function(query, props) {
       RiotControl.trigger(CALLS.CHANGE_VERTEX, query, props);

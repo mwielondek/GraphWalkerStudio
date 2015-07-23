@@ -50,7 +50,7 @@ define(['app/RiotControl', 'constants/ConnectionConstants'], function(RiotContro
     send: function(message) {
       RiotControl.trigger(CALLS.SEND, message);
     },
-    sendRequest: function(request, callback) {
+    sendRequestRaw: function(request, callback) {
       // Add unique request ID
       request['request-id'] = Math.random().toString(36).substr(2);
       this.send(JSON.stringify(request));
@@ -59,6 +59,15 @@ define(['app/RiotControl', 'constants/ConnectionConstants'], function(RiotContro
         if (message['request-id'] == request['request-id']) {
           callback(message);
           return true; // stop listening
+        }
+      });
+    },
+    sendRequest: function(request, onsuccess, onerror) {
+      this.sendRequestRaw(request, function(response) {
+        if (response.success) {
+          onsuccess(response);
+        } else {
+          onerror(response);
         }
       });
     },
