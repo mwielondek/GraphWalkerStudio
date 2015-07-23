@@ -48,12 +48,17 @@ define(['jquery'], function($) {
           left: startpos.X
         }).hide().appendTo(this);
 
+        var mouseMoved = false;
+
         // Append temporary handlers
         $(this)
-          .on("mousemove", function(emv) {
+          .one("mousemove", function() {
+            mouseMoved = true;
+
             // Don't display the rubberband until user moves the cursor
             rb.show();
-
+          })
+          .on("mousemove", function(emv) {
             // Update dimensions
             rb.css({
               "top":    Math.min(startpos.Y, emv.pageY - this.offsetTop),
@@ -63,12 +68,14 @@ define(['jquery'], function($) {
             });
           })
           .on("mouseup", function(eup) {
-            // Add to existing selection if meta key is down
-            var append = eup.metaKey;
+            if (mouseMoved) {
+              // Add to existing selection if meta key is down
+              var append = eup.metaKey;
 
-            // Select vertices that (fully) fall inside the rubberband
-            var selectedVertices = _getSelectedVertices(rb[0]);
-            fn(selectedVertices, append);
+              // Select vertices that (fully) fall inside the rubberband
+              var selectedVertices = _getSelectedVertices(rb[0]);
+              fn(selectedVertices, append);
+            }
 
             // Remove rubberband
             rb.remove();
