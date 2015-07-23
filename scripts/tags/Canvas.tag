@@ -58,7 +58,7 @@
   });
   VertexActions.addChangeListener(function(vertices) {
     self.vertices = vertices;
-    self.opts.updateselection(0);
+    self.update();
   });
 
   EdgeActions.getAll(function(edges) {
@@ -66,7 +66,7 @@
   });
   EdgeActions.addChangeListener(function(edges) {
     self.edges = edges;
-    self.opts.updateselection(0);
+    self.update();
   });
 
   self.on('mount', function() {
@@ -116,6 +116,17 @@
       });
     });
 
+    // Create a selection rubberband on click-n-drag
+    rubberband(self.root, function(selectedVertices, append) {
+      // Dispatch it to end of event queue so that it reaches
+      // the selection buffer last.
+      setTimeout(function() {
+        self.opts.updateselection(selectedVertices.map(function(el) {
+          return el['_vertexId'];
+        }), ElementConstants.T_VERTEX, append);
+      }, 0);
+    });
+
     // Set up event listeners
     $(self.root)
       // Add new vertices on double click
@@ -127,12 +138,6 @@
         if (e.target == this) self.opts.updateselection(0);
       });
 
-    // Create a selection rubberband on click-n-drag
-    rubberband(self.root, function(selectedVertices, append) {
-      self.opts.updateselection(selectedVertices.map(function(el) {
-        return el['_vertexId'];
-      }), ElementConstants.T_VERTEX, append);
-    });
   });
 
   self.on('update', function() {
