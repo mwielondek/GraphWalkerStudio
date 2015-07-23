@@ -1,4 +1,5 @@
 window.debug = (window.location.hostname == 'localhost' ? true : false)
+window.debug.disableCache = false;
 
 // RequireJS config
 var config = {
@@ -47,7 +48,7 @@ var config = {
 };
 
 // Prevent browser caching
-if (window.debug) config.urlArgs = "bust=" +  (new Date()).getTime();
+if (window.debug.disableCache) config.urlArgs = "bust=" +  (new Date()).getTime();
 requirejs.config(config);
 
 requirejs(['app/StudioApp'], function(StudioApp) {
