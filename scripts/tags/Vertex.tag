@@ -186,8 +186,24 @@
           // Allow the `mousedown` event to propagate
           self.root.removeEventListener('mousedown', self, true);
 
+
+          // Make sure connection endpoints start precisely at the edge of the
+          // vertex by trimming any offset caused by lag between mouse drag
+          // and the mouseup event.
+          var vertexDimensions = evt.target.getBoundingClientRect();
+          var _e = $.extend({}, evt, {
+            clientY: (function() {
+              if (evt.clientY > vertexDimensions.bottom) return vertexDimensions.bottom;
+              if (evt.clientY < vertexDimensions.top) return vertexDimensions.top;
+            })(),
+            clientX: (function() {
+              if (evt.clientX > vertexDimensions.right) return vertexDimensions.right;
+              if (evt.clientX < vertexDimensions.left) return vertexDimensions.left;
+            })()
+          });
+
           // Re-trigger mousedown event
-          self.root.dispatchEvent(new MouseEvent('mousedown', evt));
+          self.root.dispatchEvent(new MouseEvent('mousedown', _e));
 
           // Reactivate our event multiplexer
           self.root.addEventListener('mousedown', self, true);
