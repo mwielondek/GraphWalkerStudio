@@ -19,10 +19,6 @@ function(riot, RiotControl, Constants) {
     });
 
     self.on(CALLS.CONNECT, function(url) {
-      // Data from the WebSocket comes in the form of a blob which needs
-      // to be converted before use. Blob => JSON string => JSON object.
-      self.reader = self.reader || new FileReader();
-
       var ws = new WebSocket(url);
       ws.onopen = function() {
         self.websocket = ws;
@@ -32,14 +28,8 @@ function(riot, RiotControl, Constants) {
         self.trigger(EVENTS.CONNECTION_CLOSED);
       };
       ws.onmessage = function(evt) {
-        var originalMessage = evt.data;
-        self.reader.readAsText(originalMessage);
-        self.reader.addEventListener('loadend', function handler() {
-          var data   = self.reader.result;
-          var dataObject = JSON.parse(data);
-          self.trigger(EVENTS.INCOMING_MESSAGE, dataObject, originalMessage);
-          self.reader.removeEventListener('loadend', handler);
-        });
+        var dataObject = JSON.parse(evt.data);
+        self.trigger(EVENTS.INCOMING_MESSAGE, dataObject);
       };
     });
 
