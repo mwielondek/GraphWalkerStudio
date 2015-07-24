@@ -71,6 +71,7 @@
   var Constants        = require('constants/VertexConstants');
   var ElementConstants = require('constants/ElementConstants');
   var VertexActions    = require('actions/VertexActions');
+  var ActionUtils      = require('actions/Utils');
 
   var self = this;
   var $root;
@@ -134,7 +135,7 @@
         var updatePositionInModel = function() {
           VertexActions.setProps(self.id, {view: {left: params.pos[0], top: params.pos[1]}});
         };
-        VertexActions.bufferedAction(updatePositionInModel, 'jsp.draggable.stop', params.selection.length);
+        ActionUtils.bufferedAction(updatePositionInModel, 'jsp.draggable.stop', params.selection.length);
       }
     });
 

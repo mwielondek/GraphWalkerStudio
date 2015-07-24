@@ -27,7 +27,7 @@ var config = {
                                'actions/EdgeActions', 'jsplumb', 'constants/ElementConstants',
                                'tests/CanvasTest', 'utils/rubberband'],
         'tag/Vertex'        : ['riot', 'jquery', 'constants/VertexConstants', 'jsplumb', 'jquery-ui',
-                               'actions/VertexActions', 'constants/ElementConstants'],
+                               'actions/VertexActions', 'constants/ElementConstants', 'actions/Utils'],
         'tag/Edge'          : ['riot', 'jquery', 'constants/EdgeConstants', 'jsplumb', 'actions/EdgeActions'],
         'tag/ContextPane'   : ['riot'],
         'tag/PropertiesPane': ['riot', 'actions/VertexActions', 'actions/EdgeActions',

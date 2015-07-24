@@ -1,7 +1,8 @@
-define(['riot', 'constants/VertexConstants', 'app/RiotControl', 'jquery', 'jsplumb'],
+define(['riot', 'constants/VertexConstants', 'app/RiotControl', 'jquery', 'jsplumb', 'store/Utils'],
  function(riot, Constants, RiotControl, $) {
 
-  var jsp = require('jsplumb');
+  var jsp   = require('jsplumb');
+  var Utils = require('store/Utils');
 
   function VertexStore() {
     var self = riot.observable(this);
@@ -12,6 +13,9 @@ define(['riot', 'constants/VertexConstants', 'app/RiotControl', 'jquery', 'jsplu
 
     // DATA STORE
     self.vertices = [];
+
+    // Utils
+    var _getVertex = Utils.getElement.bind(undefined, self.vertices);
 
     // Event listeners
     var CALLS = Constants.calls;
@@ -51,17 +55,6 @@ define(['riot', 'constants/VertexConstants', 'app/RiotControl', 'jquery', 'jsplu
       self.trigger(EMIT_CHANGE, self.vertices);
     });
 
-    // Helper functions
-
-    // Get vertex either by object or by ID
-    var _getVertex = function(query) {
-      if (query !== null && typeof query === 'object') {
-        // Extract id
-        query = query.id;
-      }
-      // Search by ID
-      return self.vertices.filter(function(el) { return el.id === query })[0];
-    };
   }
 
   return new VertexStore();

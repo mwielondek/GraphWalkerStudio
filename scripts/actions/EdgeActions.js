@@ -27,9 +27,9 @@ function(RiotControl, Constants, connection, $) {
       });
     },
     add: function(newEdge) {
-      // give edge temporary ID if not already set
+      // Give edge temporary ID if not already set
       if (!newEdge.id) {
-        newEdge.id = 'e_' + counter++;//Math.random().toString(16).substr(2);
+        newEdge.id = 'e_' + counter++;
       }
       RiotControl.trigger(CALLS.ADD_EDGE, newEdge);
       // TODO: Sent request to GW

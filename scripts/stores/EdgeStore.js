@@ -1,4 +1,5 @@
-define(['riot', 'constants/EdgeConstants', 'app/RiotControl', 'jquery'], function(riot, Constants, RiotControl, $) {
+define(['riot', 'constants/EdgeConstants', 'app/RiotControl', 'jquery', 'store/Utils'],
+function(riot, Constants, RiotControl, $, Utils) {
   function EdgeStore() {
     var self = riot.observable(this);
 
@@ -8,6 +9,9 @@ define(['riot', 'constants/EdgeConstants', 'app/RiotControl', 'jquery'], functio
 
     // DATA STORE
     self.edges = [];
+
+    // Utils
+    var _getEdge = Utils.getElement.bind(undefined, self.edges);
 
     // Event listeners
     var CALLS = Constants.calls;
@@ -37,14 +41,6 @@ define(['riot', 'constants/EdgeConstants', 'app/RiotControl', 'jquery'], functio
       self.trigger(EMIT_CHANGE, self.edges);
     });
 
-    // Helper functions
-    var _getEdge = function(query) {
-      if (query !== null && typeof query === 'object') {
-        query = query.id
-      }
-      // Search by ID
-      return self.edges.filter(function(el) { return el.id === query })[0];
-    };
   }
 
   return new EdgeStore();
