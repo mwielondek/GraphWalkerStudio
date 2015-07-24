@@ -1,5 +1,5 @@
-define(['app/RiotControl', 'constants/VertexConstants', './ConnectionActions',
-'jquery', 'constants/GWConstants', './EdgeActions'], function(RiotControl, Constants, connection, $) {
+define(['app/RiotControl', 'constants/VertexConstants', './GWActions',
+'jquery', 'constants/GWConstants', './EdgeActions'], function(RiotControl, Constants, gwcon, $) {
 
   var CALLS       = Constants.calls;
   var EVENTS      = Constants.events;
@@ -34,7 +34,7 @@ define(['app/RiotControl', 'constants/VertexConstants', './ConnectionActions',
         command: GW.ADDVERTEX
       };
       var _this = this;
-      connection.sendRequest(request,
+      gwcon.sendRequest(request,
         // On success
         function(response) {
           _this.setProps(newVertex, {label: response.id, id: response.id, status: STATUS.VERIFIED});
