@@ -9,9 +9,13 @@ import (
   "encoding/json"
   "encoding/hex"
   "crypto/rand"
+  "time"
+  "os"
+  "strconv"
 )
 
 const (
+  // GW Commands
   ADDVERTEX = "addVertex"
 )
 
@@ -45,6 +49,8 @@ func randId() string {
 // Mock GraphWalker
 
 func GWMockServer(ws *websocket.Conn) {
+  d, _ := strconv.Atoi(os.Args[1])
+  DELAY := time.Duration(d)
   logger := new(Logger)
   logger.Print("Connection from %s", ws.LocalAddr().String())
   var request interface{}
@@ -77,6 +83,7 @@ func GWMockServer(ws *websocket.Conn) {
     }
     if (response != nil) {
       m, _ := json.Marshal(response)
+      time.Sleep(DELAY * time.Millisecond)
       logger.Print("Sent response: %s", m)
       websocket.JSON.Send(ws, response)
       response = nil
@@ -89,6 +96,10 @@ func GWMockServer(ws *websocket.Conn) {
 
 // Serve
 func main() {
+  if len(os.Args) < 2 {
+    fmt.Printf("Usage: %s <SIMULATED DELAY TIME IN MS>\n", os.Args[0])
+    os.Exit(1)
+  }
   http.Handle("/", websocket.Handler(GWMockServer))
   err := http.ListenAndServe(":9999", nil)
   log.Print("Listening on :9999")
