@@ -10,11 +10,19 @@
     }
   </style>
 
-  var VertexActions    = require('actions/VertexActions');
-  var ElementConstants = require('constants/ElementConstants');
+  var VertexActions     = require('actions/VertexActions');
+  var ElementConstants  = require('constants/ElementConstants');
+  var ConnectionActions = require('actions/ConnectionActions');
 
   // STATE
   this.selection = [];
+
+  // Handle passed in options
+  this.on('mount', function() {
+    if (opts.autoConnect && opts.autoConnect.enabled) {
+      ConnectionActions.connect(opts.autoConnect.url);
+    }
+  });
 
   // TODO: refactor using promises
   updateSelection(elements, type, toggle) {

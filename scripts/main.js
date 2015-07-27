@@ -59,5 +59,10 @@ requirejs(['app/StudioApp'], function(StudioApp) {
     console.log = function() {};
   }
 
-  StudioApp.init();
+  StudioApp.init({
+    autoConnect: {
+      enabled: true,
+      url: 'ws://localhost:9999'
+    }
+  });
 });
