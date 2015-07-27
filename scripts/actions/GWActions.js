@@ -4,11 +4,11 @@ define(['./ConnectionActions'], function(connection) {
 
     sendRequestRaw: function(request, callback) {
       // Add unique request ID
-      request['request-id'] = Math.random().toString(36).substr(2);
+      request['requestId'] = Math.random().toString(36).substr(2);
       connection.send(JSON.stringify(request));
       // Wait for relevant response
       connection.readUntil(function(message) {
-        if (message['request-id'] == request['request-id']) {
+        if (message['requestId'] == request['requestId']) {
           callback(message);
           return true; // stop listening
         }

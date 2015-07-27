@@ -20,10 +20,9 @@ const (
 )
 
 type Response struct {
-  Requestid string `json:"request-id"`
-  Command string `json:"command"`
+  Requestid string `json:"requestId"`
   Success bool `json:"success"`
-  Id string `json:"id"`
+  Body interface{} `json:"body"`
 }
 
 // Custom logger with prefix
@@ -73,10 +72,9 @@ func GWMockServer(ws *websocket.Conn) {
     switch req["command"] {
       case ADDVERTEX:
         response = &Response{
-          Requestid: req["request-id"].(string),
-          Command: ADDVERTEX,
+          Requestid: req["requestId"].(string),
           Success: true,
-          Id: "v_"+randId(),
+          Body: map[string]string{"id": "v_"+randId()},
         }
       default:
         logger.Print("Unknown command %s", req["command"])

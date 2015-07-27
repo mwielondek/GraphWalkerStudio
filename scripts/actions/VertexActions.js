@@ -37,11 +37,11 @@ define(['app/RiotControl', 'constants/VertexConstants', './GWActions',
       gwcon.sendRequest(request,
         // On success
         function(response) {
-          _this.setProps(newVertex, {label: response.id, id: response.id, status: STATUS.VERIFIED});
+          _this.setProps(newVertex, {label: response.body.id, id: response.body.id, status: STATUS.VERIFIED});
         },
         // On error
         function(response) {
-          _this.setProps(newVertex, {id: response.id, status: STATUS.ERROR});
+          _this.setProps(newVertex, {id: response.body.id, status: STATUS.ERROR});
         }
       );
     },
