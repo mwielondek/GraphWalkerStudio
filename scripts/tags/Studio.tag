@@ -1,6 +1,6 @@
 <studio>
   <p>Studio</p>
-  <studio-tabs model={ model } updatemodel={ updateModel } />
+  <studio-tabs model={ model } setmodel={ setModel } />
   <studio-contextpane selection={ selection } />
   <studio-canvas options={ opts.canvas } selection={ selection } updateselection={ updateSelection } />
 
@@ -17,7 +17,7 @@
 
   // STATE
   this.selection = [];
-  this.model = '';
+  this.model = undefined;
 
   // Handle passed in options
   this.on('mount', function() {
@@ -26,7 +26,7 @@
     }
   });
 
-  updateModel(model) {
+  setModel(model) {
     this.model = model;
   }
 

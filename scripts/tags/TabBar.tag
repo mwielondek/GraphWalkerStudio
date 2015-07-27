@@ -1,14 +1,15 @@
 <studio-tabs>
   <ul>
-    <li><div>HardTab1<span>[X]</span></div></li>
-    <li><div>HardTab2<span>[X]</span></div></li>
-    <li><div id="add">&nbsp;<span>[+]</span></div></li>
+    <li each={ tabs }><div onclick={ selectTab } class="{ selected: parent.opts.model.id == id}">{ name }
+      <span onclick={ parent.removeTab }>[X]</span></div></li>
+
+    <li><div id="add">&nbsp;<span onclick={ addTab }>[+]</span></div></li>
   </ul>
 
   <style scoped>
     ul {
       width: 100%;
-      background-color: rgb(130, 130, 130);
+      background-color: rgb(115, 112, 112);
       list-style: none;
       padding: 0;
       margin: 0;
@@ -24,6 +25,7 @@
       text-align: left;
       vertical-align: middle;
       line-height: 20px;
+      background-color: rgb(153, 153, 153);
     }
     span {
       float: right;
@@ -31,10 +33,47 @@
     }
     span:hover {
       color: black;
+      cursor: default;
     }
     div#add {
       border: 0px;
       width: 100%;
+      margin-left: -5px;
+    }
+    div.selected {
+      border: 1px solid #0e9c14;
+      background-color: rgb(181, 181, 181);
     }
   </style>
+
+  var ModelActions = require('actions/ModelActions');
+
+  var self = this;
+
+  self.tabs = [];
+
+  ModelActions.addChangeListener(function(models) {
+    self.tabs = models;
+    self.update();
+  });
+
+  addTab() {
+    ModelActions.add();
+  }
+
+  removeTab(e) {
+    // TODO: add confirmation modal
+    var model = e.item.id;
+    ModelActions.remove(model);
+
+    // Don't trigger selectTab
+    e.stopPropagation();
+
+    // Reset model selection if selected model is being removed
+    if (opts.model == model) opts.setmodel(0);
+  }
+
+  selectTab(e) {
+    opts.setmodel(e.item);
+  }
 </studio-tabs>
