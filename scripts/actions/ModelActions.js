@@ -20,12 +20,13 @@ define(['app/RiotControl', 'constants/ModelConstants', './GWActions',
     get: function(vertexId, callback) {
       RiotControl.trigger(CALLS.GET_MODEL, vertexId, callback);
     },
-    add: function(newModel) {
+    add: function(newModel, callback) {
       newModel = newModel || {};
       // Give vertex temporary ID if not already set
       if (!newModel.id) newModel.id = 'model' + String.fromCharCode(counter++);
       if (!newModel.name) newModel.name = newModel.id;
       RiotControl.trigger(CALLS.ADD_MODEL, newModel);
+      callback(newModel);
 
       // Prepare server request
       // var request = {

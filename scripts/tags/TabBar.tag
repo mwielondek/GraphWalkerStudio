@@ -58,7 +58,9 @@
   });
 
   addTab() {
-    ModelActions.add();
+    ModelActions.add({}, function(model) {
+      self.opts.setmodel(model);
+    });
   }
 
   removeTab(e) {
