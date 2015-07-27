@@ -8,7 +8,7 @@
     height: 100%;
     display: block;
     position: relative;
-    margin-right: 320px;
+    margin-right: 310px;
     background-color: #f0f0f0;
   }
   </style>

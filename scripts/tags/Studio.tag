@@ -1,5 +1,6 @@
 <studio>
   <p>Studio</p>
+  <studio-tabs model={ model } updatemodel={ updateModel } />
   <studio-contextpane selection={ selection } />
   <studio-canvas options={ opts.canvas } selection={ selection } updateselection={ updateSelection } />
 
@@ -16,6 +17,7 @@
 
   // STATE
   this.selection = [];
+  this.model = '';
 
   // Handle passed in options
   this.on('mount', function() {
@@ -23,6 +25,10 @@
       ConnectionActions.connect(opts.autoConnect.url);
     }
   });
+
+  updateModel(model) {
+    this.model = model;
+  }
 
   // TODO: refactor using promises
   updateSelection(elements, type, toggle) {
