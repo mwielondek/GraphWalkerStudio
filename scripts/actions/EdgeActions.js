@@ -44,11 +44,11 @@ function(RiotControl, Constants, connection, $) {
       });
       RiotControl.trigger(CALLS.REMOVE_EDGE, edgeId);
     },
-    removeForVertex: function(vertexDomId) {
+    removeForVertex: function(vertexId) {
       var _this = this;
       this.getAll(function(allEdges) {
         var edgesToRemove = allEdges.filter(function(el) {
-          return el.sourceVertexId === vertexDomId || el.targetVertexId === vertexDomId;
+          return el.sourceVertexId === vertexId || el.targetVertexId === vertexId;
         });
 
         // TODO: instead refactor the store method to accept multiple edges...
