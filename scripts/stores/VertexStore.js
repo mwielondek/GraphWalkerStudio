@@ -46,12 +46,10 @@ define(['riot', 'constants/VertexConstants', 'app/RiotControl', 'jquery', 'jsplu
       // Remove vertex from the array
       var index = self.vertices.indexOf(vertex);
       console.assert(index !== -1, 'Trying to remove a vertice that doesn\'t exist');
-      // self.vertices.splice(index, 1);
+      self.vertices.splice(index, 1);
 
-      // HACK: riot/#1003 work-around. TODO fix once issue's been resolved.
-      jsp.remove(vertex.view.domId); // Removes vertice and all connections
-      self.trigger(CALLS.CHANGE_VERTEX, query, {_deleted: true});
-
+      // HACK: riot/#1003 workaround. Prevents vertex labels switching DOM nodes.
+      self.trigger(EMIT_CHANGE, []);
       self.trigger(EMIT_CHANGE, self.vertices);
     });
 

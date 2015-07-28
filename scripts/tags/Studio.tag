@@ -12,6 +12,7 @@
     }
   </style>
 
+  var jsp               = require('jsplumb');
   var VertexActions     = require('actions/VertexActions');
   var ElementConstants  = require('constants/ElementConstants');
   var ConnectionActions = require('actions/ConnectionActions');
@@ -28,7 +29,12 @@
   });
 
   setModel(model) {
+    // HACK: riot/#1003 workaround. Prevents vertex labels switching DOM nodes.
+    this.model = {};
+    this.update();
+
     this.model = model;
+    this.selection = [];
     this.update();
   }
 

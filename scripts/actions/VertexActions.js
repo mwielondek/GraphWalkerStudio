@@ -52,7 +52,7 @@ define(['app/RiotControl', 'constants/VertexConstants', './GWActions',
       if (!Array.isArray(vertexIds)) vertexIds = [vertexIds];
       vertexIds.forEach(function(el) {
         // Remove edges from/to this vertex
-        EdgeActions.removeForVertex(el)
+        EdgeActions.removeForVertex(el);
 
         RiotControl.trigger(CALLS.REMOVE_VERTEX, el);
       });
