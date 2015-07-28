@@ -41,13 +41,17 @@ function(RiotControl, Constants, connection, $) {
       if (!Array.isArray(edgeIds)) edgeIds = [edgeIds];
       RiotControl.trigger(CALLS.REMOVE_EDGE, edgeIds);
     },
-    removeForVertex: function(vertexId) {
-      var _this = this;
+    getForVertices: function(vertexIds, callback) {
+      if (!Array.isArray(vertexIds)) vertexIds = [vertexIds];
       this.getAll(function(allEdges) {
-        var edgesToRemove = allEdges.filter(function(el) {
-          return el.sourceVertexId === vertexId || el.targetVertexId === vertexId;
+        var results = [];
+        vertexIds.forEach(function(vertexId) {
+          var matchingEdges = allEdges.filter(function(el) {
+            return el.sourceVertexId === vertexId || el.targetVertexId === vertexId;
+          });
+          results = results.concat(matchingEdges.filter(function(el) { return results.indexOf(el) == -1 }));
         });
-        _this.remove(edgesToRemove);
+        callback(results);
       });
     }
   }
