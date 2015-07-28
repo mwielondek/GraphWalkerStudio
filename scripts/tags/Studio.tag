@@ -30,12 +30,14 @@
 
   setModel(model) {
     // HACK: riot/#1003 workaround. Prevents vertex labels switching DOM nodes.
-    this.model = {};
+    this.model = undefined;
     this.update();
 
-    this.model = model;
-    this.selection = [];
-    this.update();
+    if (model) {
+      this.model = model;
+      this.selection = [];
+      this.update();
+    }
   }
 
   // TODO: refactor using promises

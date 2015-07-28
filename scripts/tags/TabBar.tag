@@ -1,7 +1,7 @@
 <studio-tabs>
   <ul>
     <li each={ tabs }><div onclick={ selectTab } class="{ selected: parent.opts.model.id == id}">{ name }
-      <span onclick={ parent.removeTab }>[X]</span></div></li>
+      <span onclick={ parent.closeTab }>[X]</span></div></li>
 
     <li><div id="add">&nbsp;<span onclick={ addTab }>[+]</span></div></li>
   </ul>
@@ -59,20 +59,25 @@
 
   addTab() {
     ModelActions.add({}, function(model) {
-      self.opts.setmodel(model);
+      opts.setmodel(model);
     });
   }
 
-  removeTab(e) {
-    // TODO: add confirmation modal
+  closeTab(e) {
     var model = e.item.id;
+
+    // Change model selection if selected model is being removed
+    if (opts.model.id == model) {
+      // Try selecting model immediately next to the left
+      var index = self.tabs.mapBy('id').indexOf(model) - 1;
+      index = index < 0 ? 1 : index;
+      opts.setmodel(self.tabs[index]);
+    }
+
     ModelActions.remove(model);
 
     // Don't trigger selectTab
     e.stopPropagation();
-
-    // Reset model selection if selected model is being removed
-    if (opts.model == model) opts.setmodel(0);
   }
 
   selectTab(e) {
