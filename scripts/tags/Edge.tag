@@ -56,8 +56,6 @@
   })
 
   self.on('unmount', function() {
-    // don't do this for now.. riot/#1003
-    // jsp.detach(self.connection);
-    delete self.connection;
+    if (self.connection.connector) jsp.detach(self.connection);
   });
 </edge>

@@ -40,7 +40,7 @@ define(['riot', 'constants/VertexConstants', 'app/RiotControl', 'jquery', 'jsplu
       self.trigger(EMIT_CHANGE, self.vertices);
     });
 
-    self.on(CALLS.REMOVE_VERTEX, function(vertices) {
+    self.on(CALLS.REMOVE_VERTEX, function(vertices, callback) {
       vertices.forEach(function(el) {
         var vertex = _getVertex(el);
 
@@ -53,6 +53,7 @@ define(['riot', 'constants/VertexConstants', 'app/RiotControl', 'jquery', 'jsplu
       // HACK: riot/#1003 workaround. Prevents vertex labels switching DOM nodes.
       self.trigger(EMIT_CHANGE, []);
       self.trigger(EMIT_CHANGE, self.vertices);
+      callback();
     });
 
   }

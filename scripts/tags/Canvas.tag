@@ -101,7 +101,7 @@
       });
 
       // Register connection types
-      jsPlumb.registerConnectionType('selected', {
+      jsp.registerConnectionType('selected', {
         // Same as HoverPaintStyle
         paintStyle: {strokeStyle: '#0b771b', lineWidth: 3 }
       });

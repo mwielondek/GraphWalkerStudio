@@ -50,10 +50,11 @@ define(['app/RiotControl', 'constants/VertexConstants', './GWActions',
     },
     remove: function(vertexIds) {
       if (!Array.isArray(vertexIds)) vertexIds = [vertexIds];
-      EdgeActions.getForVertices(vertexIds, function(edgesToRemove) {
-        EdgeActions.remove(edgesToRemove);
+      RiotControl.trigger(CALLS.REMOVE_VERTEX, vertexIds, function() {
+        EdgeActions.getForVertices(vertexIds, function(edgesToRemove) {
+          EdgeActions.remove(edgesToRemove);
+        });
       });
-      RiotControl.trigger(CALLS.REMOVE_VERTEX, vertexIds);
       // TODO: add GW connection request
     },
     getDomId: function(idArray, callback) {
