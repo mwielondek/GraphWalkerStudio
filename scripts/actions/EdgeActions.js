@@ -37,12 +37,9 @@ function(RiotControl, Constants, connection, $) {
     setProps: function(query, props) {
       RiotControl.trigger(CALLS.CHANGE_EDGE, query, props);
     },
-    remove: function(edgeId) {
-      var connection = this.getById(edgeId, function(edge) {
-        var connection = edge._jsp_connection;
-        jsp.detach(connection);
-      });
-      RiotControl.trigger(CALLS.REMOVE_EDGE, edgeId);
+    remove: function(edgeIds) {
+      if (!Array.isArray(edgeIds)) edgeIds = [edgeIds];
+      RiotControl.trigger(CALLS.REMOVE_EDGE, edgeIds);
     },
     removeForVertex: function(vertexId) {
       var _this = this;
@@ -50,11 +47,7 @@ function(RiotControl, Constants, connection, $) {
         var edgesToRemove = allEdges.filter(function(el) {
           return el.sourceVertexId === vertexId || el.targetVertexId === vertexId;
         });
-
-        // TODO: instead refactor the store method to accept multiple edges...
-        for (var i = 0; i < edgesToRemove.length; i++) {
-          _this.remove(edgesToRemove[i].id);
-        }
+        _this.remove(edgesToRemove);
       });
     }
   }
