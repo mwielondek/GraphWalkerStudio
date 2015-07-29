@@ -1,5 +1,5 @@
 define(['app/RiotControl', 'constants/EdgeConstants', './ConnectionActions',
-'jquery', 'constants/GWConstants', 'jsplumb', 'constants/ElementConstants'],
+'jquery', 'constants/GWConstants', 'jsplumb', 'constants/StudioConstants'],
 function(RiotControl, Constants, connection, $) {
 
   var CALLS  = Constants.calls;
@@ -7,7 +7,7 @@ function(RiotControl, Constants, connection, $) {
   var STATUS = Constants.status;
   var GW     = require('constants/GWConstants').methods;
 
-  var ElementConstants = require('constants/ElementConstants');
+  var StudioConstants = require('constants/StudioConstants');
 
   var jsp = require('jsplumb');
 
@@ -32,7 +32,7 @@ function(RiotControl, Constants, connection, $) {
       // Give edge temporary ID if not already set
       newEdge.id = newEdge.id || 'e_' + counter++;
 
-      newEdge.type = ElementConstants.T_EDGE;
+      newEdge.type = StudioConstants.types.T_EDGE;
       RiotControl.trigger(CALLS.ADD_EDGE, newEdge);
       // TODO: Sent request to GW
     },

@@ -24,17 +24,17 @@ var config = {
     'tag/Studio': (function() {
       var tagShims = {
         'tag/Canvas'        : ['riot', 'jquery', 'app/RiotControl', 'actions/VertexActions',
-                               'actions/EdgeActions', 'jsplumb', 'constants/ElementConstants',
+                               'actions/EdgeActions', 'jsplumb', 'constants/StudioConstants',
                                'tests/CanvasTest', 'utils/rubberband'],
         'tag/Vertex'        : ['riot', 'jquery', 'constants/VertexConstants', 'jsplumb', 'jquery-ui',
-                               'actions/VertexActions', 'constants/ElementConstants', 'actions/Utils'],
+                               'actions/VertexActions', 'constants/StudioConstants', 'actions/Utils'],
         'tag/Edge'          : ['riot', 'jquery', 'constants/EdgeConstants', 'jsplumb', 'actions/EdgeActions'],
         'tag/ContextPane'   : ['riot'],
         'tag/PropertiesPane': ['riot', 'actions/VertexActions', 'actions/EdgeActions',
-                               'constants/ElementConstants', 'utils/mixins'],
+                               'constants/StudioConstants', 'utils/mixins'],
         'tag/ConnectionPane': ['riot', 'actions/ConnectionActions'],
         'tag/TabBar'        : ['riot', 'actions/ModelActions'],
-        'tag/Studio'        : ['actions/VertexActions', 'constants/ElementConstants']
+        'tag/Studio'        : ['actions/VertexActions', 'constants/StudioConstants']
       };
       var compiledShim = [];
       for (var prop in tagShims) {

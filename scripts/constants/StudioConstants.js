@@ -8,5 +8,5 @@ define(function() {
     'T_MODEL': 'model'
   };
 
-  return constants.types;
+  return constants;
 });

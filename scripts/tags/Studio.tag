@@ -14,7 +14,7 @@
 
   var jsp               = require('jsplumb');
   var VertexActions     = require('actions/VertexActions');
-  var ElementConstants  = require('constants/ElementConstants');
+  var StudioConstants   = require('constants/StudioConstants');
   var ConnectionActions = require('actions/ConnectionActions');
 
   // STATE
@@ -67,7 +67,7 @@
       }
 
     }
-    if (type !== ElementConstants.T_VERTEX) {
+    if (type !== StudioConstants.types.T_VERTEX) {
       this.update();
       return;
     }

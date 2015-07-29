@@ -1,11 +1,12 @@
 define(['app/RiotControl', 'constants/ModelConstants', './GWActions',
-'jquery', 'constants/GWConstants'], function(RiotControl, Constants, gwcon, $) {
+'jquery', 'constants/GWConstants', 'constants/StudioConstants'],
+function(RiotControl, Constants, gwcon, $) {
 
   var CALLS  = Constants.calls;
   var EVENTS = Constants.events;
   var GW     = require('constants/GWConstants').methods;
 
-  var ElementConstants = require('constants/ElementConstants');
+  var StudioConstants = require('constants/StudioConstants');
 
   var counter = 65; // 'A'
 
@@ -28,7 +29,7 @@ define(['app/RiotControl', 'constants/ModelConstants', './GWActions',
       newModel.id = newModel.id || 'model' + String.fromCharCode(counter++);
 
       newModel.name = newModel.name || newModel.id;
-      newModel.type = ElementConstants.T_MODEL;
+      newModel.type = StudioConstants.types.T_MODEL;
       RiotControl.trigger(CALLS.ADD_MODEL, newModel);
       callback(newModel);
 

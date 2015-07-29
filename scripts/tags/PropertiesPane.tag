@@ -11,7 +11,7 @@
   var VertexActions    = require('actions/VertexActions');
   var EdgeActions      = require('actions/EdgeActions');
   var ModelActions     = require('actions/ModelActions');
-  var ElementConstants = require('constants/ElementConstants');
+  var StudioConstants  = require('constants/StudioConstants');
 
   var self = this;
 
@@ -24,13 +24,13 @@
   removeElement() {
     // Call proper remove action
     switch (self.element.type) {
-      case ElementConstants.T_VERTEX:
+      case StudioConstants.types.T_VERTEX:
         VertexActions.remove(opts.selection.mapBy('id'));
         break;
-      case ElementConstants.T_EDGE:
+      case StudioConstants.types.T_EDGE:
         EdgeActions.remove(self.element.id);
         break;
-      case ElementConstants.T_MODEL:
+      case StudioConstants.types.T_MODEL:
         ModelActions.remove(self.element.id);
         break;
     }

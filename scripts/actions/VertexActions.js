@@ -1,5 +1,5 @@
 define(['app/RiotControl', 'constants/VertexConstants', './GWActions',
-'jquery', 'constants/GWConstants', './EdgeActions', 'constants/ElementConstants'],
+'jquery', 'constants/GWConstants', './EdgeActions', 'constants/StudioConstants'],
 function(RiotControl, Constants, gwcon, $) {
 
   var CALLS  = Constants.calls;
@@ -8,7 +8,7 @@ function(RiotControl, Constants, gwcon, $) {
   var GW     = require('constants/GWConstants').methods;
 
   var EdgeActions      = require('actions/EdgeActions');
-  var ElementConstants = require('constants/ElementConstants');
+  var StudioConstants  = require('constants/StudioConstants');
 
   var counter = 65; // 'A'
 
@@ -29,7 +29,7 @@ function(RiotControl, Constants, gwcon, $) {
       // Give vertex temporary ID if not already set
       newVertex.id = newVertex.id || 'v_' + String.fromCharCode(counter++);
 
-      newVertex.type = ElementConstants.T_VERTEX;
+      newVertex.type = StudioConstants.types.T_VERTEX;
       RiotControl.trigger(CALLS.ADD_VERTEX, newVertex);
 
       // Prepare server request

@@ -18,7 +18,7 @@
   var RiotControl       = require('app/RiotControl');
   var VertexActions     = require('actions/VertexActions');
   var EdgeActions       = require('actions/EdgeActions');
-  var ElementConstants  = require('constants/ElementConstants');
+  var StudioConstants   = require('constants/StudioConstants');
   var ConnectionActions = require('actions/ConnectionActions');
   var rubberband        = require('utils/rubberband');
 
@@ -116,7 +116,7 @@
       // Selecting edges
       jsp.bind('click', function(connection) {
         var edgeId = connection.getParameter('edge_id');
-        self.opts.updateselection(edgeId, ElementConstants.T_EDGE);
+        self.opts.updateselection(edgeId, StudioConstants.types.T_EDGE);
       });
     });
 
@@ -127,7 +127,7 @@
       setTimeout(function() {
         self.opts.updateselection(selectedVertices.map(function(el) {
           return el['_vertexId'];
-        }), ElementConstants.T_VERTEX, append);
+        }), StudioConstants.types.T_VERTEX, append);
       }, 0);
     });
 

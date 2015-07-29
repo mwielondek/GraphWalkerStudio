@@ -69,7 +69,7 @@
   var $                = require('jquery');
   var jsp              = require('jsplumb');
   var Constants        = require('constants/VertexConstants');
-  var ElementConstants = require('constants/ElementConstants');
+  var StudioConstants  = require('constants/StudioConstants');
   var VertexActions    = require('actions/VertexActions');
   var ActionUtils      = require('actions/Utils');
 
@@ -172,7 +172,7 @@
     $root.on('focus click', function(e) {
       // Toggle if meta key was down during the click.
       var toggle = e.type == 'click' ? e.metaKey : false;
-      self.opts.updateselection(self.id, ElementConstants.T_VERTEX, toggle);
+      self.opts.updateselection(self.id, StudioConstants.types.T_VERTEX, toggle);
     });
 
     // MouseEvent multiplexing. Trigger click as usual, trigger
