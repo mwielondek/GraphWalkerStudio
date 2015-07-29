@@ -53,31 +53,45 @@
   self.tabs = [];
 
   ModelActions.addChangeListener(function(models) {
-    self.tabs = models;
+    // Close tabs belonging to recently removed models
+    self.tabs.forEach(function(tab) {
+      if (models.indexOf(tab) == -1) self.closeTab(null, tab.id);
+    });
     self.update();
   });
 
-  addTab() {
-    ModelActions.add({}, function(model) {
+  addTab(e, model) {
+    // TODO: use promises
+    if (model) {
+      // Open existing model
+      self.tabs.push(model);
       opts.setmodel(model);
-    });
+    } else {
+      // Create new model
+      ModelActions.add({}, function(model) {
+        self.tabs.push(model);
+        opts.setmodel(model);
+      });
+    }
   }
 
-  closeTab(e) {
-    var model = e.item.id;
+  closeTab(e, modelId) {
+    var model = modelId || e.item.id;
+
+    var index = self.tabs.mapBy('id').indexOf(model);
 
     // Change model selection if selected model is being removed
     if (opts.model.id == model) {
       // Try selecting model immediately next to the left
-      var index = self.tabs.mapBy('id').indexOf(model) - 1;
-      index = index < 0 ? 1 : index;
-      opts.setmodel(self.tabs[index]);
+      var next = index - 1;
+      next = next < 0 ? 1 : next;
+      opts.setmodel(self.tabs[next]);
     }
 
-    ModelActions.remove(model);
+    self.tabs.splice(index, 1);
 
     // Don't trigger selectTab
-    e.stopPropagation();
+    if (e) e.stopPropagation();
   }
 
   selectTab(e) {
