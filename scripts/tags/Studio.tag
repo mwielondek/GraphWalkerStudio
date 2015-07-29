@@ -13,30 +13,37 @@
   </style>
 
   var jsp               = require('jsplumb');
+  var RiotControl       = require('app/RiotControl');
   var VertexActions     = require('actions/VertexActions');
   var StudioConstants   = require('constants/StudioConstants');
   var ConnectionActions = require('actions/ConnectionActions');
 
+  var self = this;
+
   // STATE
-  this.selection = [];
-  this.model = undefined;
+  self.selection = [];
+  self.model = undefined;
 
   // Handle passed in options
-  this.on('mount', function() {
+  self.on('mount', function() {
     if (opts.autoConnect && opts.autoConnect.enabled) {
       ConnectionActions.connect(opts.autoConnect.url);
     }
   });
 
+  RiotControl.on(StudioConstants.calls.CLEAR_SELECTION, function() {
+    self.updateSelection(0);
+  });
+
   setModel(model) {
     // HACK: riot/#1003 workaround. Prevents vertex labels switching DOM nodes.
-    this.model = undefined;
-    this.update();
+    self.model = undefined;
+    self.update();
 
     if (model) {
-      this.model = model;
-      this.selection = [];
-      this.update();
+      self.model = model;
+      self.selection = [];
+      self.update();
     }
   }
 
@@ -45,13 +52,13 @@
     // If `elements` is falsy, clear selection
     if (!elements || elements.length == 0) {
       // If selection already is null prevent update.
-      if (this.selection.length == 0) return;
-      this.selection = [];
+      if (self.selection.length == 0) return;
+      self.selection = [];
     } else {
       if (!Array.isArray(elements)) elements = [elements]; // Wrap single element into array
 
       if (toggle) {
-        var _this = this;
+        var _this = self;
         elements.forEach(function(element) {
           var index = _this.selection.mapBy('id').indexOf(element);
           if (index == -1) {
@@ -63,24 +70,24 @@
           }
         });
       } else {
-        this.selection = elements.map(function(element) { return {id: element, type: type}});
+        self.selection = elements.map(function(element) { return {id: element, type: type}});
       }
 
     }
-    if (type !== StudioConstants.types.T_VERTEX) {
-      this.update();
-      return;
-    }
-    // Augment selection array with domIds
-    var noDomId = this.selection.filter(function(el) { return !el.domId }).mapBy('id');
-    var _this = this;
-    VertexActions.getDomId(noDomId, function(domId) {
-      _this.selection.forEach(function(el) {
-        if (domId[el.id])
+    if (type == StudioConstants.types.T_VERTEX) {
+      // Augment vertex selection array with domIds
+      var noDomId = self.selection.filter(function(el) { return !el.domId }).mapBy('id');
+      var _this = self;
+      VertexActions.getDomId(noDomId, function(domId) {
+        _this.selection.forEach(function(el) {
+          if (domId[el.id])
           el['domId'] = domId[el.id];
+        });
+        _this.update();
       });
-      _this.update();
-    });
+    } else {
+      self.update();
+    }
   }
 
 </studio>

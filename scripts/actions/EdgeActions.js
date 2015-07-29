@@ -42,6 +42,9 @@ function(RiotControl, Constants, connection, $) {
     remove: function(edgeIds) {
       if (!Array.isArray(edgeIds)) edgeIds = [edgeIds];
       RiotControl.trigger(CALLS.REMOVE_EDGE, edgeIds);
+
+      // Clear selection to refresh the properties pane
+      RiotControl.trigger(StudioConstants.calls.CLEAR_SELECTION);
     },
     getForVertices: function(vertexIds, callback) {
       if (!Array.isArray(vertexIds)) vertexIds = [vertexIds];

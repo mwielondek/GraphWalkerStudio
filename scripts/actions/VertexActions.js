@@ -58,6 +58,10 @@ function(RiotControl, Constants, gwcon, $) {
           EdgeActions.remove(edgesToRemove);
         });
       });
+
+      // Clear selection to refresh the properties pane
+      RiotControl.trigger(StudioConstants.calls.CLEAR_SELECTION);
+
       // TODO: add GW connection request
     },
     getDomId: function(idArray, callback) {
