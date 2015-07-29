@@ -30,8 +30,8 @@ define(function() {
 
         // Increment counter and check if we are ready to dispatch
         if (++bufferedAction.bufferCounter === bufferedAction.bufferUntil) {
-          bufferedAction.dispatch();                                                   // Dispatch and
-          _bufferedActionCache.splice(_bufferedActionCache.indexOf(bufferedAction),1); // remove instance
+          bufferedAction.dispatch();                   // Dispatch and
+          _bufferedActionCache.remove(bufferedAction); // remove instance
         }
       }
     })()

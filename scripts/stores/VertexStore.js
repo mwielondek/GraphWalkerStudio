@@ -43,11 +43,7 @@ define(['riot', 'constants/VertexConstants', 'app/RiotControl', 'jquery', 'jsplu
     self.on(CALLS.REMOVE_VERTEX, function(vertices, callback) {
       vertices.forEach(function(el) {
         var vertex = _getVertex(el);
-
-        // Remove vertex from the array
-        var index = self.vertices.indexOf(vertex);
-        console.assert(index !== -1, 'Trying to remove a vertice that doesn\'t exist');
-        self.vertices.splice(index, 1);
+        self.vertices.remove(vertex);
       });
 
       // HACK: riot/#1003 workaround. Prevents vertex labels switching DOM nodes.

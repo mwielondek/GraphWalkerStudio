@@ -42,11 +42,7 @@ define(['riot', 'constants/ModelConstants', 'app/RiotControl', 'jquery', 'jsplum
 
     self.on(CALLS.REMOVE_MODEL, function(query) {
       var model = _getModel(query);
-
-      // Remove model from the array
-      var index = self.models.indexOf(model);
-      console.assert(index !== -1, 'Trying to remove a model that doesn\'t exist');
-      self.models.splice(index, 1);
+      self.models.remove(model);
       self.trigger(EMIT_CHANGE, self.models);
     });
 

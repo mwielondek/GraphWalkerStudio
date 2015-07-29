@@ -10,6 +10,12 @@ define(['jquery'], function($) {
     return this[this.length - 1];
   }
 
+  // Remove given element from array
+  Array.prototype.remove = function(el) {
+    var index = this.indexOf(el);
+    if (index != -1) this.splice(index, 1);
+  }
+
   // Pluralize known words
   String.prototype.pluralize = function(flag) {
     var WORDS = {

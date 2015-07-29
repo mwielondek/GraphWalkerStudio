@@ -38,7 +38,7 @@ function(riot, Constants, RiotControl, $, Utils) {
     self.on(CALLS.REMOVE_EDGE, function(edges) {
       edges.forEach(function(el) {
         var edge = _getEdge(el);
-        self.edges.splice(self.edges.indexOf(edge), 1);
+        self.edges.remove(edge);
       });
 
       // HACK: riot/#1003 workaround.
