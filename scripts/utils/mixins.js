@@ -5,6 +5,11 @@ define(['jquery'], function($) {
     return this.map(function(el) { return el[prop] });
   }
 
+  // Get last item from array or undefined if empty
+  Array.prototype.last = function() {
+    return this[this.length - 1];
+  }
+
   // Pluralize known words
   String.prototype.pluralize = function(flag) {
     var WORDS = {
@@ -33,5 +38,5 @@ define(['jquery'], function($) {
       handlers.unshift(handlers.pop());
     }
   };
-  
+
 });

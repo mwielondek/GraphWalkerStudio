@@ -1,7 +1,9 @@
 <studio>
   <p>Studio</p>
-  <studio-contextpane selection={ selection } />
-  <studio-canvas options={ opts.canvas } selection={ selection } updateselection={ updateSelection } />
+  <studio-tabs model={ model } setmodel={ setModel } />
+  <studio-contextpane selection={ selection } model={ model } />
+  <studio-canvas options={ opts.canvas } selection={ selection } updateselection={ updateSelection }
+    model={ model } show={ model } />
 
   <style>
     studio {
@@ -10,12 +12,14 @@
     }
   </style>
 
+  var jsp               = require('jsplumb');
   var VertexActions     = require('actions/VertexActions');
   var ElementConstants  = require('constants/ElementConstants');
   var ConnectionActions = require('actions/ConnectionActions');
 
   // STATE
   this.selection = [];
+  this.model = undefined;
 
   // Handle passed in options
   this.on('mount', function() {
@@ -23,6 +27,18 @@
       ConnectionActions.connect(opts.autoConnect.url);
     }
   });
+
+  setModel(model) {
+    // HACK: riot/#1003 workaround. Prevents vertex labels switching DOM nodes.
+    this.model = undefined;
+    this.update();
+
+    if (model) {
+      this.model = model;
+      this.selection = [];
+      this.update();
+    }
+  }
 
   // TODO: refactor using promises
   updateSelection(elements, type, toggle) {

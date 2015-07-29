@@ -33,6 +33,7 @@ var config = {
         'tag/PropertiesPane': ['riot', 'actions/VertexActions', 'actions/EdgeActions',
                                'constants/ElementConstants', 'utils/mixins'],
         'tag/ConnectionPane': ['riot', 'actions/ConnectionActions'],
+        'tag/TabBar'        : ['riot', 'actions/ModelActions'],
         'tag/Studio'        : ['actions/VertexActions', 'constants/ElementConstants']
       };
       var compiledShim = [];
@@ -61,7 +62,7 @@ requirejs(['app/StudioApp'], function(StudioApp) {
 
   StudioApp.init({
     autoConnect: {
-      enabled: true,
+      enabled: false,
       url: 'ws://localhost:9999'
     }
   });

@@ -1,11 +1,14 @@
 define(['app/RiotControl', 'constants/VertexConstants', './GWActions',
-'jquery', 'constants/GWConstants', './EdgeActions'], function(RiotControl, Constants, gwcon, $) {
+'jquery', 'constants/GWConstants', './EdgeActions', 'constants/ElementConstants'],
+function(RiotControl, Constants, gwcon, $) {
 
-  var CALLS       = Constants.calls;
-  var EVENTS      = Constants.events;
-  var STATUS      = Constants.status;
-  var GW          = require('constants/GWConstants').methods;
-  var EdgeActions = require('actions/EdgeActions');
+  var CALLS  = Constants.calls;
+  var EVENTS = Constants.events;
+  var STATUS = Constants.status;
+  var GW     = require('constants/GWConstants').methods;
+
+  var EdgeActions      = require('actions/EdgeActions');
+  var ElementConstants = require('constants/ElementConstants');
 
   var counter = 65; // 'A'
 
@@ -24,9 +27,9 @@ define(['app/RiotControl', 'constants/VertexConstants', './GWActions',
     },
     add: function(newVertex) {
       // Give vertex temporary ID if not already set
-      if (!newVertex.id) {
-        newVertex.id = 'v_' + String.fromCharCode(counter++);
-      }
+      newVertex.id = newVertex.id || 'v_' + String.fromCharCode(counter++);
+
+      newVertex.type = ElementConstants.T_VERTEX;
       RiotControl.trigger(CALLS.ADD_VERTEX, newVertex);
 
       // Prepare server request
@@ -50,11 +53,10 @@ define(['app/RiotControl', 'constants/VertexConstants', './GWActions',
     },
     remove: function(vertexIds) {
       if (!Array.isArray(vertexIds)) vertexIds = [vertexIds];
-      vertexIds.forEach(function(el) {
-        // Remove edges from/to this vertex
-        EdgeActions.removeForVertex(el)
-
-        RiotControl.trigger(CALLS.REMOVE_VERTEX, el);
+      RiotControl.trigger(CALLS.REMOVE_VERTEX, vertexIds, function() {
+        EdgeActions.getForVertices(vertexIds, function(edgesToRemove) {
+          EdgeActions.remove(edgesToRemove);
+        });
       });
       // TODO: add GW connection request
     },

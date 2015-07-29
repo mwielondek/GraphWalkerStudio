@@ -35,9 +35,14 @@ function(riot, Constants, RiotControl, $, Utils) {
       $.extend(true, edge, props);
     });
 
-    self.on(CALLS.REMOVE_EDGE, function(query) {
-      var edge = _getEdge(query);
-      self.edges.splice(self.edges.indexOf(edge), 1);
+    self.on(CALLS.REMOVE_EDGE, function(edges) {
+      edges.forEach(function(el) {
+        var edge = _getEdge(el);
+        self.edges.splice(self.edges.indexOf(edge), 1);
+      });
+
+      // HACK: riot/#1003 workaround.
+      self.trigger(EMIT_CHANGE, []);
       self.trigger(EMIT_CHANGE, self.edges);
     });
 

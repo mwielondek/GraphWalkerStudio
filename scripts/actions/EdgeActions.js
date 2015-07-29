@@ -1,11 +1,13 @@
 define(['app/RiotControl', 'constants/EdgeConstants', './ConnectionActions',
-'jquery', 'constants/GWConstants', 'jsplumb'],
+'jquery', 'constants/GWConstants', 'jsplumb', 'constants/ElementConstants'],
 function(RiotControl, Constants, connection, $) {
 
   var CALLS  = Constants.calls;
   var EVENTS = Constants.events;
   var STATUS = Constants.status;
   var GW     = require('constants/GWConstants').methods;
+
+  var ElementConstants = require('constants/ElementConstants');
 
   var jsp = require('jsplumb');
 
@@ -28,33 +30,30 @@ function(RiotControl, Constants, connection, $) {
     },
     add: function(newEdge) {
       // Give edge temporary ID if not already set
-      if (!newEdge.id) {
-        newEdge.id = 'e_' + counter++;
-      }
+      newEdge.id = newEdge.id || 'e_' + counter++;
+
+      newEdge.type = ElementConstants.T_EDGE;
       RiotControl.trigger(CALLS.ADD_EDGE, newEdge);
       // TODO: Sent request to GW
     },
     setProps: function(query, props) {
       RiotControl.trigger(CALLS.CHANGE_EDGE, query, props);
     },
-    remove: function(edgeId) {
-      var connection = this.getById(edgeId, function(edge) {
-        var connection = edge._jsp_connection;
-        jsp.detach(connection);
-      });
-      RiotControl.trigger(CALLS.REMOVE_EDGE, edgeId);
+    remove: function(edgeIds) {
+      if (!Array.isArray(edgeIds)) edgeIds = [edgeIds];
+      RiotControl.trigger(CALLS.REMOVE_EDGE, edgeIds);
     },
-    removeForVertex: function(vertexId) {
-      var _this = this;
+    getForVertices: function(vertexIds, callback) {
+      if (!Array.isArray(vertexIds)) vertexIds = [vertexIds];
       this.getAll(function(allEdges) {
-        var edgesToRemove = allEdges.filter(function(el) {
-          return el.sourceVertexId === vertexId || el.targetVertexId === vertexId;
+        var results = [];
+        vertexIds.forEach(function(vertexId) {
+          var matchingEdges = allEdges.filter(function(el) {
+            return el.sourceVertexId === vertexId || el.targetVertexId === vertexId;
+          });
+          results = results.concat(matchingEdges.filter(function(el) { return results.indexOf(el) == -1 }));
         });
-
-        // TODO: instead refactor the store method to accept multiple edges...
-        for (var i = 0; i < edgesToRemove.length; i++) {
-          _this.remove(edgesToRemove[i].id);
-        }
+        callback(results);
       });
     }
   }

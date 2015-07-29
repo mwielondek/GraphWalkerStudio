@@ -91,6 +91,32 @@
     // (i.e. extend self with defaults but dont overwrite)
     var merged = $.extend(true, {}, self.defaults, self);
     $.extend(true, self, merged);
+
+    if (!self.view.top || !self.view.left) {
+      // Calculate and set offset
+      var position = {
+        'top': self.view.centerY - (self.view.height / 2),
+        'left': self.view.centerX - (self.view.width / 2)
+      };
+      $.extend(self.view, position);
+
+      // Store dimensions and offset, and a reference to the DOM element in the model
+      VertexActions.setProps(self.id, {view: self.view, dom: self.root});
+    }
+
+    if (!self.view.css) {
+      // Create custom css property getter
+      Object.defineProperty(self.view, 'css', {
+        get: function() {
+          return {
+            'height': this.height,
+            'width' : this.width,
+            'top'   : this.top,
+            'left'  : this.left
+          };
+        }
+      });
+    }
   });
 
   self.on('mount', function() {
@@ -98,16 +124,6 @@
 
     // Hide the element until everything is set, especially dimensions and offset
     $root.hide();
-
-    // Set dimensions and offset
-    var css = {
-      'height': self.view.height,
-      'width': self.view.width,
-      'top': self.view.centerY - (self.view.height / 2),
-      'left': self.view.centerX - (self.view.width / 2)
-    };
-    // Store dimensions and offset, and a reference to the DOM element in the model
-    VertexActions.setProps(self, {view: css, dom: self.root});
 
     // Make into jsPlumb source & target
     jsp.makeSource(self.root);
@@ -227,7 +243,7 @@
   self.on('updated', function() {
     if ($root) {
       // Update dimenions and offset
-      $root.show().css(self.view);
+      $root.show().css(self.view.css);
 
       // Set vertex id on the DOM element (used e.g. in rubberband selection)
       self.root['_vertexId'] = self.id;
@@ -238,10 +254,10 @@
 
       /**  __________________________
        *  | FUNCTION      | SELECTED |
+       *  | MouseEvent mux| Off      |
        *  | SourceEnabled | Off      |
        *  | Draggable     | On       |
        *  | Resizable     | On       |
-       *  | MouseEvent mux| Off      |
        *   --------------------------
        */
 
@@ -259,5 +275,9 @@
       var modifyEventListener = selected ? self.root.removeEventListener : self.root.addEventListener;
       modifyEventListener.call(self.root, 'mousedown', self, true);
     }
+  });
+
+  self.on('unmount', function() {
+    jsp.remove(self.root);
   });
 </vertex>

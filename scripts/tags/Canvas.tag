@@ -1,14 +1,14 @@
 <studio-canvas>
-  <vertex each={ vertices } isselected={ parent.opts.selection.mapBy('id').indexOf(id) != -1 }
+  <vertex each={ filterByModel(vertices) } isselected={ parent.opts.selection.mapBy('id').indexOf(id) != -1 }
   resizable={ parent.opts.selection.length == 1 } updateselection={ parent.opts.updateselection }/>
-  <edge each={ edges } isselected={ parent.opts.selection.mapBy('id').indexOf(id) != -1 }/>
+  <edge each={ filterByModel(edges) } isselected={ parent.opts.selection.mapBy('id').indexOf(id) != -1 }/>
 
   <style>
   studio-canvas {
     height: 100%;
     display: block;
     position: relative;
-    margin-right: 320px;
+    margin-right: 310px;
     background-color: #f0f0f0;
   }
   </style>
@@ -30,7 +30,7 @@
   addVertex(e) {
     // Prepare vertex object
     var vertex = {
-      type: ElementConstants.T_VERTEX,
+      modelId: opts.model.id,
       view: {
         centerY: e.pageY - self.root.offsetTop,
         centerX: e.pageX - self.root.offsetLeft
@@ -44,13 +44,17 @@
     var sourceVertexId = $('#'+sourceDomId).attr('vertex-id');
     var targetVertexId = $('#'+targetDomId).attr('vertex-id');
     var edge = {
-      type: ElementConstants.T_EDGE,
+      modelId: opts.model.id,
       sourceDomId: sourceDomId,
       targetDomId: targetDomId,
       sourceVertexId: sourceVertexId,
       targetVertexId: targetVertexId
     };
     EdgeActions.add(edge);
+  }
+
+  filterByModel(elements) {
+    return elements.filter(function(el) { return el.modelId == opts.model.id });
   }
 
   VertexActions.getAll(function(vertices) {
@@ -95,7 +99,7 @@
       });
 
       // Register connection types
-      jsPlumb.registerConnectionType('selected', {
+      jsp.registerConnectionType('selected', {
         // Same as HoverPaintStyle
         paintStyle: {strokeStyle: '#0b771b', lineWidth: 3 }
       });

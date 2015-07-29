@@ -1,6 +1,6 @@
 <studio-contextpane>
   <div id="contextpane">
-    <properties-pane show={ opts.selection.length != 0 } selection={ opts.selection } />
+    <properties-pane if={ opts.model } model={ opts.model } selection={ opts.selection } />
     <connection-pane />
   </div>
 

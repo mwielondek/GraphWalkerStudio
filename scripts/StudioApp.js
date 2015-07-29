@@ -1,4 +1,5 @@
-define(['riot', 'store/VertexStore', 'store/EdgeStore', 'store/ConnectionStore', 'tag/Studio', 'utils/mixins'],
+define(['riot', 'store/VertexStore', 'store/EdgeStore', 'store/ConnectionStore',
+ 'store/ModelStore', 'tag/Studio', 'utils/mixins'],
 function(riot) {
 
   var init = function(opts) {
