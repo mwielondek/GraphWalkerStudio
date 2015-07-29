@@ -1,13 +1,6 @@
-define(function() {
+define(['constants/Utils'], function(Utils) {
 
-  // Creates an enum object => {ENUM: 'ENUM'}
-  function Enum(constantsList) {
-    for (var i = 0; i < constantsList.length; i++) {
-      var constant = constantsList[i];
-      this[constant] = constant;
-    }
-  }
-
+  var Enum = Utils.Enum;
   var constants = {};
 
   // IDEA: change below to POJO in order to be able to change the value without

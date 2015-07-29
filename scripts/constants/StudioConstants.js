@@ -1,5 +1,6 @@
-define(function() {
+define(['constants/Utils'], function(Utils) {
 
+  var Enum = Utils.Enum;
   var constants = {};
 
   constants.types = {
@@ -7,6 +8,10 @@ define(function() {
     'T_EDGE': 'edge',
     'T_MODEL': 'model'
   };
+
+  constants.calls = new Enum([
+    'CLEAR_SELECTION'
+  ]);
 
   return constants;
 });
