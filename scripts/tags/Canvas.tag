@@ -30,7 +30,6 @@
   addVertex(e) {
     // Prepare vertex object
     var vertex = {
-      type: ElementConstants.T_VERTEX,
       modelId: opts.model.id,
       view: {
         centerY: e.pageY - self.root.offsetTop,
@@ -45,7 +44,6 @@
     var sourceVertexId = $('#'+sourceDomId).attr('vertex-id');
     var targetVertexId = $('#'+targetDomId).attr('vertex-id');
     var edge = {
-      type: ElementConstants.T_EDGE,
       modelId: opts.model.id,
       sourceDomId: sourceDomId,
       targetDomId: targetDomId,

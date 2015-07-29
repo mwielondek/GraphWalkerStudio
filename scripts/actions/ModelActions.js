@@ -1,9 +1,11 @@
 define(['app/RiotControl', 'constants/ModelConstants', './GWActions',
 'jquery', 'constants/GWConstants'], function(RiotControl, Constants, gwcon, $) {
 
-  var CALLS       = Constants.calls;
-  var EVENTS      = Constants.events;
-  var GW          = require('constants/GWConstants').methods;
+  var CALLS  = Constants.calls;
+  var EVENTS = Constants.events;
+  var GW     = require('constants/GWConstants').methods;
+
+  var ElementConstants = require('constants/ElementConstants');
 
   var counter = 65; // 'A'
 
@@ -23,26 +25,14 @@ define(['app/RiotControl', 'constants/ModelConstants', './GWActions',
     add: function(newModel, callback) {
       newModel = newModel || {};
       // Give vertex temporary ID if not already set
-      if (!newModel.id) newModel.id = 'model' + String.fromCharCode(counter++);
-      if (!newModel.name) newModel.name = newModel.id;
+      newModel.id = newModel.id || 'model' + String.fromCharCode(counter++);
+
+      newModel.name = newModel.name || newModel.id;
+      newModel.type = ElementConstants.T_MODEL;
       RiotControl.trigger(CALLS.ADD_MODEL, newModel);
       callback(newModel);
 
-      // Prepare server request
-      // var request = {
-      //   command: GW.ADDMODEL
-      // };
-      // var _this = this;
-      // gwcon.sendRequest(request,
-      //   // On success
-      //   function(response) {
-      //     _this.setProps(newModel, {label: response.body.id, id: response.body.id, status: STATUS.VERIFIED});
-      //   },
-      //   // On error
-      //   function(response) {
-      //     _this.setProps(newModel, {id: response.body.id, status: STATUS.ERROR});
-      //   }
-      // );
+      // TODO send request to GW
     },
     setProps: function(query, props) {
       RiotControl.trigger(CALLS.CHANGE_MODEL, query, props);
