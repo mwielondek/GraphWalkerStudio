@@ -45,13 +45,17 @@
     EdgeActions.setProps(self.id, {_jsp_connection: self.connection});
   });
 
+  self.on('update', function() {
+    self.selected = self.opts.selection.mapBy('id').contains(self.id);
+  });
+
   self.on('updated', function() {
     // Set proper style when selected
     var connection = self.connection;
     var SELECTED = 'selected';
     if (connection && connection.connector) {
-      if (opts.isselected && !connection.hasType(SELECTED)) connection.addType(SELECTED);
-      if (!opts.isselected && connection.hasType(SELECTED)) connection.removeType(SELECTED);
+      if (self.selected && !connection.hasType(SELECTED)) connection.addType(SELECTED);
+      if (!self.selected && connection.hasType(SELECTED)) connection.removeType(SELECTED);
     }
   })
 

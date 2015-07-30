@@ -1,7 +1,6 @@
 <studio-canvas>
-  <vertex each={ filterByModel(vertices) } isselected={ parent.opts.selection.contains(this) }
-  resizable={ parent.opts.selection.length == 1 } updateselection={ parent.opts.updateselection }/>
-  <edge each={ filterByModel(edges) } isselected={ parent.opts.selection.contains(this) }/>
+  <vertex each={ filterByModel(vertices) } selection={ parent.opts.selection } />
+  <edge each={ filterByModel(edges) } selection={ parent.opts.selection } />
 
   <style>
   studio-canvas {
@@ -116,7 +115,7 @@
       // Selecting edges
       jsp.bind('click', function(connection) {
         var edge = connection.getParameter('_edgeObject');
-        self.opts.updateselection(edge);
+        self.opts.selection.update(edge);
       });
     });
 
@@ -125,7 +124,7 @@
       // Dispatch it to end of event queue so that it is not
       // overriden by the onClick handler below.
       setTimeout(function() {
-        self.opts.updateselection(selectedVertices.mapBy('_vertexObject'), append);
+        self.opts.selection.update(selectedVertices.mapBy('_vertexObject'), append);
       }, 0);
     });
 
@@ -137,7 +136,7 @@
       })
       // Deselect vertices on click
       .on('click', function(e) {
-        if (e.target == this) self.opts.updateselection(0);
+        if (e.target == this) self.opts.selection.clear();
       });
 
   });

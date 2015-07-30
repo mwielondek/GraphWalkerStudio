@@ -1,4 +1,4 @@
-<vertex id="{ view.domId }" class="{ selected: opts.isselected } { status.toLowerCase() }" tabindex="1"
+<vertex id="{ view.domId }" class="{ selected: selected } { status.toLowerCase() }" tabindex="1"
   vertex-id="{ id }">
   <div class="label-div">
     <p class="label">{ label }</p>
@@ -172,7 +172,7 @@
     $root.on('focus click', function(e) {
       // Toggle if meta key was down during the click.
       var toggle = e.type == 'click' ? e.metaKey : false;
-      self.opts.updateselection(self, toggle);
+      self.opts.selection.update(self, toggle);
     });
 
     // MouseEvent multiplexing. Trigger click as usual, trigger
@@ -240,6 +240,11 @@
     self.trigger('updated');
   });
 
+  self.on('update', function() {
+    self.selected = opts.selection.mapBy('id').contains(self.id);
+    self.resizable = opts.selection.length == 1;
+  });
+
   self.on('updated', function() {
     if ($root) {
       // Update dimenions and offset
@@ -249,8 +254,8 @@
       self.root['_vertexObject'] = self;
 
       // Selection-based settings
-      var selected = opts.isselected;
-      var resizable = selected && opts.resizable;
+      var selected = self.selected;
+      var resizable = selected && self.resizable;
 
       /**  __________________________
        *  | FUNCTION      | SELECTED |
