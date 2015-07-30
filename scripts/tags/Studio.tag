@@ -1,6 +1,6 @@
 <studio>
   <p>Studio</p>
-  <studio-tabs model={ model } setmodel={ setModel } />
+  <studio-tabs tabs={ tabs } model={ model } setmodel={ setModel } />
   <studio-contextpane selection={ selection } model={ model } />
   <studio-canvas options={ opts.canvas } selection={ selection } updateselection={ updateSelection }
     model={ model } show={ model } />
@@ -22,6 +22,7 @@
 
   // STATE
   self.selection = [];
+  self.tabs = [];
   self.model = undefined;
 
   // Handle passed in options
