@@ -1,8 +1,15 @@
 define(['jquery'], function($) {
 
-  // Helper function for object arrays like `selection`
+  // Extract given property for all elements in an array.
+  // Accepts nested arguments like eg. `mapBy('foo.bar')`.
   Array.prototype.mapBy = function(prop) {
-    return this.map(function(el) { return el[prop] });
+    var props = prop.split('.');
+    return this.map(function(el) {
+      props.forEach(function(prop) {
+        el = el[prop];
+      });
+      return el;
+    });
   }
 
   // Get last item from array or undefined if empty
@@ -19,6 +26,11 @@ define(['jquery'], function($) {
   // Check if element is in array
   Array.prototype.contains = function(el) {
     return this.indexOf(el) != -1;
+  }
+
+  // Empty the array
+  Array.prototype.clear = function() {
+    this.length = 0;
   }
 
   // Removes an element if it exists, otherwise add it
