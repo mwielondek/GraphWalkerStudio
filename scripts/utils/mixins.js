@@ -4,12 +4,18 @@ define(['jquery'], function($) {
   // Accepts nested arguments like eg. `mapBy('foo.bar')`.
   Array.prototype.mapBy = function(prop) {
     var props = prop.split('.');
-    return this.map(function(el) {
-      props.forEach(function(prop) {
+    var ret, el, prop;
+    ret = [];
+    for (var i = 0, j = this.length; i < j; i++) {
+      el = this[i];
+      for (var k = 0, l = props.length; k < l; k++) {
+        prop = props[k];
         el = el[prop];
-      });
-      return el;
-    });
+        if (!el) return undefined;
+      }
+      ret.push(el);
+    }
+    return ret;
   }
 
   // Get last item from array or undefined if empty
