@@ -172,7 +172,7 @@
     $root.on('focus click', function(e) {
       // Toggle if meta key was down during the click.
       var toggle = e.type == 'click' ? e.metaKey : false;
-      self.opts.updateselection(self.id, StudioConstants.types.T_VERTEX, toggle);
+      self.opts.updateselection(self, toggle);
     });
 
     // MouseEvent multiplexing. Trigger click as usual, trigger
@@ -246,7 +246,7 @@
       $root.show().css(self.view.css);
 
       // Set vertex id on the DOM element (used e.g. in rubberband selection)
-      self.root['_vertexId'] = self.id;
+      self.root['_vertexObject'] = self;
 
       // Selection-based settings
       var selected = opts.isselected;

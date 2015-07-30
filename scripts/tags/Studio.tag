@@ -48,47 +48,32 @@
     }
   }
 
-  // TODO: refactor using promises
-  updateSelection(elements, type, toggle) {
+  updateSelection(elements, toggle) {
+
     // If `elements` is falsy, clear selection
     if (!elements || elements.length == 0) {
+
       // If selection already is null prevent update.
       if (self.selection.length == 0) return;
-      self.selection = [];
+
+      self.selection.clear();
     } else {
       if (!Array.isArray(elements)) elements = [elements]; // Wrap single element into array
 
       if (toggle) {
+        // If element isn't currently selected, add
+        // it to selection otherwise deselect it.
         var _this = self;
         elements.forEach(function(element) {
-          var index = _this.selection.mapBy('id').indexOf(element);
-          if (index == -1) {
-            // If element isn't currently selected, add it to selection
-            _this.selection.push({id: element, type: type});
-          } else {
-            // If element is currently selected, deselect it
-            _this.selection.splice(index, 1);
-          }
+          _this.selection.toggle(element);
         });
       } else {
-        self.selection = elements.map(function(element) { return {id: element, type: type}});
+        self.selection.clear();
+        self.selection.push.apply(self.selection, elements); // concatenates the array in place
       }
 
     }
-    if (type == StudioConstants.types.T_VERTEX) {
-      // Augment vertex selection array with domIds
-      var noDomId = self.selection.filter(function(el) { return !el.domId }).mapBy('id');
-      var _this = self;
-      VertexActions.getDomId(noDomId, function(domId) {
-        _this.selection.forEach(function(el) {
-          if (domId[el.id])
-          el['domId'] = domId[el.id];
-        });
-        _this.update();
-      });
-    } else {
-      self.update();
-    }
+    self.update();
   }
 
 </studio>

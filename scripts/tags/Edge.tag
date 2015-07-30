@@ -36,7 +36,7 @@
   self.on('mount', function() {
     self.connection = jsp.connect({source: self.sourceDomId, target: self.targetDomId});
     self.connection.getOverlay('label').setLabel(self.label);
-    self.connection.setParameter('edge_id', self.id);
+    self.connection.setParameter('_edgeObject', self);
 
     // Fix the loopback connection spawning off center
     if (self.sourceDomId == self.targetDomId)

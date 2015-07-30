@@ -1,7 +1,7 @@
 <studio-canvas>
-  <vertex each={ filterByModel(vertices) } isselected={ parent.opts.selection.mapBy('id').indexOf(id) != -1 }
+  <vertex each={ filterByModel(vertices) } isselected={ parent.opts.selection.contains(this) }
   resizable={ parent.opts.selection.length == 1 } updateselection={ parent.opts.updateselection }/>
-  <edge each={ filterByModel(edges) } isselected={ parent.opts.selection.mapBy('id').indexOf(id) != -1 }/>
+  <edge each={ filterByModel(edges) } isselected={ parent.opts.selection.contains(this) }/>
 
   <style>
   studio-canvas {
@@ -115,8 +115,8 @@
 
       // Selecting edges
       jsp.bind('click', function(connection) {
-        var edgeId = connection.getParameter('edge_id');
-        self.opts.updateselection(edgeId, StudioConstants.types.T_EDGE);
+        var edge = connection.getParameter('_edgeObject');
+        self.opts.updateselection(edge);
       });
     });
 
@@ -125,9 +125,7 @@
       // Dispatch it to end of event queue so that it is not
       // overriden by the onClick handler below.
       setTimeout(function() {
-        self.opts.updateselection(selectedVertices.map(function(el) {
-          return el['_vertexId'];
-        }), StudioConstants.types.T_VERTEX, append);
+        self.opts.updateselection(selectedVertices.mapBy('_vertexObject'), append);
       }, 0);
     });
 
@@ -145,7 +143,7 @@
   });
 
   self.on('update', function() {
-    var selection = self.opts.selection.mapBy('domId');
+    var selection = self.opts.selection.mapBy('view.domId');
     jsp.clearDragSelection();
     jsp.addToDragSelection(selection);
   });
