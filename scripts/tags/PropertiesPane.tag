@@ -18,7 +18,6 @@
   self.on('update', function() {
     self.element = opts.selection[0] || opts.model;
     self.isMultipleSelection = opts.selection.length > 1;
-    self.isEmptySelection = opts.selection.length == 0;
   });
 
   removeElement() {
