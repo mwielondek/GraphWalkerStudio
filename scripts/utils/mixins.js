@@ -16,6 +16,21 @@ define(['jquery'], function($) {
     if (index != -1) this.splice(index, 1);
   }
 
+  // Check if element is in array
+  Array.prototype.contains = function(el) {
+    return this.indexOf(el) != -1;
+  }
+
+  // Removes an element if it exists, otherwise add it
+  Array.prototype.toggle = function(el) {
+    var index = this.indexOf(el);
+    if (index != -1) {
+      this.remove(el);
+    } else {
+      this.push(el);
+    }
+  }
+
   // Pluralize known words
   String.prototype.pluralize = function(flag) {
     var WORDS = {
