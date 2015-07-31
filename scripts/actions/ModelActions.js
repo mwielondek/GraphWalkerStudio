@@ -1,5 +1,5 @@
 define(['app/RiotControl', 'constants/ModelConstants', './GWActions',
-'jquery', 'constants/GWConstants', 'constants/StudioConstants'],
+'jquery', 'constants/GWConstants', 'constants/StudioConstants', './VertexActions'],
 function(RiotControl, Constants, gwcon, $) {
 
   var CALLS  = Constants.calls;
@@ -7,6 +7,7 @@ function(RiotControl, Constants, gwcon, $) {
   var GW     = require('constants/GWConstants').methods;
 
   var StudioConstants = require('constants/StudioConstants');
+  var VertexActions   = require('actions/VertexActions');
 
   var counter = 65; // 'A'
 
@@ -42,7 +43,11 @@ function(RiotControl, Constants, gwcon, $) {
       RiotControl.trigger(CALLS.REMOVE_MODEL, modelId);
 
       // Remove all vertices which are part of the model
-      // TODO
+      VertexActions.getAll(function(vertices) {
+        VertexActions.remove(vertices.filter(function(el) {
+          return el.modelId == modelId;
+        }));
+      })
     },
   }
 });
