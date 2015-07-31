@@ -3,7 +3,7 @@
   <ul class="treeview">
     <li each={ model in models } class="{ active: parent.opts.model.id == model.id}">
       <span onclick={ toggleExpand }>{ parent.expanded.contains(model.id) ? ARROW_DOWN : ARROW_RIGHT }</span>
-      <a class="{ active: parent.opts.model.id == model.id}">
+      <a class="{ active: parent.opts.model.id == model.id}" onclick={ openModel }>
         { model.name }
       </a>
       <ul if={ parent.expanded.contains(model.id) }>
@@ -80,6 +80,11 @@
   select(e) {
     e.preventUpdate = true; // Update is called by selection.update
     opts.selection.update(e.item);
+  }
+
+  openModel(e) {
+    console.log(e.item);
+    self.opts.tabs.push(e.item.model);
   }
 
 </treeview-pane>

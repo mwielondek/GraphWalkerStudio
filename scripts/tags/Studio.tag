@@ -1,8 +1,8 @@
 <studio>
   <p>Studio</p>
-  <studio-tabs tabs={ tabs } model={ model } setmodel={ setModel } />
+  <studio-tabs tabs={ tabs } model={ model } />
   <studio-contextpane selection={ selection } model={ model } />
-  <studio-canvas options={ opts.canvas } selection={ selection } model={ model } show={ model } />
+  <studio-canvas options={ opts.canvas } selection={ selection } model={ model } show={ tabs.length } />
 
   <style>
     studio {
@@ -13,6 +13,7 @@
 
   var jsp               = require('jsplumb');
   var RiotControl       = require('app/RiotControl');
+  var ModelActions      = require('actions/ModelActions');
   var VertexActions     = require('actions/VertexActions');
   var StudioConstants   = require('constants/StudioConstants');
   var ConnectionActions = require('actions/ConnectionActions');
@@ -59,8 +60,59 @@
     self.update();
   }.bind(self.selection);
 
+  // TABS
   self.tabs = [];
-  self.model = undefined;
+  Object.defineProperty(self, 'tabs', { writable: false }); // Prevent from overwriting object
+  self.tabs.open = function(model) {
+    // TODO: use promises
+    if (model) {
+      // Open existing model
+      this.push(model);
+      self.model = model;
+    } else {
+      // Create new model
+      var _this = this;
+      ModelActions.add({}, function(model) {
+        _this.push(model);
+        self.model = model;
+      });
+    }
+    self.update();
+  }.bind(self.tabs);
+  self.tabs.close = function(modelId) {
+    var index = this.mapBy('id').indexOf(modelId);
+
+    // Change model selection if selected model is being removed
+    if (self.model.id == modelId) {
+      // Try selecting model immediately next to the left
+      var next = index - 1;
+      next = next < 0 ? 1 : next;
+      self.model = this[next];
+    }
+    this.splice(index, 1);
+    self.update();
+  }.bind(self.tabs);
+
+  // CURRENT MODEL
+  Object.defineProperty(self, 'model', {
+    get: function() {
+      return this._model;
+    },
+    set: function(model) {
+      // HACK: riot/#1003 workaround. Prevents vertex labels switching DOM nodes.
+      this._model = { set: self._setModel };
+      this.update();
+
+      if (model) {
+        this._model = model;
+        this._model.set = self._setModel;
+        this.selection.clear();
+      }
+    }
+  });
+  _setModel(model) {
+    self.model = model;
+  }
 
   // Handle passed in options
   self.on('mount', function() {
@@ -70,18 +122,7 @@
   });
 
   RiotControl.on(StudioConstants.calls.CLEAR_SELECTION, function() {
-    self.selection.clear(); // TODO: check if not better called directly from children
+    self.selection.clear();
   });
-
-  setModel(model) {
-    // HACK: riot/#1003 workaround. Prevents vertex labels switching DOM nodes.
-    self.model = undefined;
-    self.update();
-
-    if (model) {
-      self.model = model;
-      self.selection.clear();
-    }
-  }
 
 </studio>

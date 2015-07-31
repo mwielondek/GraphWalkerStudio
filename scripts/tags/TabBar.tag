@@ -3,7 +3,7 @@
     <li each={ opts.tabs }><div onclick={ selectTab } class="{ selected: parent.opts.model.id == id}">{ name }
       <span onclick={ parent.closeTab }>[X]</span></div></li>
 
-    <li><div id="add">&nbsp;<span onclick={ addTab }>[+]</span></div></li>
+    <li><div id="add">&nbsp;<span onclick={ openTab }>[+]</span></div></li>
   </ul>
 
   <style scoped>
@@ -53,46 +53,26 @@
   ModelActions.addChangeListener(function(models) {
     // Close tabs belonging to recently removed models
     opts.tabs.forEach(function(tab) {
-      if (models.indexOf(tab) == -1) self.closeTab(null, tab.id);
+      if (models.indexOf(tab) == -1) self.opts.tabs.close(tab.id);
     });
     self.update();
   });
 
-  addTab(e, model) {
-    // TODO: use promises
-    if (model) {
-      // Open existing model
-      opts.tabs.push(model);
-      opts.setmodel(model);
-    } else {
-      // Create new model
-      ModelActions.add({}, function(model) {
-        opts.tabs.push(model);
-        opts.setmodel(model);
-      });
-    }
-  }
+  openTab(e) {
+    self.opts.tabs.open();
+    e.preventUpdate = true; // Update is called indirectly above
+  };
 
-  closeTab(e, modelId) {
-    var model = modelId || e.item.id;
-
-    var index = opts.tabs.mapBy('id').indexOf(model);
-
-    // Change model selection if selected model is being removed
-    if (opts.model.id == model) {
-      // Try selecting model immediately next to the left
-      var next = index - 1;
-      next = next < 0 ? 1 : next;
-      opts.setmodel(opts.tabs[next]);
-    }
-
-    opts.tabs.splice(index, 1);
+  closeTab(e) {
+    self.opts.tabs.close(e.item.id);
+    e.preventUpdate = true; // Update is called indirectly above
 
     // Don't trigger selectTab
     if (e) e.stopPropagation();
   }
 
   selectTab(e) {
-    opts.setmodel(e.item);
+    self.opts.model.set(e.item);
+    e.preventUpdate = true; // Update is called indirectly above
   }
 </studio-tabs>

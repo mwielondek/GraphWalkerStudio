@@ -1,6 +1,6 @@
 <studio-contextpane>
   <div id="contextpane">
-    <properties-pane if={ opts.model } model={ opts.model } selection={ opts.selection } />
+    <properties-pane if={ opts.model.id } model={ opts.model } selection={ opts.selection } />
     <treeview-pane model={ opts.model } selection={ opts.selection } tabs={ opts.tabs }/>
     <connection-pane />
   </div>
