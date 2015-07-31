@@ -79,7 +79,9 @@
 
   select(e) {
     e.preventUpdate = true; // Update is called by selection.update
-    opts.selection.update(e.item);
+    var element = e.item;
+    self.opts.model.set(element.model);
+    opts.selection.update(element);
   }
 
   openModel(e) {
