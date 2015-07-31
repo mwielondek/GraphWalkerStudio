@@ -53,7 +53,7 @@
   ModelActions.addChangeListener(function(models) {
     // Close tabs belonging to recently removed models
     opts.tabs.forEach(function(tab) {
-      if (models.indexOf(tab) == -1) self.opts.tabs.close(tab.id);
+      if (!models.contains(tab)) self.opts.tabs.close(tab.id);
     });
     self.update();
   });

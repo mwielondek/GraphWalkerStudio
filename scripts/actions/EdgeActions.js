@@ -54,7 +54,7 @@ function(RiotControl, Constants, connection, $) {
           var matchingEdges = allEdges.filter(function(el) {
             return el.sourceVertexId === vertexId || el.targetVertexId === vertexId;
           });
-          results = results.concat(matchingEdges.filter(function(el) { return results.indexOf(el) == -1 }));
+          results = results.concat(matchingEdges.filter(function(el) { return !results.contains(el) }));
         });
         callback(results);
       });
