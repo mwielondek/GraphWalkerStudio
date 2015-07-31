@@ -101,7 +101,7 @@
       $.extend(self.view, position);
 
       // Store dimensions and offset, and a reference to the DOM element in the model
-      VertexActions.setProps(self.id, {view: self.view, dom: self.root});
+      VertexActions.setProps(self.id, {view: self.view});
     }
 
     if (!self.view.css) {

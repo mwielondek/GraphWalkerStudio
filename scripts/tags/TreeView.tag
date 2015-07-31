@@ -7,11 +7,11 @@
         { model.name }
       </a>
       <ul if={ parent.expanded.contains(model.id) }>
-        <li each={ filterByModel(vertices, model.id) }>
+        <li each={ filterByModel(vertices, model) }>
           <a class="vertex { selected: parent.parent.opts.selection.mapBy('id').contains(id) }"
            onclick={ select }>{ id }</a>
         </li>
-        <li each={ filterByModel(edges, model.id) }>
+        <li each={ filterByModel(edges, model) }>
           <a class="edge { selected: parent.parent.opts.selection.mapBy('id').contains(id) }"
            onclick={ select }>{ id }</a>
         </li>
@@ -69,7 +69,7 @@
   });
 
   filterByModel(elements, model) {
-    return elements.filter(function(el) { return el.modelId == model });
+    return elements.filter(function(el) { return el.model.id == model.id });
   }
 
   toggleExpand(e) {

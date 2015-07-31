@@ -45,7 +45,7 @@ function(RiotControl, Constants, gwcon, $) {
       // Remove all vertices which are part of the model
       VertexActions.getAll(function(vertices) {
         VertexActions.remove(vertices.filter(function(el) {
-          return el.modelId == modelId;
+          return el.model.id == modelId;
         }));
       })
     },
