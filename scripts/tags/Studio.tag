@@ -64,20 +64,18 @@
   self.tabs = [];
   Object.defineProperty(self, 'tabs', { writable: false }); // Prevent from overwriting object
   self.tabs.open = function(model) {
-    // TODO: use promises
     if (model && !this.contains(model)) {
       // Open existing model and set it as active
       this.push(model);
       if (self.model != model) self.model = model;
+      self.update();
     } else if(!model) {
       // Create new model
       var _this = this;
       ModelActions.add({}, function(model) {
-        _this.push(model);
         self.model = model;
       });
     }
-    self.update();
   }.bind(self.tabs);
   self.tabs.close = function(modelId) {
     var index = this.mapBy('id').indexOf(modelId);
