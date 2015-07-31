@@ -83,8 +83,7 @@
   }
 
   openModel(e) {
-    console.log(e.item);
-    self.opts.tabs.push(e.item.model);
+    self.opts.model.set(e.item.model);
   }
 
 </treeview-pane>

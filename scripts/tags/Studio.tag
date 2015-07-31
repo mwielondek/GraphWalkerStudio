@@ -65,11 +65,11 @@
   Object.defineProperty(self, 'tabs', { writable: false }); // Prevent from overwriting object
   self.tabs.open = function(model) {
     // TODO: use promises
-    if (model) {
-      // Open existing model
+    if (model && !this.contains(model)) {
+      // Open existing model and set it as active
       this.push(model);
-      self.model = model;
-    } else {
+      if (self.model != model) self.model = model;
+    } else if(!model) {
       // Create new model
       var _this = this;
       ModelActions.add({}, function(model) {
@@ -106,10 +106,12 @@
       if (model) {
         this._model = model;
         this._model.set = self._setModel;
-        this.selection.clear();
+        this.selection.clear(true);
+        self.tabs.open(model);
       }
     }
   });
+  // Helper setter for calling from children
   _setModel(model) {
     self.model = model;
   }
