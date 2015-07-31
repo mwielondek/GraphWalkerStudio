@@ -20,7 +20,7 @@ function(RiotControl, Constants, gwcon, $) {
 
     // Triggers
     getAll: function(callback) {
-      RiotControl.trigger(CALLS.GET_ALL, callback);
+      RiotControl.trigger(CALLS.GET_ALL_VERTICES, callback);
     },
     get: function(vertexId, callback) {
       RiotControl.trigger(CALLS.GET_VERTEX, vertexId, callback);

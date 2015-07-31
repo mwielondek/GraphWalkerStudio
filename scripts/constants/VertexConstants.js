@@ -4,7 +4,7 @@ define(['constants/Utils'], function(Utils) {
   var constants = {};
 
   constants.calls = new Enum([
-    'GET_ALL',
+    'GET_ALL_VERTICES',
     'GET_VERTEX',
     'ADD_VERTEX',
     'REMOVE_VERTEX',

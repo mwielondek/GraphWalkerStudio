@@ -4,7 +4,7 @@ define(['constants/Utils'], function(Utils) {
   var constants = {};
 
   constants.calls = new Enum([
-    'GET_ALL',
+    'GET_ALL_MODELS',
     'GET_MODEL',
     'ADD_MODEL',
     'REMOVE_MODEL',

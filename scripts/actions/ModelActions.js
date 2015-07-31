@@ -19,10 +19,10 @@ function(RiotControl, Constants, gwcon, $) {
 
     // Triggers
     getAll: function(callback) {
-      RiotControl.trigger(CALLS.GET_ALL, callback);
+      RiotControl.trigger(CALLS.GET_ALL_MODELS, callback);
     },
-    get: function(vertexId, callback) {
-      RiotControl.trigger(CALLS.GET_MODEL, vertexId, callback);
+    get: function(modelId, callback) {
+      RiotControl.trigger(CALLS.GET_MODEL, modelId, callback);
     },
     add: function(newModel, callback) {
       newModel = newModel || {};

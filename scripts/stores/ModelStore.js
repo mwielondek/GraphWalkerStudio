@@ -21,7 +21,8 @@ define(['riot', 'constants/ModelConstants', 'app/RiotControl', 'jquery', 'jsplum
     var CALLS = Constants.calls;
     var EVENTS = Constants.events;
     const EMIT_CHANGE = EVENTS.MODEL_LIST_CHANGED;
-    self.on(CALLS.GET_ALL, function(callback) {
+
+    self.on(CALLS.GET_ALL_MODELS, function(callback) {
       callback(self.models)
     });
 
