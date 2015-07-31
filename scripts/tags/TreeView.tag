@@ -2,7 +2,8 @@
   <h4>Models</h4>
   <ul class="treeview">
     <li each={ model in models } class="{ active: parent.opts.model.id == model.id}">
-      <a class="{ active: parent.opts.model.id == model.id}" onclick={ toggleExpand }>
+      <span onclick={ toggleExpand }>{ parent.expanded.contains(model.id) ? ARROW_DOWN : ARROW_RIGHT }</span>
+      <a class="{ active: parent.opts.model.id == model.id}">
         { model.name }
       </a>
       <ul if={ parent.expanded.contains(model.id) }>
@@ -20,7 +21,7 @@
 
   <style scoped>
     a.active {
-      background-color: rgba(98, 171, 130, 0.6);
+      color: #72b7d5;
     }
     a.selected {
       background-color: rgba(55, 157, 200, 0.75);
@@ -40,6 +41,10 @@
   var StudioConstants = require('constants/StudioConstants');
 
   var self = this;
+
+  // CONSTANTS
+  ARROW_RIGHT = '\u25b7';
+  ARROW_DOWN = '\u25bd';
 
   // Store data
   self.models   = [];

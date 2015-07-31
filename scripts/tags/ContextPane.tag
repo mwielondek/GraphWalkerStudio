@@ -12,7 +12,7 @@
       height: 100%;
       background-color: #47866f;
     }
-    #contextpane .panecontainer {
+    .panecontainer {
       display: block;
       background-color: #01493a;
       color: white;
@@ -20,15 +20,15 @@
       padding: 8px;
       min-height: 100px;
     }
-    #contextpane ul {
+    .panecontainer > ul {
       list-style: none;
       padding: 0;
       margin: 0 auto;
     }
-    #contextpane li {
+    .panecontainer > ul > li {
       padding: 0 0 10px 0;
     }
-    #contextpane textarea {
+    .panecontainer textarea {
       vertical-align: top;
       width: 255px;
       min-height: 100px;
