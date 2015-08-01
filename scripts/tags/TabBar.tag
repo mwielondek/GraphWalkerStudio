@@ -59,7 +59,7 @@
   });
 
   openTab(e) {
-    self.opts.tabs.open();
+    self.opts.model.new();
     e.preventUpdate = true; // Update is called indirectly above
   };
 

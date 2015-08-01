@@ -26,12 +26,8 @@
   self.selection = [];
   Object.defineProperty(self, 'selection', { writable: false }); // Prevent from overwriting object
   self.selection.clear = function(preventUpdate) {
-    if (preventUpdate) {
-      this.constructor.prototype.clear.apply(this);
-    } else {
-      this.constructor.prototype.clear.apply(this);
-      self.update();
-    }
+    this.constructor.prototype.clear.apply(this);
+    if (!preventUpdate) self.update();
   };
   self.selection.update = function(elements, toggle) {
     // If `elements` is falsy, clear selection
@@ -63,18 +59,11 @@
   // TABS
   self.tabs = [];
   Object.defineProperty(self, 'tabs', { writable: false }); // Prevent from overwriting object
-  self.tabs.open = function(model) {
-    if (model && !this.contains(model)) {
+  self.tabs.open = function(model, preventUpdate) {
+    if (!this.mapBy('id').contains(model.id)) {
       // Open existing model and set it as active
       this.push(model);
-      if (self.model != model) self.model = model;
-      self.update();
-    } else if(!model) {
-      // Create new model
-      var _this = this;
-      ModelActions.add({}, function(model) {
-        self.model = model;
-      });
+      if (!preventUpdate) self.update();
     }
   }.bind(self.tabs);
   self.tabs.close = function(modelId) {
@@ -92,27 +81,34 @@
   }.bind(self.tabs);
 
   // CURRENT MODEL
+  var _modelHelperFunctions = self._model = {
+    // Helper setter for calling from children
+    set: function(model) {
+      self.model = model;
+    },
+    // Create new model and set it as active
+    new: function() {
+      ModelActions.add({}, function(model) {
+        self.model = model;
+      });
+    }
+  };
   Object.defineProperty(self, 'model', {
     get: function() {
       return this._model;
     },
     set: function(model) {
       // HACK: riot/#1003 workaround. Prevents vertex labels switching DOM nodes.
-      this._model = { set: self._setModel };
+      this._model = _modelHelperFunctions;
       this.update();
 
       if (model) {
-        this._model = model;
-        this._model.set = self._setModel;
-        this.selection.clear(true);
-        self.tabs.open(model);
+        this._model = $.extend({}, model, _modelHelperFunctions);
+        self.tabs.open(model, true);
+        this.selection.clear();
       }
     }
   });
-  // Helper setter for calling from children
-  _setModel(model) {
-    self.model = model;
-  }
 
   // Handle passed in options
   self.on('mount', function() {
