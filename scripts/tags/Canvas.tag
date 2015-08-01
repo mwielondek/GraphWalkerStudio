@@ -113,9 +113,9 @@
       });
 
       // Selecting edges
-      jsp.bind('click', function(connection) {
+      jsp.bind('click', function(connection, evt) {
         var edge = connection.getParameter('_edgeObject');
-        self.opts.selection.update(edge);
+        self.opts.selection.update(edge, evt.metaKey);
       });
     });
 

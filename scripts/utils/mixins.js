@@ -52,7 +52,10 @@ define(['jquery'], function($) {
   // Pluralize known words
   String.prototype.pluralize = function(flag) {
     var WORDS = {
-      'vertex' : 'vertices'
+      'edge'    : 'edges',
+      'model'   : 'models',
+      'vertex'  : 'vertices',
+      'element' : 'elements'
     };
     return flag ? WORDS[this] : this;
   }

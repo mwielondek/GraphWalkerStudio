@@ -3,9 +3,14 @@
   <ul>
     <li if={!isMultipleSelection}>ID: { element.id }</li>
     <li if={isMultipleSelection}>
-      Selected { opts.selection.length } {element.type.pluralize(isMultipleSelection)}
+      Selected { opts.selection.length }
+       { isDifferentTypes ? 'elements' : element.type.pluralize(isMultipleSelection) }
     </li>
-    <li><button onclick={ removeElement }>Remove { element.type.pluralize(isMultipleSelection) }</button></li>
+    <li>
+      <button onclick={ removeElement }>
+        Remove { isDifferentTypes ? 'elements' : element.type.pluralize(isMultipleSelection) }
+      </button>
+    </li>
   </ul>
 
   var VertexActions    = require('actions/VertexActions');
@@ -16,8 +21,12 @@
   var self = this;
 
   self.on('update', function() {
-    self.element = opts.selection[0] || opts.model;
+    self.element = opts.selection[0] || opts.model || {};
     self.isMultipleSelection = opts.selection.length > 1;
+    self.isDifferentTypes = !self.isMultipleSelection ? false :
+      !opts.selection.mapBy('type').every(function(el, i, array) {
+        return i > 0 ? el == array[i-1] : true;
+      });
   });
 
   removeElement() {
