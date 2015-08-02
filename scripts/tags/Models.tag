@@ -2,6 +2,10 @@
   <ul class="models">
     <li if={ !models.length }><a href="" onclick={ opts.model.new }>Create new model</a></li>
     <li if={ models.length }>
+      <input type="text" name="searchInput" placeholder="Search" onkeyup={ search }>
+      <button onclick={ clearSearch }>Clear</button>
+    </li>
+    <li if={ models.length }>
       <a href="" onclick={ expandAll }>Expand all</a>
       <a href="" onclick={ hideAll }>Hide all</a>
     </li>
@@ -11,11 +15,11 @@
         { model.name }
       </a>
       <ul if={ parent.expanded.contains(model.id) }>
-        <li each={ filterByModel(vertices, model) }>
+        <li each={ filterByModel(vertices, model).filter(searchFilter) }>
           <a class="vertex { selected: parent.parent.opts.selection.mapBy('id').contains(id) }"
            onclick={ select }>{ id }</a>
         </li>
-        <li each={ filterByModel(edges, model) }>
+        <li each={ filterByModel(edges, model).filter(searchFilter) }>
           <a class="edge { selected: parent.parent.opts.selection.mapBy('id').contains(id) }"
            onclick={ select }>{ id }</a>
         </li>
@@ -60,6 +64,7 @@
 
   // State
   self.expanded = [];
+  self.searchQuery = '';
 
 
   ModelActions.addChangeListener(function(models) {
@@ -101,6 +106,22 @@
 
   openModel(e) {
     self.opts.model.set(e.item.model);
+  }
+
+  searchFilter(el) {
+    return !self.searchQuery ? true : new RegExp(self.searchQuery).test(el.id);
+  }
+
+  search() {
+    if (!self.expandedBeforeSearch) self.expandedBeforeSearch = self.expanded;
+    self.searchQuery = self.searchInput.value;
+    self.expandAll();
+  }
+
+  clearSearch() {
+    self.searchQuery = self.searchInput.value = '';
+    self.expanded = self.expandedBeforeSearch;
+    delete self.expandedBeforeSearch;
   }
 
 </models-pane>
