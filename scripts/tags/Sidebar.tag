@@ -5,7 +5,7 @@
     </sidebar-pane>
 
     <sidebar-pane heading="Models">
-      <treeview-pane model={ parent.opts.model } selection={ parent.opts.selection } tabs={ parent.opts.tabs }/>
+      <models-pane model={ parent.opts.model } selection={ parent.opts.selection } tabs={ parent.opts.tabs }/>
     </sidebar-pane>
 
     <sidebar-pane heading="Settings">

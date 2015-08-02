@@ -1,5 +1,5 @@
-<treeview-pane>
-  <ul class="treeview">
+<models-pane>
+  <ul class="models">
     <li each={ model in models } class="{ active: parent.opts.model.id == model.id}">
       <span onclick={ toggleExpand }>{ parent.expanded.contains(model.id) ? ARROW_DOWN : ARROW_RIGHT }</span>
       <a class="{ active: parent.opts.model.id == model.id}" onclick={ openModel }>
@@ -28,7 +28,7 @@
     li.active {
       background-color: rgba(98, 171, 130, 0.3);
     }
-    ul.treeview {
+    ul.models {
       background-color: rgba(98, 171, 130, 0.1);
     }
   </style>
@@ -87,4 +87,4 @@
     self.opts.model.set(e.item.model);
   }
 
-</treeview-pane>
+</models-pane>
