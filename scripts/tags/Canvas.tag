@@ -1,15 +1,19 @@
-<studio-canvas>
+<studio-canvas class="{ highlight: !selection.length }">
   <vertex each={ filterByModel(vertices) } selection={ parent.opts.selection } />
   <edge each={ filterByModel(edges) } selection={ parent.opts.selection } />
 
   <style>
-  studio-canvas {
-    height: 100%;
-    display: block;
-    position: relative;
-    margin-right: 310px;
-    background-color: #f0f0f0;
-  }
+    studio-canvas {
+      height: 100%;
+      display: block;
+      position: relative;
+      margin-right: 310px;
+      background-color: #f0f0f0;
+      border: 2px solid #10586b;
+    }
+    studio-canvas.highlight {
+      border: 2px solid #2cb9de;
+    }
   </style>
 
   var $                 = require('jquery');
