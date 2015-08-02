@@ -1,5 +1,10 @@
 <models-pane>
   <ul class="models">
+    <li if={ !models.length }><a href="" onclick={ opts.model.new }>Create new model</a></li>
+    <li if={ models.length }>
+      <a href="" onclick={ expandAll }>Expand all</a>
+      <a href="" onclick={ hideAll }>Hide all</a>
+    </li>
     <li each={ model in models } class="{ active: parent.opts.model.id == model.id}">
       <span onclick={ toggleExpand }>{ parent.expanded.contains(model.id) ? ARROW_DOWN : ARROW_RIGHT }</span>
       <a class="{ active: parent.opts.model.id == model.id}" onclick={ openModel }>
@@ -19,6 +24,9 @@
   </ul>
 
   <style scoped>
+    a {
+      color: inherit;
+    }
     a.active {
       color: #72b7d5;
     }
@@ -74,6 +82,14 @@
   toggleExpand(e) {
     var modelId = e.item.model.id;
     self.expanded.toggle(modelId);
+  }
+
+  expandAll() {
+    self.expanded = self.models.mapBy('id');
+  }
+
+  hideAll() {
+    self.expanded = [];
   }
 
   select(e) {
