@@ -1,5 +1,4 @@
-<properties-pane class="panecontainer">
-  <h4>Properties</h4>
+<properties-pane>
   <ul>
     <li if={!isMultipleSelection}>ID: { element.id }</li>
     <li if={isMultipleSelection}>

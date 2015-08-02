@@ -1,6 +1,4 @@
-<connection-pane class="panecontainer">
-  <h4>Settings</h4>
-
+<connection-pane>
   <h5>Connect to GraphWalker</h5>
   <ul>
     <li>URL: <input name="ws_url" disabled="{ connected }" />

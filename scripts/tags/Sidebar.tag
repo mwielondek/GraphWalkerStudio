@@ -1,8 +1,16 @@
 <studio-sidebar>
   <div id="sidebar">
-    <properties-pane if={ opts.model.id } model={ opts.model } selection={ opts.selection } />
-    <treeview-pane model={ opts.model } selection={ opts.selection } tabs={ opts.tabs }/>
-    <connection-pane />
+    <sidebar-pane heading="Properties" if={ opts.model.id }>
+      <properties-pane model={ parent.opts.model } selection={ parent.opts.selection } />
+    </sidebar-pane>
+    
+    <sidebar-pane heading="Models">
+      <treeview-pane model={ parent.opts.model } selection={ parent.opts.selection } tabs={ parent.opts.tabs }/>
+    </sidebar-pane>
+
+    <sidebar-pane heading="Settings">
+      <connection-pane />
+    </sidebar-pane>
   </div>
 
   <style>
@@ -12,7 +20,7 @@
       height: 100%;
       background-color: #47866f;
     }
-    .panecontainer {
+    sidebar-pane {
       display: block;
       background-color: #01493a;
       color: white;
@@ -20,15 +28,15 @@
       padding: 8px;
       min-height: 100px;
     }
-    .panecontainer > ul {
+    sidebar-pane > * > ul {
       list-style: none;
       padding: 0;
       margin: 0 auto;
     }
-    .panecontainer > ul > li {
+    sidebar-pane > * > ul > li {
       padding: 0 0 10px 0;
     }
-    .panecontainer textarea {
+    sidebar-pane textarea {
       vertical-align: top;
       width: 255px;
       min-height: 100px;

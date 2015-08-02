@@ -1,5 +1,4 @@
-<treeview-pane class="panecontainer">
-  <h4>Models</h4>
+<treeview-pane>
   <ul class="treeview">
     <li each={ model in models } class="{ active: parent.opts.model.id == model.id}">
       <span onclick={ toggleExpand }>{ parent.expanded.contains(model.id) ? ARROW_DOWN : ARROW_RIGHT }</span>
