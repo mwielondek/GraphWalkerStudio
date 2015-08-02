@@ -1,5 +1,5 @@
 <sidebar-pane>
-  <h4>{ opts.heading }<span class="minimize" onclick={ togglePane }>[{ expanded ? '–' : '+'}]</span></h4>
+  <h4 onclick={ togglePane }>{ opts.heading }<span class="minimize">[{ expanded ? '–' : '+'}]</span></h4>
   <div class="pane-body" show={ expanded }>
     <yield/>
   </div>
