@@ -7,7 +7,7 @@
     </li>
     <li if={ models.length }>
       <a href="" onclick={ expandAll }>Expand all</a>
-      <a href="" onclick={ hideAll }>Hide all</a>
+      <a href="" onclick={ hideAll }>Hide not active</a>
     </li>
     <li each={ model in models } class="{ active: parent.opts.model.id == model.id}">
       <span onclick={ toggleExpand }>{ parent.expanded.contains(model.id) ? ARROW_DOWN : ARROW_RIGHT }</span>
@@ -78,6 +78,10 @@
   EdgeActions.addChangeListener(function(edges) {
     self.edges = edges;
     self.update();
+  });
+
+  self.on('update', function() {
+    if (!self.expanded.contains(opts.model.id)) self.expanded.push(opts.model.id);
   });
 
   filterByModel(elements, model) {
