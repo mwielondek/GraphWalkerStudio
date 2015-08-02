@@ -1,12 +1,12 @@
-<studio-contextpane>
-  <div id="contextpane">
+<studio-sidebar>
+  <div id="sidebar">
     <properties-pane if={ opts.model.id } model={ opts.model } selection={ opts.selection } />
     <treeview-pane model={ opts.model } selection={ opts.selection } tabs={ opts.tabs }/>
     <connection-pane />
   </div>
 
   <style>
-    #contextpane {
+    #sidebar {
       float: right;
       width: 310px;
       height: 100%;
@@ -35,4 +35,4 @@
     }
   </style>
 
-</studio-contextpane>
+</studio-sidebar>

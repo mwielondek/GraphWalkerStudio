@@ -29,7 +29,7 @@ var config = {
         'tag/Vertex'        : ['riot', 'jquery', 'constants/VertexConstants', 'jsplumb', 'jquery-ui',
                                'actions/VertexActions', 'constants/StudioConstants', 'actions/Utils'],
         'tag/Edge'          : ['riot', 'jquery', 'constants/EdgeConstants', 'jsplumb', 'actions/EdgeActions'],
-        'tag/ContextPane'   : ['riot'],
+        'tag/Sidebar'       : ['riot'],
         'tag/PropertiesPane': ['riot', 'actions/VertexActions', 'actions/EdgeActions',
                                'constants/StudioConstants', 'utils/mixins'],
         'tag/ConnectionPane': ['riot', 'actions/ConnectionActions'],

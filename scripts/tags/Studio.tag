@@ -1,7 +1,7 @@
 <studio>
   <p>Studio</p>
   <studio-tabs tabs={ tabs } model={ model } />
-  <studio-contextpane selection={ selection } model={ model } />
+  <studio-sidebar selection={ selection } model={ model } />
   <studio-canvas options={ opts.canvas } selection={ selection } model={ model } show={ tabs.length } />
 
   <style>
