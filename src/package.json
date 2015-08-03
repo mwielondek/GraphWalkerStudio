@@ -1,0 +1,37 @@
+{
+  "name": "graph-editor",
+  "version": "0.3.0",
+  "description": "[WIP] A studio suite for creating and validating state diagrams",
+  "main": "dist/main.js",
+  "scripts": {
+    "bundle-js": "r.js -o build.js out=\"../dist/grapheditor.js\" optimize=none",
+    "compile-tags": "./scripts/tags/compile.sh js",
+    "build": "npm run compile-tags && npm run bundle-js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/miloszw/gw-studio.git"
+  },
+  "keywords": [
+    "graph",
+    "editor",
+    "state",
+    "machine",
+    "diagram",
+    "graphwalker"
+  ],
+  "author": "Milosz Wielondek",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/miloszw/gw-studio/issues"
+  },
+  "homepage": "https://github.com/miloszw/gw-studio#readme",
+  "devDependencies": {},
+  "dependencies": {
+    "jquery": "^2.1.4",
+    "jquery-ui": "^1.10.5",
+    "jsplumb": "sporritt/jsplumb",
+    "requirejs": "^2.1.20",
+    "riot": "^2.2.2"
+  }
+}

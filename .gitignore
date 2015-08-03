@@ -1,3 +1,4 @@
 .DS_Store
 scripts/tags/js
 *.pyc
+node_modules
