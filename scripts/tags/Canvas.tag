@@ -1,6 +1,7 @@
 <studio-canvas class="{ highlight: !selection.length }">
   <div class="zoom-button" id="zoom-in">+</div>
   <div class="zoom-button" id="zoom-out">–</div>
+  <input type="range" id="zoom-range" step="0.05" min="0.4" max="5">
   <div id="canvas-body">
     <vertex each={ filterByModel(vertices) } selection={ parent.opts.selection } />
     <edge each={ filterByModel(edges) } selection={ parent.opts.selection } />
@@ -39,6 +40,14 @@
       position: absolute;
       top: 10px;
       z-index: 1;
+    }
+    #zoom-range {
+      position: absolute;
+      top: 100px;
+      right: -42px;
+      z-index: 1;
+      transform: rotate(270deg);
+      -webkit-transform: rotate(270deg);
     }
     #zoom-in {
       right: 5px;
@@ -215,6 +224,7 @@
       },
       $zoomIn: $('#zoom-in'),
       $zoomOut: $('#zoom-out'),
+      $zoomRange: $('#zoom-range'),
       onZoom: function(e, pz, scale) {
         jsp.setZoom(scale);
       }
