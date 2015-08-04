@@ -104,7 +104,7 @@
   select(e) {
     e.preventUpdate = true; // Update is called by selection.update
     var element = e.item;
-    self.opts.model.set(element.model);
+    self.opts.model.set(element.model.id);
     opts.selection.update(element);
   }
 
