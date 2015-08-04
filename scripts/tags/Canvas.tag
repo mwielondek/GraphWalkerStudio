@@ -70,9 +70,10 @@
 
   var LEFT_BUTTON  = 0;
   var RIGHT_BUTTON = 2;
-  var ALT_KEY   = 91;
-  var SPACEBAR  = 32;
-  var SHIFT_KEY = 16;
+  var ALT_KEY    = 91;
+  var ALT_KEY_FF = 224; // Firefox uses a different keycode for ALT for some reason.
+  var SPACEBAR   = 32;
+  var SHIFT_KEY  = 16;
 
   var self = this
 
@@ -247,7 +248,7 @@
     // Alt-click zooming
     $('body').on('keydown', function(e) {
       if (e.target != this) return;
-      if (e.keyCode == ALT_KEY) {
+      if (e.keyCode == ALT_KEY || e.keyCode == ALT_KEY_FF) {
         var zoomOut = false;
         var zoomHandler = function (e) {
           // Don't zoom on right click or when clicking elements
@@ -270,7 +271,7 @@
           }
         };
         var keyUpHandler = function(e) {
-          if (e.keyCode == ALT_KEY) {
+          if (e.keyCode == ALT_KEY  || e.keyCode == ALT_KEY_FF) {
             // Remove all listeners
             $('#canvas-body')
               .css('cursor', 'default')
