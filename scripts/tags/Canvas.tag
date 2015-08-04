@@ -20,8 +20,10 @@
     #canvas-body {
       background: linear-gradient(to bottom right, #f0f0f0, #000000);// #f0f0f0;
       position: absolute;
-      height: 1900px;
-      width: 1900px;
+      height: 10000px;
+      width: 10000px;
+      top: -5000px;
+      left: -5000px;
     }
     #zoom-in {
       background-color: navy;
@@ -167,6 +169,13 @@
         if (e.button == LEFT_BUTTON) {
           $(this).trigger('rubberband', e);
           e.stopImmediatePropagation();
+        } else {
+          $(this)
+            .css('cursor', 'grabbing')
+            .css('cursor', '-webkit-grabbing')
+            .one('mouseup', function() {
+              $(this).css('cursor', 'default');
+            })
         }
       })
       .on('contextmenu', function(e) {
@@ -175,7 +184,7 @@
 
     // Set up panning & zooming
     $('#canvas-body').panzoom({
-      cursor: 'normal',
+      cursor: 'default',
       contain: 'invert' // Don't show what's behind canvas
     });
     $(window).on('resize', function() {
