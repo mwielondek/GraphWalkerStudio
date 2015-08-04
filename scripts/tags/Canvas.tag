@@ -175,7 +175,12 @@
 
     // Set up panning & zooming
     $('#canvas-body').panzoom({
-      cursor: 'normal'
+      cursor: 'normal',
+      contain: 'invert' // Don't show what's behind canvas
+    });
+    $(window).on('resize', function() {
+      // Fix contain dimensions upon browser window resize
+      $('#canvas-body').panzoom('resetDimensions');
     });
 
   });
