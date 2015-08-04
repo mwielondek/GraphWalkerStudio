@@ -115,10 +115,10 @@
         this.selection.clear();
 
         // Restore pan position
-        try {
+        if (model.view && model.view.panzoom) {
           $('#canvas-body').panzoom('setMatrix', model.view.panzoom);
-        } catch (e) {
-          $('#canvas-body').panzoom('resetPan', { animate: false });
+        } else {
+          $('#canvas-body').panzoom('reset', { animate: false });
         }
       }
     }

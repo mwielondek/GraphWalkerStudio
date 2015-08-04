@@ -1,5 +1,7 @@
 <studio-canvas class="{ highlight: !selection.length }">
-  <div id="zoom-in">+</div>
+  <div class="zoom-button" id="zoom-in">+</div>
+  <div class="zoom-button" id="zoom-out">–</div>
+  <input type="range" id="zoom-range" step="0.05" min="0.4" max="5">
   <div id="canvas-body">
     <vertex each={ filterByModel(vertices) } selection={ parent.opts.selection } />
     <edge each={ filterByModel(edges) } selection={ parent.opts.selection } />
@@ -18,21 +20,40 @@
       border: 2px solid #2cb9de;
     }
     #canvas-body {
+      box-sizing: border-box;
+      border: 7px solid #6e2d1f;
       background: #f0f0f0;
       position: absolute;
       height: 10000px;
       width: 10000px;
       top: -5000px;
       left: -5000px;
+      -webkit-backface-visibility: initial !important;
+      -webkit-transform-origin: 50% 50%;
     }
-    #zoom-in {
-      display: hidden;
+    .zoom-button {
+      text-align: center;
       background-color: navy;
       color: white;
+      width: 20px;
+      height: 20px;
       position: absolute;
-      right: 10px;
       top: 10px;
       z-index: 1;
+    }
+    #zoom-range {
+      position: absolute;
+      top: 100px;
+      right: -42px;
+      z-index: 1;
+      transform: rotate(270deg);
+      -webkit-transform: rotate(270deg);
+    }
+    #zoom-in {
+      right: 5px;
+    }
+    #zoom-out {
+      right: 27px;
     }
   </style>
 
@@ -42,12 +63,17 @@
   var VertexActions     = require('actions/VertexActions');
   var EdgeActions       = require('actions/EdgeActions');
   var ModelActions      = require('actions/ModelActions');
+  var ActionUtils       = require('actions/Utils');
   var StudioConstants   = require('constants/StudioConstants');
   var ConnectionActions = require('actions/ConnectionActions');
   var rubberband        = require('utils/rubberband');
 
   var LEFT_BUTTON  = 0;
   var RIGHT_BUTTON = 2;
+  var ALT_KEY    = 91;
+  var ALT_KEY_FF = 224; // Firefox uses a different keycode for ALT for some reason.
+  var SPACEBAR   = 32;
+  var SHIFT_KEY  = 16;
 
   var self = this
 
@@ -57,7 +83,7 @@
   addVertex(e) {
     // Prepare vertex object
     var vertex = {
-      model: opts.model,
+      modelId: opts.model.id,
       view: {
         centerY: e.offsetY,
         centerX: e.offsetX
@@ -71,7 +97,7 @@
     var sourceVertexId = $('#'+sourceDomId).attr('vertex-id');
     var targetVertexId = $('#'+targetDomId).attr('vertex-id');
     var edge = {
-      model: opts.model,
+      modelId: opts.model.id,
       sourceDomId: sourceDomId,
       targetDomId: targetDomId,
       sourceVertexId: sourceVertexId,
@@ -81,7 +107,7 @@
   }
 
   filterByModel(elements) {
-    return elements.filter(function(el) { return el.model.id == opts.model.id });
+    return elements.filter(function(el) { return el.modelId == opts.model.id });
   }
 
   VertexActions.getAll(function(vertices) {
@@ -160,7 +186,7 @@
     $('#canvas-body')
       // Add new vertices on double click
       .on('dblclick', function(e) {
-        if (e.target === this) self.addVertex(e);
+        if (e.target === this && !e.metaKey) self.addVertex(e);
       })
       // Deselect vertices on click
       .on('click', function(e) {
@@ -170,7 +196,6 @@
         // Create rubberband on left click-n-drag
         if (e.button == LEFT_BUTTON) {
           $(this).trigger('rubberband', e);
-          e.stopImmediatePropagation();
         } else {
           $(this)
             .css('cursor', 'grabbing')
@@ -190,15 +215,90 @@
       contain: 'invert', // Don't show what's behind canvas
       onEnd: function() {
         // Store pan position in model
-        ModelActions.setProps(opts.model.id, {
-          view: {
-            panzoom: $(this).panzoom('getMatrix')
-          }
-        });
+        ActionUtils.timeBufferedAction(function() {
+          ModelActions.setProps(opts.model.id, {
+            view: {
+              panzoom: $(this).panzoom('getMatrix')
+            }
+          });
+        }.bind(this), 'model.update.panzoom', 400);
+      },
+      $zoomIn: $('#zoom-in'),
+      $zoomOut: $('#zoom-out'),
+      $zoomRange: $('#zoom-range'),
+      onZoom: function(e, pz, scale) {
+        jsp.setZoom(scale);
       }
-    });
+    })
+    // Mousewheel zooming (doesn't support Firefox)
+    .on('mousewheel', function( e ) {
+      if (e.target != this) return;
+      e.preventDefault();
+      var delta = e.delta || e.originalEvent.wheelDelta;
+      var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
+      $('#canvas-body').panzoom('zoom', zoomOut, {
+        increment: 0.00005 * Math.max(Math.abs(delta), 50),
+        focal: {
+          clientX: e.offsetY,
+          clientY: e.offsetX
+        },
+        animate: false
+      });
+    })
+    // Alt-click zooming
+    $('body').on('keydown', function(e) {
+      if (e.target != this) return;
+      if (e.keyCode == ALT_KEY || e.keyCode == ALT_KEY_FF) {
+        var zoomOut = false;
+        var zoomHandler = function (e) {
+          // Don't zoom on right click or when clicking elements
+          if (e.button == RIGHT_BUTTON || e.target != this) return;
+          $('#canvas-body').panzoom('zoom', zoomOut, {
+            increment: 0.3,
+            focal: {
+              clientX: e.offsetY,
+              clientY: e.offsetX
+            },
+            animate: true
+          });
+        };
+        var zoomOutHandler = function(e) {
+          if (e.keyCode == SHIFT_KEY) {
+            zoomOut = true;
+            $('#canvas-body')
+              .css('cursor', 'zoom-out');
+          }
+        };
+        var keyUpHandler = function(e) {
+          if (e.keyCode == ALT_KEY  || e.keyCode == ALT_KEY_FF) {
+            // Remove all listeners
+            $('#canvas-body')
+              .css('cursor', 'default')
+              .off('mousedown', zoomHandler)
+            $(this)
+              .off('keydown', zoomOutHandler)
+              .off('keyup', keyUpHandler);
+          } else if (e.keyCode == SHIFT_KEY) {
+            zoomOut = false;
+            $('#canvas-body')
+              .css('cursor', 'zoom-in');
+          }
+        };
+
+        // Set listeners
+        $('#canvas-body')
+          .css('cursor', 'zoom-in')
+          .on('mousedown', zoomHandler);
+        $(this)
+          .on('keydown', zoomOutHandler)
+          .on('keyup', keyUpHandler);
+      } else if (e.keyCode == SPACEBAR) {
+        // Reset pan and zoom on spacebar press
+        $('#canvas-body').panzoom('reset');
+      }
+    })
+    // Fix contain dimensions upon browser window resize
     $(window).on('resize', function() {
-      // Fix contain dimensions upon browser window resize
       $('#canvas-body').panzoom('resetDimensions');
     });
 

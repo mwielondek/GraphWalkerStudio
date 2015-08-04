@@ -34,6 +34,33 @@ define(function() {
           _bufferedActionCache.remove(bufferedAction); // remove instance
         }
       }
+    })(),
+    /**
+     * Runs an action if no new actions have come in during a time interval.
+     */
+    timeBufferedAction: (function() {
+      var _bufferedActionCache = [];
+      return function(action, uniqueId, bufferUntil) {
+        // Get buffered instance or create new one
+        var bufferedAction = _bufferedActionCache.filter(function(el) { return el.id === uniqueId })[0];
+        if (!bufferedAction) {
+          bufferedAction = {
+            id           : uniqueId,
+            action       : action
+          };
+          _bufferedActionCache.push(bufferedAction);
+        }
+
+        // Update timer
+        bufferedAction.timer = bufferUntil;
+
+        // Stop previous timeout
+        if (bufferedAction.timeout) clearTimeout(bufferedAction.timeout);
+
+        // Set timeout
+        bufferedAction.timeout = setTimeout(bufferedAction.action, bufferedAction.timer);
+
+      }
     })()
   }
 });
