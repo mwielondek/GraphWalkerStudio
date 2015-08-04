@@ -103,6 +103,13 @@
       this.update();
 
       if (model) {
+        if (typeof model == 'string') {
+          ModelActions.get(model, function(m) {
+            self.model = m;
+          });
+          return;
+        }
+
         this._model = $.extend({}, model, _modelHelperFunctions);
         self.tabs.open(model, true);
         this.selection.clear();
