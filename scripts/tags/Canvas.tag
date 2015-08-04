@@ -41,6 +41,7 @@
   var RiotControl       = require('app/RiotControl');
   var VertexActions     = require('actions/VertexActions');
   var EdgeActions       = require('actions/EdgeActions');
+  var ModelActions      = require('actions/ModelActions');
   var StudioConstants   = require('constants/StudioConstants');
   var ConnectionActions = require('actions/ConnectionActions');
   var rubberband        = require('utils/rubberband');
@@ -186,7 +187,15 @@
     // Set up panning & zooming
     $('#canvas-body').panzoom({
       cursor: 'default',
-      contain: 'invert' // Don't show what's behind canvas
+      contain: 'invert', // Don't show what's behind canvas
+      onEnd: function() {
+        // Store pan position in model
+        ModelActions.setProps(opts.model.id, {
+          view: {
+            panzoom: $(this).panzoom('getMatrix')
+          }
+        });
+      }
     });
     $(window).on('resize', function() {
       // Fix contain dimensions upon browser window resize

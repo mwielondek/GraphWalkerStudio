@@ -106,6 +106,13 @@
         this._model = $.extend({}, model, _modelHelperFunctions);
         self.tabs.open(model, true);
         this.selection.clear();
+
+        // Restore pan position
+        try {
+          $('#canvas-body').panzoom('setMatrix', model.view.panzoom);
+        } catch (e) {
+          $('#canvas-body').panzoom('resetPan', { animate: false });
+        }
       }
     }
   });
