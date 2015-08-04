@@ -253,14 +253,13 @@
         var zoomHandler = function (e) {
           // Don't zoom on right click or when clicking elements
           if (e.button == RIGHT_BUTTON || e.target != this) return;
-
           $('#canvas-body').panzoom('zoom', zoomOut, {
-            increment: 0.2,
+            increment: 0.3,
             focal: {
               clientX: e.offsetY,
               clientY: e.offsetX
             },
-            animate: false
+            animate: true
           });
         };
         var zoomOutHandler = function(e) {
