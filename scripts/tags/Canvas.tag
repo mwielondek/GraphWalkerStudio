@@ -1,18 +1,35 @@
 <studio-canvas class="{ highlight: !selection.length }">
-  <vertex each={ filterByModel(vertices) } selection={ parent.opts.selection } />
-  <edge each={ filterByModel(edges) } selection={ parent.opts.selection } />
+  <div id="zoom-in">+</div>
+  <div id="canvas-body">
+    <vertex each={ filterByModel(vertices) } selection={ parent.opts.selection } />
+    <edge each={ filterByModel(edges) } selection={ parent.opts.selection } />
+  </div>
 
   <style>
     studio-canvas {
       height: 100%;
       display: block;
-      position: relative;
       margin-right: 310px;
-      background-color: #f0f0f0;
       border: 2px solid #10586b;
+      overflow: hidden;
+      position: relative;
     }
     studio-canvas.highlight {
       border: 2px solid #2cb9de;
+    }
+    #canvas-body {
+      background: linear-gradient(to bottom right, #f0f0f0, #000000);// #f0f0f0;
+      position: absolute;
+      height: 1900px;
+      width: 1900px;
+    }
+    #zoom-in {
+      background-color: navy;
+      color: white;
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      z-index: 1;
     }
   </style>
 
@@ -25,6 +42,9 @@
   var ConnectionActions = require('actions/ConnectionActions');
   var rubberband        = require('utils/rubberband');
 
+  var LEFT_BUTTON  = 0;
+  var RIGHT_BUTTON = 2;
+
   var self = this
 
   self.vertices = []
@@ -35,8 +55,8 @@
     var vertex = {
       model: opts.model,
       view: {
-        centerY: e.pageY - self.root.offsetTop,
-        centerX: e.pageX - self.root.offsetLeft
+        centerY: e.offsetY,
+        centerX: e.offsetX
       }
     }
     // Dispatch action
@@ -108,7 +128,7 @@
       });
 
       // Set canvas as container
-      jsp.setContainer(self.root);
+      jsp.setContainer('canvas-body');
 
       // Move connection creation logic to `edge` tag.
       jsp.bind('beforeDrop', function(params) {
@@ -123,8 +143,8 @@
       });
     });
 
-    // Create a selection rubberband on click-n-drag
-    rubberband(self.root, 'vertex', function(selectedVertices, append) {
+    // Append rubberband listener
+    rubberband('#canvas-body', 'vertex', function(selectedVertices, append) {
       // Dispatch it to end of event queue so that it is not
       // overriden by the onClick handler below.
       setTimeout(function() {
@@ -133,7 +153,7 @@
     });
 
     // Set up event listeners
-    $(self.root)
+    $('#canvas-body')
       // Add new vertices on double click
       .on('dblclick', function(e) {
         if (e.target === this) self.addVertex(e);
@@ -141,7 +161,22 @@
       // Deselect vertices on click
       .on('click', function(e) {
         if (e.target == this) self.opts.selection.clear();
+      })
+      .on('mousedown', function(e) {
+        // Create rubberband on left click-n-drag
+        if (e.button == LEFT_BUTTON) {
+          $(this).trigger('rubberband', e);
+          e.stopImmediatePropagation();
+        }
+      })
+      .on('contextmenu', function(e) {
+        e.preventDefault();
       });
+
+    // Set up panning & zooming
+    $('#canvas-body').panzoom({
+      cursor: 'normal'
+    });
 
   });
 
