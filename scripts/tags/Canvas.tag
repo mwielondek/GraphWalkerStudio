@@ -1,5 +1,6 @@
 <studio-canvas class="{ highlight: !selection.length }">
-  <div id="zoom-in">+</div>
+  <div class="zoom-button" id="zoom-in">+</div>
+  <div class="zoom-button" id="zoom-out">–</div>
   <div id="canvas-body">
     <vertex each={ filterByModel(vertices) } selection={ parent.opts.selection } />
     <edge each={ filterByModel(edges) } selection={ parent.opts.selection } />
@@ -25,14 +26,21 @@
       top: -5000px;
       left: -5000px;
     }
-    #zoom-in {
-      display: none;
+    .zoom-button {
+      text-align: center;
       background-color: navy;
       color: white;
+      width: 20px;
+      height: 20px;
       position: absolute;
-      right: 10px;
       top: 10px;
       z-index: 1;
+    }
+    #zoom-in {
+      right: 5px;
+    }
+    #zoom-out {
+      right: 27px;
     }
   </style>
 
@@ -198,6 +206,11 @@
             }
           });
         }.bind(this), 'model.update.panzoom', 400);
+      },
+      $zoomIn: $('#zoom-in'),
+      $zoomOut: $('#zoom-out'),
+      onZoom: function(e, pz, scale) {
+        jsp.setZoom(scale);
       }
     });
     $(window).on('resize', function() {

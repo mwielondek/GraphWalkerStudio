@@ -118,7 +118,7 @@
         if (model.view && model.view.panzoom) {
           $('#canvas-body').panzoom('setMatrix', model.view.panzoom);
         } else {
-          $('#canvas-body').panzoom('resetPan', { animate: false });
+          $('#canvas-body').panzoom('reset', { animate: false });
         }
       }
     }
