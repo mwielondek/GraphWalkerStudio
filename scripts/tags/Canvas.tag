@@ -61,8 +61,9 @@
 
   var LEFT_BUTTON  = 0;
   var RIGHT_BUTTON = 2;
-  var ALT_KEY  = 91;
-  var SPACEBAR = 32;
+  var ALT_KEY   = 91;
+  var SPACEBAR  = 32;
+  var SHIFT_KEY = 16;
 
   var self = this
 
@@ -237,10 +238,12 @@
     $('body').on('keydown', function(e) {
       if (e.target != this) return;
       if (e.keyCode == ALT_KEY) {
+        var zoomOut = false;
         var zoomHandler = function (e) {
-          if (e.button == RIGHT_BUTTON) return;
-          e.stopImmediatePropagation();
-          $('#canvas-body').panzoom('zoom', false, {
+          // Don't zoom on right click or when clicking elements
+          if (e.button == RIGHT_BUTTON || e.target != this) return;
+
+          $('#canvas-body').panzoom('zoom', zoomOut, {
             increment: 0.2,
             focal: {
               clientX: e.offsetY,
@@ -249,18 +252,38 @@
             animate: false
           });
         };
+        var zoomOutHandler = function(e) {
+          if (e.keyCode == SHIFT_KEY) {
+            zoomOut = true;
+            $('#canvas-body')
+              .css('cursor', 'zoom-out');
+          }
+        };
+        var keyUpHandler = function(e) {
+          if (e.keyCode == ALT_KEY) {
+            // Remove all listeners
+            $('#canvas-body')
+              .css('cursor', 'default')
+              .off('mousedown', zoomHandler)
+            $(this)
+              .off('keydown', zoomOutHandler)
+              .off('keyup', keyUpHandler);
+          } else if (e.keyCode == SHIFT_KEY) {
+            zoomOut = false;
+            $('#canvas-body')
+              .css('cursor', 'zoom-in');
+          }
+        };
 
+        // Set listeners
         $('#canvas-body')
           .css('cursor', 'zoom-in')
           .on('mousedown', zoomHandler);
-
         $(this)
-          .one('keyup', function() {
-            $('#canvas-body')
-              .css('cursor', 'default')
-              .off('mousedown', zoomHandler);
-          });
+          .on('keydown', zoomOutHandler)
+          .on('keyup', keyUpHandler);
       } else if (e.keyCode == SPACEBAR) {
+        // Reset pan and zoom on spacebar press
         $('#canvas-body').panzoom('reset');
       }
     })
