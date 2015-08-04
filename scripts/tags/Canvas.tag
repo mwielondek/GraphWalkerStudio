@@ -19,12 +19,16 @@
       border: 2px solid #2cb9de;
     }
     #canvas-body {
+      box-sizing: border-box;
+      border: 7px solid #6e2d1f;
       background: #f0f0f0;
       position: absolute;
       height: 10000px;
       width: 10000px;
       top: -5000px;
       left: -5000px;
+      -webkit-backface-visibility: initial !important;
+      -webkit-transform-origin: 50% 50%;
     }
     .zoom-button {
       text-align: center;
@@ -213,8 +217,23 @@
         jsp.setZoom(scale);
       }
     });
+    // Mousewheel zooming (doesn't support Firefox)
+    $('#canvas-body').on('mousewheel', function( e ) {
+      if (e.target != this) return;
+      e.preventDefault();
+      var delta = e.delta || e.originalEvent.wheelDelta;
+      var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
+      $('#canvas-body').panzoom('zoom', zoomOut, {
+        increment: 0.00005 * Math.max(Math.abs(delta), 50),
+        focal: {
+          clientX: e.offsetY,
+          clientY: e.offsetX
+        },
+        animate: false
+      });
+    });
+    // Fix contain dimensions upon browser window resize
     $(window).on('resize', function() {
-      // Fix contain dimensions upon browser window resize
       $('#canvas-body').panzoom('resetDimensions');
     });
 
