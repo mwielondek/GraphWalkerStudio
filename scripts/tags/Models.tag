@@ -85,7 +85,7 @@
   });
 
   filterByModel(elements, model) {
-    return elements.filter(function(el) { return el.model.id == model.id });
+    return elements.filter(function(el) { return el.modelId == model.id });
   }
 
   toggleExpand(e) {
@@ -104,7 +104,7 @@
   select(e) {
     e.preventUpdate = true; // Update is called by selection.update
     var element = e.item;
-    self.opts.model.set(element.model.id);
+    self.opts.model.set(element.modelId);
     opts.selection.update(element);
   }
 

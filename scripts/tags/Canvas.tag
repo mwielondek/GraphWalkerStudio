@@ -58,7 +58,7 @@
   addVertex(e) {
     // Prepare vertex object
     var vertex = {
-      model: opts.model,
+      modelId: opts.model.id,
       view: {
         centerY: e.offsetY,
         centerX: e.offsetX
@@ -72,7 +72,7 @@
     var sourceVertexId = $('#'+sourceDomId).attr('vertex-id');
     var targetVertexId = $('#'+targetDomId).attr('vertex-id');
     var edge = {
-      model: opts.model,
+      modelId: opts.model.id,
       sourceDomId: sourceDomId,
       targetDomId: targetDomId,
       sourceVertexId: sourceVertexId,
@@ -82,7 +82,7 @@
   }
 
   filterByModel(elements) {
-    return elements.filter(function(el) { return el.model.id == opts.model.id });
+    return elements.filter(function(el) { return el.modelId == opts.model.id });
   }
 
   VertexActions.getAll(function(vertices) {
