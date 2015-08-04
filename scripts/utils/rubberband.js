@@ -32,15 +32,15 @@ define(['jquery'], function($) {
 
     var attachHandlerTo = function(canvas, selector, fn) {
       var boundGetSelectedElements = _getSelectedElements.bind(null, selector);
-      $(canvas).on('mousedown', function(evt) {
+      $(canvas).on('rubberband', function(evt, mouseEvt) {
         // Trigger only when clicked directly on canvas to prevent
         // rubberband appearing when e.g. resizing vertices.
-        if (evt.target !== this) return;
+        if (mouseEvt.target !== this) return;
 
         // Record the starting point
         var startpos = {
-          Y: evt.pageY - this.offsetTop,
-          X: evt.pageX - this.offsetLeft
+          Y: mouseEvt.offsetY,
+          X: mouseEvt.offsetX
         };
 
         // Create the rubberband div and append it to container
@@ -61,12 +61,13 @@ define(['jquery'], function($) {
             rb.show();
           })
           .on('mousemove', function emvHandler(emv) {
+            if (emv.target !== this) return;
             // Update dimensions
             rb.css({
-              'top':    Math.min(startpos.Y, emv.pageY - this.offsetTop),
-              'left':   Math.min(startpos.X, emv.pageX - this.offsetLeft),
-              'width':  Math.abs(startpos.X - emv.pageX + this.offsetLeft),
-              'height': Math.abs(startpos.Y - emv.pageY + this.offsetTop)
+              'top':    Math.min(startpos.Y, emv.offsetY),
+              'left':   Math.min(startpos.X, emv.offsetX),
+              'width':  Math.abs(startpos.X - emv.offsetX),
+              'height': Math.abs(startpos.Y - emv.offsetY)
             });
 
             // Add hover class to elements currently in selection
