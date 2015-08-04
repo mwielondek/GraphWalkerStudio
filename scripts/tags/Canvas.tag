@@ -61,6 +61,8 @@
 
   var LEFT_BUTTON  = 0;
   var RIGHT_BUTTON = 2;
+  var ALT_KEY  = 91;
+  var SPACEBAR = 32;
 
   var self = this
 
@@ -173,7 +175,7 @@
     $('#canvas-body')
       // Add new vertices on double click
       .on('dblclick', function(e) {
-        if (e.target === this) self.addVertex(e);
+        if (e.target === this && !e.metaKey) self.addVertex(e);
       })
       // Deselect vertices on click
       .on('click', function(e) {
@@ -183,7 +185,6 @@
         // Create rubberband on left click-n-drag
         if (e.button == LEFT_BUTTON) {
           $(this).trigger('rubberband', e);
-          e.stopImmediatePropagation();
         } else {
           $(this)
             .css('cursor', 'grabbing')
@@ -216,9 +217,9 @@
       onZoom: function(e, pz, scale) {
         jsp.setZoom(scale);
       }
-    });
+    })
     // Mousewheel zooming (doesn't support Firefox)
-    $('#canvas-body').on('mousewheel', function( e ) {
+    .on('mousewheel', function( e ) {
       if (e.target != this) return;
       e.preventDefault();
       var delta = e.delta || e.originalEvent.wheelDelta;
@@ -231,7 +232,38 @@
         },
         animate: false
       });
-    });
+    })
+    // Alt-click zooming
+    $('body').on('keydown', function(e) {
+      if (e.target != this) return;
+      if (e.keyCode == ALT_KEY) {
+        var zoomHandler = function (e) {
+          if (e.button == RIGHT_BUTTON) return;
+          e.stopImmediatePropagation();
+          $('#canvas-body').panzoom('zoom', false, {
+            increment: 0.2,
+            focal: {
+              clientX: e.offsetY,
+              clientY: e.offsetX
+            },
+            animate: false
+          });
+        };
+
+        $('#canvas-body')
+          .css('cursor', 'zoom-in')
+          .on('mousedown', zoomHandler);
+
+        $(this)
+          .one('keyup', function() {
+            $('#canvas-body')
+              .css('cursor', 'default')
+              .off('mousedown', zoomHandler);
+          });
+      } else if (e.keyCode == SPACEBAR) {
+        $('#canvas-body').panzoom('reset');
+      }
+    })
     // Fix contain dimensions upon browser window resize
     $(window).on('resize', function() {
       $('#canvas-body').panzoom('resetDimensions');

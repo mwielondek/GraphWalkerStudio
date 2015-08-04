@@ -11,6 +11,7 @@
     position: absolute !important;
     display: table !important;
     border-radius: 15px;
+    cursor: default;
   }
 
   vertex:focus {
@@ -19,6 +20,7 @@
 
   vertex.selected {
     border: 1px solid #21cfdf;
+    cursor: move;
   }
 
   vertex.rubberband-hover {
