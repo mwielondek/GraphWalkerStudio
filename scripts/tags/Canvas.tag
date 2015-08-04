@@ -18,7 +18,7 @@
       border: 2px solid #2cb9de;
     }
     #canvas-body {
-      background: linear-gradient(to bottom right, #f0f0f0, #000000);// #f0f0f0;
+      background: #f0f0f0;
       position: absolute;
       height: 10000px;
       width: 10000px;
@@ -26,6 +26,7 @@
       left: -5000px;
     }
     #zoom-in {
+      display: hidden;
       background-color: navy;
       color: white;
       position: absolute;
