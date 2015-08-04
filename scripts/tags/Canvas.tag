@@ -26,7 +26,7 @@
       left: -5000px;
     }
     #zoom-in {
-      display: hidden;
+      display: none;
       background-color: navy;
       color: white;
       position: absolute;
@@ -42,6 +42,7 @@
   var VertexActions     = require('actions/VertexActions');
   var EdgeActions       = require('actions/EdgeActions');
   var ModelActions      = require('actions/ModelActions');
+  var ActionUtils       = require('actions/Utils');
   var StudioConstants   = require('constants/StudioConstants');
   var ConnectionActions = require('actions/ConnectionActions');
   var rubberband        = require('utils/rubberband');
@@ -190,11 +191,13 @@
       contain: 'invert', // Don't show what's behind canvas
       onEnd: function() {
         // Store pan position in model
-        ModelActions.setProps(opts.model.id, {
-          view: {
-            panzoom: $(this).panzoom('getMatrix')
-          }
-        });
+        ActionUtils.timeBufferedAction(function() {
+          ModelActions.setProps(opts.model.id, {
+            view: {
+              panzoom: $(this).panzoom('getMatrix')
+            }
+          });
+        }.bind(this), 'model.update.panzoom', 400);
       }
     });
     $(window).on('resize', function() {
