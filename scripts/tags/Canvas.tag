@@ -239,8 +239,8 @@
       $('#canvas-body').panzoom('zoom', zoomOut, {
         increment: 0.00005 * Math.max(Math.abs(delta), 50),
         focal: {
-          clientX: e.offsetY,
-          clientY: e.offsetX
+          clientX: e.originalEvent.layerX,
+          clientY: e.originalEvent.layerY
         },
         animate: false
       });
@@ -256,8 +256,8 @@
           $('#canvas-body').panzoom('zoom', zoomOut, {
             increment: 0.3,
             focal: {
-              clientX: e.offsetY,
-              clientY: e.offsetX
+              clientX: e.originalEvent.layerX,
+              clientY: e.originalEvent.layerY
             },
             animate: true
           });
