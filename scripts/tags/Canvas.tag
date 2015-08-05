@@ -232,15 +232,30 @@
     })
     // Mousewheel zooming (doesn't support Firefox)
     .on('mousewheel', function( e ) {
-      if (e.target != this) return;
+      // Scroll while hovering over an element
+      if (e.target != this) {
+        // Find correct offsetParent
+        var offsetParent = e.target;
+        while (offsetParent.offsetParent != this) {
+          offsetParent = offsetParent.offsetParent;
+        }
+        // Set focal point
+        var clientX = offsetParent.offsetLeft;
+        var clientY = offsetParent.offsetTop;
+      };
+
+      // Don't scroll container
       e.preventDefault();
+
+      // Zoom in or out?
       var delta = e.delta || e.originalEvent.wheelDelta;
       var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
+
       $('#canvas-body').panzoom('zoom', zoomOut, {
         increment: 0.00005 * Math.max(Math.abs(delta), 50),
         focal: {
-          clientX: e.originalEvent.layerX,
-          clientY: e.originalEvent.layerY
+          clientX: clientX || e.originalEvent.layerX,
+          clientY: clientY || e.originalEvent.layerY
         },
         animate: false
       });
