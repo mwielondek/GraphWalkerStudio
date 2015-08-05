@@ -24,10 +24,6 @@
       border: 7px solid #6e2d1f;
       background: #f0f0f0;
       position: absolute;
-      height: 10000px;
-      width: 10000px;
-      top: -5000px;
-      left: -5000px;
       -webkit-backface-visibility: initial !important;
       -webkit-transform-origin: 50% 50%;
     }
@@ -74,6 +70,9 @@
   var ALT_KEY_FF = 224; // Firefox uses a different keycode for ALT for some reason.
   var SPACEBAR   = 32;
   var SHIFT_KEY  = 16;
+
+  // Canvas dimensions
+  var CANVAS_SIZE = 10000;
 
   var self = this
 
@@ -127,6 +126,14 @@
   });
 
   self.on('mount', function() {
+    // Set canvas dimensions and center it
+    $('#canvas-body').css({
+      height: CANVAS_SIZE,
+      width: CANVAS_SIZE,
+      top: -CANVAS_SIZE/2,
+      left: -CANVAS_SIZE/2
+    });
+
     // Init jsPlumb
     jsp.ready(function() {
       // Defaults
@@ -241,8 +248,8 @@
 
       $('#canvas-body').panzoom('zoom', zoomOut, {
         focal: {
-          clientX: e.clientX + 5000,
-          clientY: e.clientY + 5000
+          clientX: e.clientX + CANVAS_SIZE/2,
+          clientY: e.clientY + CANVAS_SIZE/2
         },
         animate: false
       });
@@ -257,8 +264,8 @@
           if (e.button == RIGHT_BUTTON || e.target != this) return;
           $('#canvas-body').panzoom('zoom', zoomOut, {
             focal: {
-              clientX: e.clientX + 5000,
-              clientY: e.clientY + 5000
+              clientX: e.clientX + CANVAS_SIZE/2,
+              clientY: e.clientY + CANVAS_SIZE/2
             },
             animate: true
           });
