@@ -232,15 +232,29 @@
     })
     // Mousewheel zooming (doesn't support Firefox)
     .on('mousewheel', function( e ) {
-      if (e.target != this) return;
+      // Scroll while hovering over an element
+      if (e.target != this) {
+        // Find correct offsetParent
+        var offsetParent = e.target;
+        while (offsetParent.offsetParent != this) {
+          offsetParent = offsetParent.offsetParent;
+        }
+        // Set focal point
+        var clientX = offsetParent.offsetLeft;
+        var clientY = offsetParent.offsetTop;
+      };
+
+      // Don't scroll container
       e.preventDefault();
+
+      // Zoom in or out?
       var delta = e.delta || e.originalEvent.wheelDelta;
       var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
+
       $('#canvas-body').panzoom('zoom', zoomOut, {
-        increment: 0.00005 * Math.max(Math.abs(delta), 50),
         focal: {
-          clientX: e.offsetY,
-          clientY: e.offsetX
+          clientX: clientX || e.originalEvent.layerX,
+          clientY: clientY || e.originalEvent.layerY
         },
         animate: false
       });
@@ -254,10 +268,9 @@
           // Don't zoom on right click or when clicking elements
           if (e.button == RIGHT_BUTTON || e.target != this) return;
           $('#canvas-body').panzoom('zoom', zoomOut, {
-            increment: 0.3,
             focal: {
-              clientX: e.offsetY,
-              clientY: e.offsetX
+              clientX: e.originalEvent.layerX,
+              clientY: e.originalEvent.layerY
             },
             animate: true
           });
@@ -266,7 +279,8 @@
           if (e.keyCode == SHIFT_KEY) {
             zoomOut = true;
             $('#canvas-body')
-              .css('cursor', 'zoom-out');
+              .css('cursor', 'zoom-out')
+              .css('cursor', '-webkit-zoom-out');
           }
         };
         var keyUpHandler = function(e) {
@@ -281,13 +295,15 @@
           } else if (e.keyCode == SHIFT_KEY) {
             zoomOut = false;
             $('#canvas-body')
-              .css('cursor', 'zoom-in');
+              .css('cursor', 'zoom-in')
+              .css('cursor', '-webkit-zoom-in');
           }
         };
 
         // Set listeners
         $('#canvas-body')
           .css('cursor', 'zoom-in')
+          .css('cursor', '-webkit-zoom-in')
           .on('mousedown', zoomHandler);
         $(this)
           .on('keydown', zoomOutHandler)
