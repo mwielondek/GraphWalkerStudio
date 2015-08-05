@@ -252,7 +252,6 @@
       var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
 
       $('#canvas-body').panzoom('zoom', zoomOut, {
-        increment: 0.00005 * Math.max(Math.abs(delta), 50),
         focal: {
           clientX: clientX || e.originalEvent.layerX,
           clientY: clientY || e.originalEvent.layerY
@@ -269,7 +268,6 @@
           // Don't zoom on right click or when clicking elements
           if (e.button == RIGHT_BUTTON || e.target != this) return;
           $('#canvas-body').panzoom('zoom', zoomOut, {
-            increment: 0.3,
             focal: {
               clientX: e.originalEvent.layerX,
               clientY: e.originalEvent.layerY
