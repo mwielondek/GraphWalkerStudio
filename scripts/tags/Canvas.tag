@@ -20,8 +20,6 @@
       border: 2px solid #2cb9de;
     }
     #canvas-body {
-      box-sizing: border-box;
-      border: 7px solid #6e2d1f;
       background: #f0f0f0;
       background-image: url('grid.png');
       background-blend-mode: overlay;
@@ -241,7 +239,65 @@
         _updateModel();
       },
       onReset: function() {
-        jsp.setZoom(1);
+        // Find bounding box of all vertices and set zoom and pan around it
+        if (self.vertices.length) {
+          // Get bounding box
+          var bounds = {
+            left: CANVAS_SIZE,
+            top: CANVAS_SIZE,
+            right: 0,
+            bottom: 0,
+            get size() {
+              return {
+                width: this.right - this.left,
+                height: this.bottom - this.top
+              }
+            },
+            get center() {
+              return {
+                x: this.size.width/2 + this.left,
+                y: this.size.height/2 + this.top,
+              }
+            }
+          };
+          self.vertices.forEach(function(el) {
+            bounds.left   = Math.min(bounds.left, el.view.left);
+            bounds.top    = Math.min(bounds.top, el.view.top);
+            bounds.right  = Math.max(bounds.right, el.view.left + el.view.width);
+            bounds.bottom = Math.max(bounds.bottom, el.view.top + el.view.height);
+          });
+
+          var viewport = {
+            height: this.offsetParent.clientHeight,
+            width: this.offsetParent.clientWidth
+          };
+
+          // Calculate pan
+          var CENTER_OFFSET = 0;
+          var pan = {
+            x: CANVAS_SIZE/2 - bounds.center.x + viewport.width/2 - CENTER_OFFSET,
+            y: CANVAS_SIZE/2 - bounds.center.y + viewport.height/2 - CENTER_OFFSET
+          }
+          $(this).panzoom('pan', pan.x, pan.y);
+
+          // Calculate zoom
+          var ZOOM_OFFSET = {
+            x: this.offsetParent.offsetLeft,
+            y: this.offsetParent.offsetTop
+          };
+          var ZOOM_MARGIN = 0.02; // Provide a margin between elements and canvas walls
+          var zoom = Math.min(
+            viewport.height / bounds.size.height,
+            viewport.width  / bounds.size.width
+          );
+          $(this).panzoom('zoom', zoom > 0 ? Math.min(zoom - ZOOM_MARGIN, 1) : 1, {
+            focal: {
+              clientX: (CANVAS_SIZE + viewport.width)/2 + ZOOM_OFFSET.x,
+              clientY: (CANVAS_SIZE + viewport.height)/2 + ZOOM_OFFSET.y
+            }
+          });
+
+        }
         _updateModel();
       }
     })
