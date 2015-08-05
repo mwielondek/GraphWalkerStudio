@@ -245,8 +245,8 @@
       // Zoom in or out?
       var delta = e.delta || e.originalEvent.wheelDelta;
       var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
-
       $('#canvas-body').panzoom('zoom', zoomOut, {
+        increment: opts.options.canvas.scrollIncrement,
         focal: {
           clientX: e.clientX + CANVAS_SIZE/2,
           clientY: e.clientY + CANVAS_SIZE/2

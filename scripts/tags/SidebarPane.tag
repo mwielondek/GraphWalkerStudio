@@ -21,7 +21,7 @@
     .pane-body > * > ul > li {
       padding: 0 0 10px 0;
     }
-    textarea {
+    .pane-body textarea {
       vertical-align: top;
       width: 255px;
       min-height: 100px;
