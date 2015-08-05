@@ -219,27 +219,30 @@
       });
 
     // Set up panning & zooming
+    var _updateModel = function() {
+      // Store pan position in model
+      ActionUtils.timeBufferedAction(function() {
+        ModelActions.setProps(opts.model.id, {
+          view: {
+            panzoom: $('#canvas-body').panzoom('getMatrix')
+          }
+        });
+      }, 'model.update.panzoom', 400);
+    };
     $('#canvas-body').panzoom({
       cursor: 'default',
       contain: 'invert', // Don't show what's behind canvas
-      onEnd: function() {
-        // Store pan position in model
-        ActionUtils.timeBufferedAction(function() {
-          ModelActions.setProps(opts.model.id, {
-            view: {
-              panzoom: $(this).panzoom('getMatrix')
-            }
-          });
-        }.bind(this), 'model.update.panzoom', 400);
-      },
+      onEnd: _updateModel,
       $zoomIn: $('#zoom-in'),
       $zoomOut: $('#zoom-out'),
       $zoomRange: $('#zoom-range'),
       onZoom: function(e, pz, scale) {
         jsp.setZoom(scale);
+        _updateModel();
       },
       onReset: function() {
         jsp.setZoom(1);
+        _updateModel();
       }
     })
     // Mousewheel zooming (doesn't support Firefox)
