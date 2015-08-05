@@ -23,7 +23,7 @@
       box-sizing: border-box;
       border: 7px solid #6e2d1f;
       background: #f0f0f0;
-      background-image: url('grid7.png');
+      background-image: url('grid.png');
       background-blend-mode: overlay;
       position: absolute;
       -webkit-backface-visibility: initial !important;
