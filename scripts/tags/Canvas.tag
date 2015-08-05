@@ -266,7 +266,8 @@
           if (e.keyCode == SHIFT_KEY) {
             zoomOut = true;
             $('#canvas-body')
-              .css('cursor', 'zoom-out');
+              .css('cursor', 'zoom-out')
+              .css('cursor', '-webkit-zoom-out');
           }
         };
         var keyUpHandler = function(e) {
@@ -281,13 +282,15 @@
           } else if (e.keyCode == SHIFT_KEY) {
             zoomOut = false;
             $('#canvas-body')
-              .css('cursor', 'zoom-in');
+              .css('cursor', 'zoom-in')
+              .css('cursor', '-webkit-zoom-in');
           }
         };
 
         // Set listeners
         $('#canvas-body')
           .css('cursor', 'zoom-in')
+          .css('cursor', '-webkit-zoom-in')
           .on('mousedown', zoomHandler);
         $(this)
           .on('keydown', zoomOutHandler)
