@@ -1,4 +1,4 @@
-<connection-pane>
+<connection-subpane>
   <h5>Connect to GraphWalker</h5>
   <ul>
     <li>URL: <input name="ws_url" disabled="{ connected }" />
@@ -51,4 +51,4 @@
   write() {
     this.output.value += '\n' + [].slice.call(arguments, 0).join(' ');
   }
-</connection-pane>
+</connection-subpane>

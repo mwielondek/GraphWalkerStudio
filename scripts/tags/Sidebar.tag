@@ -9,7 +9,7 @@
     </sidebar-pane>
 
     <sidebar-pane heading="Settings">
-      <connection-pane />
+      <settings-pane options={ parent.opts.options } />
     </sidebar-pane>
   </div>
 

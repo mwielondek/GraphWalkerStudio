@@ -1,8 +1,8 @@
 <studio>
   <p>Studio</p>
   <studio-tabs tabs={ tabs } model={ model } />
-  <studio-sidebar selection={ selection } model={ model } />
-  <studio-canvas selection={ selection } model={ model } show={ tabs.length } />
+  <studio-sidebar selection={ selection } model={ model } options={ opts }/>
+  <studio-canvas selection={ selection } model={ model } show={ tabs.length } options={ opts }/>
 
   <style>
     studio {

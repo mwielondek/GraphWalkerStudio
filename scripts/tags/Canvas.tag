@@ -24,10 +24,6 @@
       border: 7px solid #6e2d1f;
       background: #f0f0f0;
       position: absolute;
-      height: 10000px;
-      width: 10000px;
-      top: -5000px;
-      left: -5000px;
       -webkit-backface-visibility: initial !important;
       -webkit-transform-origin: 50% 50%;
     }
@@ -74,6 +70,9 @@
   var ALT_KEY_FF = 224; // Firefox uses a different keycode for ALT for some reason.
   var SPACEBAR   = 32;
   var SHIFT_KEY  = 16;
+
+  // Canvas dimensions
+  var CANVAS_SIZE = 10000;
 
   var self = this
 
@@ -127,6 +126,14 @@
   });
 
   self.on('mount', function() {
+    // Set canvas dimensions and center it
+    $('#canvas-body').css({
+      height: CANVAS_SIZE,
+      width: CANVAS_SIZE,
+      top: -CANVAS_SIZE/2,
+      left: -CANVAS_SIZE/2
+    });
+
     // Init jsPlumb
     jsp.ready(function() {
       // Defaults
@@ -232,29 +239,17 @@
     })
     // Mousewheel zooming (doesn't support Firefox)
     .on('mousewheel', function( e ) {
-      // Scroll while hovering over an element
-      if (e.target != this) {
-        // Find correct offsetParent
-        var offsetParent = e.target;
-        while (offsetParent.offsetParent != this) {
-          offsetParent = offsetParent.offsetParent;
-        }
-        // Set focal point
-        var clientX = offsetParent.offsetLeft;
-        var clientY = offsetParent.offsetTop;
-      };
-
       // Don't scroll container
       e.preventDefault();
 
       // Zoom in or out?
       var delta = e.delta || e.originalEvent.wheelDelta;
       var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
-
       $('#canvas-body').panzoom('zoom', zoomOut, {
+        increment: opts.options.canvas.scrollIncrement,
         focal: {
-          clientX: clientX || e.originalEvent.layerX,
-          clientY: clientY || e.originalEvent.layerY
+          clientX: e.clientX + CANVAS_SIZE/2,
+          clientY: e.clientY + CANVAS_SIZE/2
         },
         animate: false
       });
@@ -269,8 +264,8 @@
           if (e.button == RIGHT_BUTTON || e.target != this) return;
           $('#canvas-body').panzoom('zoom', zoomOut, {
             focal: {
-              clientX: e.originalEvent.layerX,
-              clientY: e.originalEvent.layerY
+              clientX: e.clientX + CANVAS_SIZE/2,
+              clientY: e.clientY + CANVAS_SIZE/2
             },
             animate: true
           });
