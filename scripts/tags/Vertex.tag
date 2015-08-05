@@ -134,6 +134,7 @@
     // Make draggable
     jsp.draggable(self.root, {
       containment: true,
+      grid: [20,20],
       filter: ".ui-resizable-handle",
       start: function(params) {
         // Avoid setting listeners on vertices not being directly
@@ -154,11 +155,15 @@
           VertexActions.setProps(self.id, {view: {left: params.pos[0], top: params.pos[1]}});
         };
         ActionUtils.bufferedAction(updatePositionInModel, 'jsp.draggable.stop', params.selection.length);
+      },
+      drag: function(params) {
+        params.drag.snap();
       }
     });
 
     // Make resizable
     $root.resizable({
+      grid: [20,20],
       resize: function(e, ui) {
         // Clear the offset and size cache of jsp and repaint the vertex.
         // This prevents endpoints from appearing at pre-resize offsets.
