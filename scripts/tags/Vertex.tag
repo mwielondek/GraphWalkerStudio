@@ -78,6 +78,8 @@
   var self = this;
   var $root;
 
+  var GRID_SIZE = 20;
+
   self.defaults = {
     label: self.id,
     status: Constants.status.UNVERIFIED,
@@ -97,8 +99,14 @@
     if (!self.view.top || !self.view.left) {
       // Calculate and set offset
       var position = {
-        'top': self.view.centerY - (self.view.height / 2),
-        'left': self.view.centerX - (self.view.width / 2)
+        'top': (function() {
+          var pos = self.view.centerY - (self.view.height / 2);
+          return GRID_SIZE * Math.floor(pos / GRID_SIZE);
+        })(),
+        'left': (function() {
+          var pos = self.view.centerX - (self.view.width / 2);
+          return GRID_SIZE * Math.floor(pos / GRID_SIZE);
+        })()
       };
       $.extend(self.view, position);
 
@@ -134,7 +142,7 @@
     // Make draggable
     jsp.draggable(self.root, {
       containment: true,
-      grid: [20,20],
+      grid: [GRID_SIZE,GRID_SIZE],
       filter: ".ui-resizable-handle",
       start: function(params) {
         // Avoid setting listeners on vertices not being directly
@@ -163,7 +171,7 @@
 
     // Make resizable
     $root.resizable({
-      grid: [20,20],
+      grid: [GRID_SIZE,GRID_SIZE],
       resize: function(e, ui) {
         // Clear the offset and size cache of jsp and repaint the vertex.
         // This prevents endpoints from appearing at pre-resize offsets.
