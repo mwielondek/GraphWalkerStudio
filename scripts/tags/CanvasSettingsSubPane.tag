@@ -19,7 +19,7 @@
   });
 
   setSensitivity() {
-    var sensValue = this.sensValue.innerText = this.sensitivity.value;
+    var sensValue = this.sensValue.innerHTML = this.sensitivity.value;
     $.extend(this.opts.options, {canvas: {scrollIncrement: sensValue}})
   }
 

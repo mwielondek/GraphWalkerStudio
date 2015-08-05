@@ -235,6 +235,9 @@
       $zoomRange: $('#zoom-range'),
       onZoom: function(e, pz, scale) {
         jsp.setZoom(scale);
+      },
+      onReset: function() {
+        jsp.setZoom(1);
       }
     })
     // Mousewheel zooming (doesn't support Firefox)
