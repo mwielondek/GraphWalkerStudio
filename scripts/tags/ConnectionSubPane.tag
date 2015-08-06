@@ -1,5 +1,5 @@
 <connection-subpane>
-  <h5>Connect to GraphWalker</h5>
+  <h5>GraphWalker settings</h5>
   <ul>
     <li>URL: <input name="ws_url" disabled="{ connected }" />
     <button onclick="{ toggleConnection }">{ connected ? 'Disconnect' : 'Connect' }</button></li>
