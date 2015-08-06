@@ -8,6 +8,7 @@ html, body {
 #rubberband {
   border: 1px dotted #0b3904;
   position: absolute;
+  pointer-events: none;
 }
 
 ._jsPlumb_connector:focus {
