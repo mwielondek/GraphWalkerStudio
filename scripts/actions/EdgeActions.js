@@ -31,6 +31,7 @@ function(RiotControl, Constants, connection, $) {
     add: function(newEdge) {
       // Give edge temporary ID if not already set
       newEdge.id = newEdge.id || 'e_' + counter++;
+      newEdge.name = newEdge.name || newEdge.id;
 
       newEdge.type = StudioConstants.types.T_EDGE;
       RiotControl.trigger(CALLS.ADD_EDGE, newEdge);

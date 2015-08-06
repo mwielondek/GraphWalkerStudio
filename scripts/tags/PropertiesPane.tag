@@ -1,5 +1,6 @@
 <properties-pane>
   <ul>
+    <li if={!isMultipleSelection}>Name: { element.name || 'unnamed' }</li>
     <li if={!isMultipleSelection}>ID: { element.id }</li>
     <li if={isMultipleSelection}>
       Selected { opts.selection.length }

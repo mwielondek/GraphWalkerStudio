@@ -28,6 +28,7 @@ function(RiotControl, Constants, gwcon, $) {
     add: function(newVertex) {
       // Give vertex temporary ID if not already set
       newVertex.id = newVertex.id || 'v_' + String.fromCharCode(counter++);
+      newVertex.name = newVertex.name || newVertex.id;
 
       newVertex.type = StudioConstants.types.T_VERTEX;
       RiotControl.trigger(CALLS.ADD_VERTEX, newVertex);

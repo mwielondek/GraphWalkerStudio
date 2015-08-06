@@ -17,11 +17,11 @@
       <ul if={ parent.expanded.contains(model.id) }>
         <li each={ filterByModel(vertices, model).filter(searchFilter) }>
           <a class="vertex { selected: parent.parent.opts.selection.mapBy('id').contains(id) }"
-           onclick={ select }>{ id }</a>
+           onclick={ select }>{ name }</a>
         </li>
         <li each={ filterByModel(edges, model).filter(searchFilter) }>
           <a class="edge { selected: parent.parent.opts.selection.mapBy('id').contains(id) }"
-           onclick={ select }>{ id }</a>
+           onclick={ select }>{ name }</a>
         </li>
       </ul>
     </li>

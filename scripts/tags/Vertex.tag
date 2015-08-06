@@ -1,7 +1,7 @@
 <vertex id="{ view.domId }" class="{ selected: selected } { status.toLowerCase() }" tabindex="1"
   vertex-id="{ id }">
   <div class="label-div">
-    <p class="label">{ label }</p>
+    <p class="label">{ name }</p>
   </div>
 
   <style>

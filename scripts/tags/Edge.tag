@@ -22,7 +22,7 @@
 
   var self = this;
   self.defaults = {
-    label: self.id + ': ' + self.sourceVertexId + '->' + self.targetVertexId,
+    label: self.name,
     status: Constants.status.UNVERIFIED
   };
 
