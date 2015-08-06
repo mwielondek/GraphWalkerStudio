@@ -1,11 +1,11 @@
 define(['app/RiotControl', 'constants/EdgeConstants', './ConnectionActions',
-'jquery', 'constants/GWConstants', 'jsplumb', 'constants/StudioConstants'],
+'jquery', 'constants/GraphWalkerConstants', 'jsplumb', 'constants/StudioConstants'],
 function(RiotControl, Constants, connection, $) {
 
   var CALLS  = Constants.calls;
   var EVENTS = Constants.events;
   var STATUS = Constants.status;
-  var GW     = require('constants/GWConstants').methods;
+  var GW     = require('constants/GraphWalkerConstants').methods;
 
   var StudioConstants = require('constants/StudioConstants');
 
