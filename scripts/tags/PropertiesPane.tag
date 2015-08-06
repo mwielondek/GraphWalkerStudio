@@ -1,6 +1,6 @@
 <properties-pane>
   <ul>
-    <li if={!isMultipleSelection}>Name: { element.name || 'unnamed' }</li>
+    <li if={!isMultipleSelection}>Name: <editable type='text' callback={ change('name') }>{ parent.element.name || 'unnamed' }</editable></li>
     <li if={!isMultipleSelection}>ID: { element.id }</li>
     <li if={isMultipleSelection}>
       Selected { opts.selection.length }
@@ -28,6 +28,24 @@
         return i > 0 ? el == array[i-1] : true;
       });
   });
+
+  change(prop) {
+    return function(newValue) {
+      var props = {};
+      props[prop] = newValue;
+      switch (self.element.type) {
+        case StudioConstants.types.T_VERTEX:
+          VertexActions.setProps(self.element.id, props);
+          break;
+        case StudioConstants.types.T_EDGE:
+          EdgeActions.setProps(self.element.id, props);
+          break;
+        case StudioConstants.types.T_MODEL:
+          ModelActions.setProps(self.element.id, props);
+          break;
+      }
+    };
+  }
 
   removeElement() {
     // Call proper remove action
