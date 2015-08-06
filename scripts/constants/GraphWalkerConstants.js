@@ -6,7 +6,8 @@ define(function() {
   // Keys might not always be the same as values. Change
   // only the values upon GW API change etc.
   constants.methods = {
-    'ADDVERTEX': 'addVertex'
+    'ADDVERTEX': 'addVertex',
+    'CHANGEVERTEX': 'changeVertex'
   }
 
   return constants;

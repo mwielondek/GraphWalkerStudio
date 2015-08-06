@@ -2,6 +2,7 @@
   <ul>
     <li if={!isMultipleSelection}>Name: <editable type='text' callback={ change('name') }>{ parent.element.name || 'unnamed' }</editable></li>
     <li if={!isMultipleSelection}>ID: { element.id }</li>
+    <li if={!isMultipleSelection && element.errorMessage}>Error: { element.errorMessage }</li>
     <li if={isMultipleSelection}>
       Selected { opts.selection.length }
        { isDifferentTypes ? 'elements' : element.type.pluralize(isMultipleSelection) }
@@ -35,7 +36,7 @@
       props[prop] = newValue;
       switch (self.element.type) {
         case StudioConstants.types.T_VERTEX:
-          VertexActions.setProps(self.element.id, props);
+          VertexActions.setProps(self.element.id, props, true);
           break;
         case StudioConstants.types.T_EDGE:
           EdgeActions.setProps(self.element.id, props);

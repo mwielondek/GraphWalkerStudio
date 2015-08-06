@@ -12,6 +12,7 @@
     display: table !important;
     border-radius: 15px;
     cursor: default;
+    background-color: rgba(255, 163, 42, 0.85);
   }
 
   vertex:focus {
@@ -28,7 +29,7 @@
   }
 
   vertex.unverified {
-    background-color: rgba(255, 163, 42, 0.85);
+    opacity: 0.7;
   }
 
   vertex.verified {

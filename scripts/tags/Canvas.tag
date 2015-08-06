@@ -114,7 +114,9 @@
   });
   VertexActions.addChangeListener(function(vertices) {
     self.vertices = vertices;
-    self.update();
+    // HACK: force update properties pane - fix by moving verticesChangedListener up to Studio.tag
+    riot.update();
+    riot.update();
   });
 
   EdgeActions.getAll(function(edges) {

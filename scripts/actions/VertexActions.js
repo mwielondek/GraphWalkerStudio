@@ -49,8 +49,28 @@ function(RiotControl, Constants, gwcon, $) {
         }
       );
     },
-    setProps: function(query, props) {
+    setProps: function(query, props, verify) { // TODO: move GW stuff into GW specific store
       RiotControl.trigger(CALLS.CHANGE_VERTEX, query, props);
+      if (!verify) return;
+      // Prepare server request
+      var request = {
+        command: GW.CHANGEVERTEX,
+        id: query,
+        properties: props
+      };
+      // Mark as unverified
+      this.setProps(query, {status: STATUS.UNVERIFIED});
+      var _this = this;
+      gwcon.sendRequest(request,
+        // On success
+        function(response) {
+          _this.setProps(query, {errorMessage: null, status: STATUS.VERIFIED});
+        },
+        // On error
+        function(response) {
+          _this.setProps(query, {errorMessage: response.body.error, status: STATUS.ERROR});
+        }
+      );
     },
     remove: function(vertexIds) {
       if (!Array.isArray(vertexIds)) vertexIds = [vertexIds];

@@ -12,11 +12,13 @@ import (
   "time"
   "os"
   "strconv"
+  "strings"
 )
 
 const (
   // GW Commands
   ADDVERTEX = "addVertex"
+  CHANGEVERTEX = "changeVertex"
 )
 
 type Response struct {
@@ -71,10 +73,28 @@ func GWMockServer(ws *websocket.Conn) {
     logger.SetPrefix("* .. ")
     switch req["command"] {
       case ADDVERTEX:
+        // Return element ID
         response = &Response{
           Requestid: req["requestId"].(string),
           Success: true,
           Body: map[string]string{"id": "v_"+randId()},
+        }
+      case CHANGEVERTEX:
+        // In the case of changing element name, check if
+        // it starts with `v_` for vertices (TODO and `e_`
+        // for edges), otherwise always return success.
+        props := req["properties"].(map[string]interface{})
+        if props["name"] == nil || strings.HasPrefix(props["name"].(string), "v_") {
+          response = &Response{
+            Requestid: req["requestId"].(string),
+            Success: true,
+          }
+        } else {
+          response = &Response{
+            Requestid: req["requestId"].(string),
+            Success: false,
+            Body: map[string]string{"error": "Bad name!"},
+          }
         }
       default:
         logger.Print("Unknown command %s", req["command"])
