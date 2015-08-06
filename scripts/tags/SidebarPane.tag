@@ -1,5 +1,5 @@
 <sidebar-pane>
-  <h4 onclick={ togglePane }>{ opts.heading }<span class="minimize">[{ expanded ? '–' : '+'}]</span></h4>
+  <h4 onclick={ toggle('expanded') }>{ opts.heading }<span class="minimize">[{ expanded ? '–' : '+'}]</span></h4>
   <div class="pane-body" show={ expanded }>
     <yield/>
   </div>
@@ -26,16 +26,17 @@
       width: 255px;
       min-height: 100px;
     }
+    .pane-body a {
+      color: inherit;
+    }
     .minimize {
       float: right;
     }
   </style>
 
-  this.expanded = true;
+  this.mixin('tagUtils');
 
-  togglePane() {
-    this.expanded = !this.expanded;
-  }
+  this.expanded = true;
 
   this.one('update', function() {
     this.expanded = !this.opts.collapsed;

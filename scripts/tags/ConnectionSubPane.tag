@@ -3,12 +3,16 @@
   <ul>
     <li>URL: <input name="ws_url" disabled="{ connected }" />
     <button onclick="{ toggleConnection }">{ connected ? 'Disconnect' : 'Connect' }</button></li>
-    <li><textarea name="output" readonly="true"></textarea></li>
+    <li><a href="" onclick={ toggle('showTextarea') }>{showTextarea ? 'Hide' : 'Show'} connection log</a></li>
+    <li show={showTextarea}><textarea name="output" readonly="true"></textarea></li>
   </ul>
 
   var ConnectionActions = require('actions/ConnectionActions');
+  this.mixin('tagUtils');
 
   this.connected = false;
+  this.showTextarea = false;
+
 
   var _this = this;
   this.on("mount", function() {
