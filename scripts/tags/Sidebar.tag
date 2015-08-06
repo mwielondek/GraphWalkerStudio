@@ -8,7 +8,7 @@
       <models-pane model={ parent.opts.model } selection={ parent.opts.selection } tabs={ parent.opts.tabs }/>
     </sidebar-pane>
 
-    <sidebar-pane heading="Settings">
+    <sidebar-pane heading="Settings" collapsed={ true }>
       <settings-pane options={ parent.opts.options } />
     </sidebar-pane>
   </div>

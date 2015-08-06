@@ -36,4 +36,8 @@
   togglePane() {
     this.expanded = !this.expanded;
   }
+
+  this.one('update', function() {
+    this.expanded = !this.opts.collapsed;
+  });
 </sidebar-pane>
