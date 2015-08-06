@@ -142,6 +142,7 @@
     // Make draggable
     jsp.draggable(self.root, {
       containment: true,
+      snapThreshold: 10,
       grid: [GRID_SIZE,GRID_SIZE],
       filter: ".ui-resizable-handle",
       start: function(params) {
@@ -163,9 +164,6 @@
           VertexActions.setProps(self.id, {view: {left: params.pos[0], top: params.pos[1]}});
         };
         ActionUtils.bufferedAction(updatePositionInModel, 'jsp.draggable.stop', params.selection.length);
-      },
-      drag: function(params) {
-        params.drag.snap();
       }
     });
 
