@@ -1,4 +1,4 @@
-define(['app/RiotControl', 'constants/VertexConstants', './GWActions',
+define(['app/RiotControl', 'constants/VertexConstants', './GraphWalkerActions',
 'jquery', 'constants/GraphWalkerConstants', './EdgeActions', 'constants/StudioConstants'],
 function(RiotControl, Constants, gwcon, $) {
 
