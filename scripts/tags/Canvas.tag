@@ -260,7 +260,7 @@
               }
             }
           };
-          self.vertices.forEach(function(el) {
+          self.filterByModel(self.vertices).forEach(function(el) {
             bounds.left   = Math.min(bounds.left, el.view.left);
             bounds.top    = Math.min(bounds.top, el.view.top);
             bounds.right  = Math.max(bounds.right, el.view.left + el.view.width);
