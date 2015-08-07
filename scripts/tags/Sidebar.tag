@@ -32,13 +32,13 @@
 
   this.connectionOpen = false;
 
-  var _toggle = function() {
-    self.connectionOpen = !self.connectionOpen;
+  var _toggle = function(toggle) {
+    self.connectionOpen = toggle == undefined ?  !self.connectionOpen : toggle;
     self.update();
   };
   ConnectionActions.addConnectionListener({
-    onopen: _toggle,
-    onclose: _toggle
+    onopen: _toggle.bind(null, true),
+    onclose: _toggle.bind(null, false)
   });
 
 </studio-sidebar>

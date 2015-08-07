@@ -23,7 +23,7 @@
   this.on('updated', function() {
     if (this.isMounted) {
       var headerElement = $(this.root).parents('sidebar-pane').find('h4');
-      headerElement.find('#connection-status').toggleClass('connected', this.opts.connected);
+      headerElement.find('#connection-status').toggleClass('connected', opts.connected);
     }
   });
 
