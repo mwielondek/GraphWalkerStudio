@@ -3,8 +3,8 @@
   <div class="zoom-button" id="zoom-out">–</div>
   <input type="range" id="zoom-range" step="0.05" min="0.4" max="5">
   <div id="canvas-body">
-    <vertex each={ filterByModel(vertices) } selection={ parent.opts.selection } />
-    <edge each={ filterByModel(edges) } selection={ parent.opts.selection } />
+    <vertex each={ filterByModel(opts.vertices) } selection={ parent.opts.selection } />
+    <edge each={ filterByModel(opts.edges) } selection={ parent.opts.selection } />
   </div>
 
   <style>
@@ -76,8 +76,6 @@
 
   var self = this
 
-  self.vertices = []
-  self.edges = []
 
   addVertex(e) {
     // Prepare vertex object
@@ -108,24 +106,6 @@
   filterByModel(elements) {
     return elements.filter(function(el) { return el.modelId == opts.model.id });
   }
-
-  VertexActions.getAll(function(vertices) {
-    self.vertices = vertices;
-  });
-  VertexActions.addChangeListener(function(vertices) {
-    self.vertices = vertices;
-    // HACK: force update properties pane - fix by moving verticesChangedListener up to Studio.tag
-    riot.update();
-    riot.update();
-  });
-
-  EdgeActions.getAll(function(edges) {
-    self.edges = edges;
-  });
-  EdgeActions.addChangeListener(function(edges) {
-    self.edges = edges;
-    self.update();
-  });
 
   self.on('mount', function() {
     // Set canvas dimensions and center it
@@ -242,7 +222,7 @@
       },
       onReset: function() {
         // Find bounding box of all vertices and set zoom and pan around it
-        if (self.vertices.length) {
+        if (self.opts.vertices.length) {
           // Get bounding box
           var bounds = {
             left: CANVAS_SIZE,
@@ -262,7 +242,7 @@
               }
             }
           };
-          self.filterByModel(self.vertices).forEach(function(el) {
+          self.filterByModel(self.opts.vertices).forEach(function(el) {
             bounds.left   = Math.min(bounds.left, el.view.left);
             bounds.top    = Math.min(bounds.top, el.view.top);
             bounds.right  = Math.max(bounds.right, el.view.left + el.view.width);

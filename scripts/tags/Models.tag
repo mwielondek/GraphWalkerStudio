@@ -1,25 +1,25 @@
 <models-pane>
   <ul class="models">
-    <li if={ !models.length }><a href="" onclick={ opts.model.new }>Create new model</a></li>
-    <li if={ models.length }>
+    <li if={ !opts.models.length }><a href="" onclick={ opts.model.new }>Create new model</a></li>
+    <li if={ opts.models.length }>
       <input type="text" name="searchInput" placeholder="Search" onkeyup={ search }>
       <button onclick={ clearSearch }>Clear</button>
     </li>
-    <li if={ models.length }>
+    <li if={ opts.models.length }>
       <a href="" onclick={ expandAll }>Expand all</a>
       <a href="" onclick={ hideAll }>Hide not active</a>
     </li>
-    <li each={ model in models } class="{ active: parent.opts.model.id == model.id}">
+    <li each={ model in opts.models } class="{ active: parent.opts.model.id == model.id}">
       <span onclick={ toggleExpand }>{ parent.expanded.contains(model.id) ? ARROW_DOWN : ARROW_RIGHT }</span>
       <a class="{ active: parent.opts.model.id == model.id}" onclick={ openModel }>
         { model.name }
       </a>
       <ul if={ parent.expanded.contains(model.id) }>
-        <li each={ filterByModel(vertices, model).filter(searchFilter) }>
+        <li each={ filterByModel(parent.opts.vertices, model).filter(searchFilter) }>
           <a class="vertex { selected: parent.parent.opts.selection.mapBy('id').contains(id) }"
            onclick={ select }>{ name }</a>
         </li>
-        <li each={ filterByModel(edges, model).filter(searchFilter) }>
+        <li each={ filterByModel(parent.opts.edges, model).filter(searchFilter) }>
           <a class="edge { selected: parent.parent.opts.selection.mapBy('id').contains(id) }"
            onclick={ select }>{ name }</a>
         </li>
@@ -57,28 +57,9 @@
   ARROW_RIGHT = '\u25b7';
   ARROW_DOWN = '\u25bd';
 
-  // Store data
-  self.models   = [];
-  self.vertices = [];
-  self.edges    = [];
-
   // State
   self.expanded = [];
   self.searchQuery = '';
-
-
-  ModelActions.addChangeListener(function(models) {
-    self.models = models;
-    self.update();
-  });
-  VertexActions.addChangeListener(function(vertices) {
-    self.vertices = vertices;
-    self.update();
-  });
-  EdgeActions.addChangeListener(function(edges) {
-    self.edges = edges;
-    self.update();
-  });
 
   self.on('update', function() {
     if (!self.expanded.contains(opts.model.id)) self.expanded.push(opts.model.id);
@@ -94,7 +75,7 @@
   }
 
   expandAll() {
-    self.expanded = self.models.mapBy('id');
+    self.expanded = self.opts.models.mapBy('id');
   }
 
   hideAll() {

@@ -1,8 +1,13 @@
 <studio>
   <p>Studio</p>
+
   <studio-tabs tabs={ tabs } model={ model } />
-  <studio-sidebar selection={ selection } model={ model } options={ opts }/>
-  <studio-canvas selection={ selection } model={ model } show={ tabs.length } options={ opts }/>
+
+  <studio-sidebar selection={ selection } model={ model } options={ opts }
+    vertices={ vertices } edges={ edges } models={ models }/>
+
+  <studio-canvas selection={ selection } model={ model } show={ tabs.length } options={ opts }
+    vertices={ vertices } edges={ edges }/>
 
   <style>
     studio {
@@ -12,6 +17,7 @@
   </style>
 
   var jsp               = require('jsplumb');
+  var EdgeActions       = require('actions/EdgeActions');
   var RiotControl       = require('app/RiotControl');
   var ModelActions      = require('actions/ModelActions');
   var VertexActions     = require('actions/VertexActions');
@@ -21,6 +27,35 @@
   var self = this;
 
   // STATE-HOLDING VARIABLES
+
+  self.vertices = [];
+  self.edges = [];
+  self.models = [];
+
+  VertexActions.getAll(function(vertices) {
+    self.vertices = vertices;
+  });
+  VertexActions.addChangeListener(function(vertices) {
+    self.vertices = vertices;
+    // HACK: force update properties pane - fix by dynamically looking up items in selection by id
+    riot.update();
+    riot.update();
+  });
+
+  EdgeActions.getAll(function(edges) {
+    self.edges = edges;
+  });
+  EdgeActions.addChangeListener(function(edges) {
+    self.edges = edges;
+    self.update();
+  });
+
+  ModelActions.addChangeListener(function(models) {
+    self.models = models;
+    self.update();
+  });
+
+  // STATE-HOLDING VARIABLES WITH EXTRA HELPER METHODS
 
   // SELECTION
   self.selection = [];
@@ -114,7 +149,7 @@
         self.tabs.open(model, true);
         this.selection.clear();
 
-        // Restore pan position
+        // Restore pan position // TODO: belongs in Canvas.tag
         if (model.view && model.view.panzoom) {
           $('#canvas-body').panzoom('setMatrix', model.view.panzoom);
         } else {
