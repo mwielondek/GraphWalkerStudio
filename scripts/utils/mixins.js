@@ -18,6 +18,13 @@ define(['jquery'], function($) {
     return ret;
   }
 
+  // Return element whose certain property matches the query
+  Array.prototype.getBy = function(prop, query) {
+    return this.filter(function(el) {
+      return el[prop] == query;
+    })
+  }
+
   // Get last item from array or undefined if empty
   Array.prototype.last = function() {
     return this[this.length - 1];

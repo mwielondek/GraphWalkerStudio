@@ -109,7 +109,7 @@
       // Try selecting model immediately next to the left
       var next = index - 1;
       next = next < 0 ? 1 : next;
-      self.model = this[next];
+      self.model.set(this[next].id);
     }
     this.splice(index, 1);
     self.update();
@@ -124,29 +124,23 @@
     // Create new model and set it as active
     new: function() {
       ModelActions.add({}, function(model) {
-        self.model = model;
+        self.model.set(model.id);
       });
     }
   };
   Object.defineProperty(self, 'model', {
     get: function() {
-      return this._model;
+      var model = self.models.getBy('id', this._model.id)[0];
+      return $.extend({}, model, _modelHelperFunctions);
     },
-    set: function(model) {
+    set: function(modelId) {
       // HACK: riot/#1003 workaround. Prevents vertex labels switching DOM nodes.
-      this._model = _modelHelperFunctions;
+      this._model = {};
       this.update();
 
-      if (model) {
-        if (typeof model == 'string') {
-          ModelActions.get(model, function(m) {
-            self.model = m;
-          });
-          return;
-        }
-
-        this._model = $.extend({}, model, _modelHelperFunctions);
-        self.tabs.open(model, true);
+      if (modelId) {
+        this._model.id = modelId;
+        self.tabs.open(modelId, true);
         this.selection.clear();
 
         // Restore pan position // TODO: belongs in Canvas.tag
