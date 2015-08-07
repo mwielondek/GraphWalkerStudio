@@ -36,7 +36,7 @@
       props[prop] = newValue;
       switch (self.element.type) {
         case StudioConstants.types.T_VERTEX:
-          VertexActions.setProps(self.element.id, props, true);
+          VertexActions.setProps(self.element.id, props);
           break;
         case StudioConstants.types.T_EDGE:
           EdgeActions.setProps(self.element.id, props);

@@ -1,11 +1,10 @@
 define(['app/RiotControl', 'constants/EdgeConstants', './ConnectionActions',
-'jquery', 'constants/GraphWalkerConstants', 'jsplumb', 'constants/StudioConstants'],
+'jquery', 'jsplumb', 'constants/StudioConstants'],
 function(RiotControl, Constants, connection, $) {
 
   var CALLS  = Constants.calls;
   var EVENTS = Constants.events;
   var STATUS = Constants.status;
-  var GW     = require('constants/GraphWalkerConstants').methods;
 
   var StudioConstants = require('constants/StudioConstants');
 
@@ -35,7 +34,6 @@ function(RiotControl, Constants, connection, $) {
 
       newEdge.type = StudioConstants.types.T_EDGE;
       RiotControl.trigger(CALLS.ADD_EDGE, newEdge);
-      // TODO: Sent request to GW
     },
     setProps: function(query, props) {
       RiotControl.trigger(CALLS.CHANGE_EDGE, query, props);

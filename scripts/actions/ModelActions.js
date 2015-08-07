@@ -1,10 +1,9 @@
-define(['app/RiotControl', 'constants/ModelConstants', './GraphWalkerActions',
-'jquery', 'constants/GraphWalkerConstants', 'constants/StudioConstants', './VertexActions'],
-function(RiotControl, Constants, gwcon, $) {
+define(['app/RiotControl', 'constants/ModelConstants',
+'jquery', 'constants/StudioConstants', './VertexActions'],
+function(RiotControl, Constants, $) {
 
   var CALLS  = Constants.calls;
   var EVENTS = Constants.events;
-  var GW     = require('constants/GraphWalkerConstants').methods;
 
   var StudioConstants = require('constants/StudioConstants');
   var VertexActions   = require('actions/VertexActions');
@@ -33,8 +32,6 @@ function(RiotControl, Constants, gwcon, $) {
       newModel.type = StudioConstants.types.T_MODEL;
       RiotControl.trigger(CALLS.ADD_MODEL, newModel);
       callback(newModel);
-
-      // TODO send request to GW
     },
     setProps: function(query, props) {
       RiotControl.trigger(CALLS.CHANGE_MODEL, query, props);

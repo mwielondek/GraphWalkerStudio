@@ -1,5 +1,5 @@
 define(['riot', 'store/VertexStore', 'store/EdgeStore', 'store/ConnectionStore',
- 'store/ModelStore', 'tag/Studio', 'utils/mixins'],
+ 'store/ModelStore', 'store/GraphWalkerStore', 'tag/Studio', 'utils/mixins'],
 function(riot) {
 
   var tagUtils = {

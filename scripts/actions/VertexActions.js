@@ -1,11 +1,10 @@
-define(['app/RiotControl', 'constants/VertexConstants', './GraphWalkerActions',
-'jquery', 'constants/GraphWalkerConstants', './EdgeActions', 'constants/StudioConstants'],
-function(RiotControl, Constants, gwcon, $) {
+define(['app/RiotControl', 'constants/VertexConstants',
+'jquery', './EdgeActions', 'constants/StudioConstants'],
+function(RiotControl, Constants, $) {
 
   var CALLS  = Constants.calls;
   var EVENTS = Constants.events;
   var STATUS = Constants.status;
-  var GW     = require('constants/GraphWalkerConstants').methods;
 
   var EdgeActions      = require('actions/EdgeActions');
   var StudioConstants  = require('constants/StudioConstants');
@@ -29,48 +28,11 @@ function(RiotControl, Constants, gwcon, $) {
       // Give vertex temporary ID if not already set
       newVertex.id = newVertex.id || 'v_' + String.fromCharCode(counter++);
       newVertex.name = newVertex.name || newVertex.id;
-
       newVertex.type = StudioConstants.types.T_VERTEX;
       RiotControl.trigger(CALLS.ADD_VERTEX, newVertex);
-
-      // Prepare server request
-      var request = {
-        command: GW.ADDVERTEX
-      };
-      var _this = this;
-      gwcon.sendRequest(request,
-        // On success
-        function(response) {
-          _this.setProps(newVertex, {label: response.body.id, id: response.body.id, status: STATUS.VERIFIED});
-        },
-        // On error
-        function(response) {
-          _this.setProps(newVertex, {id: response.body.id, status: STATUS.ERROR});
-        }
-      );
     },
-    setProps: function(query, props, verify) { // TODO: move GW stuff into GW specific store
+    setProps: function(query, props) {
       RiotControl.trigger(CALLS.CHANGE_VERTEX, query, props);
-      if (!verify) return;
-      // Prepare server request
-      var request = {
-        command: GW.CHANGEVERTEX,
-        id: query,
-        properties: props
-      };
-      // Mark as unverified
-      this.setProps(query, {status: STATUS.UNVERIFIED});
-      var _this = this;
-      gwcon.sendRequest(request,
-        // On success
-        function(response) {
-          _this.setProps(query, {errorMessage: null, status: STATUS.VERIFIED});
-        },
-        // On error
-        function(response) {
-          _this.setProps(query, {errorMessage: response.body.error, status: STATUS.ERROR});
-        }
-      );
     },
     remove: function(vertexIds) {
       if (!Array.isArray(vertexIds)) vertexIds = [vertexIds];
@@ -82,8 +44,6 @@ function(RiotControl, Constants, gwcon, $) {
 
       // Clear selection to refresh the properties pane
       RiotControl.trigger(StudioConstants.calls.CLEAR_SELECTION);
-
-      // TODO: add GW connection request
     },
     getDomId: function(idArray, callback) {
       if (!idArray || idArray.length == 0) {
