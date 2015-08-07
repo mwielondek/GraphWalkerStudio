@@ -113,7 +113,7 @@
   }
 
   searchFilter(el) {
-    return !self.searchQuery ? true : new RegExp(self.searchQuery).test(el.id);
+    return !self.searchQuery ? true : new RegExp(self.searchQuery).test(el.name);
   }
 
   search() {
