@@ -37,9 +37,8 @@
   });
   VertexActions.addChangeListener(function(vertices) {
     self.vertices = vertices;
-    // HACK: force update properties pane - fix by dynamically looking up items in selection by id
-    riot.update();
-    riot.update();
+    updateElements(self.vertices, false, true);
+    self.update();
   });
 
   EdgeActions.getAll(function(edges) {
@@ -47,6 +46,7 @@
   });
   EdgeActions.addChangeListener(function(edges) {
     self.edges = edges;
+    updateElements(self.edges, false, true);
     self.update();
   });
 
@@ -54,6 +54,15 @@
     self.models = models;
     self.update();
   });
+
+  // Update element objects in selection
+  // TODO: change selection to only hold references (id) to objects like self.tabs?
+  var updateElements = function(collection) {
+    var _sel = self.selection;
+    self.selection.update(_sel.map(function(el) {
+      return collection.getBy('id', el.id)[0] || el;
+    }));
+  };
 
   // STATE-HOLDING VARIABLES WITH EXTRA HELPER METHODS
 
@@ -64,7 +73,7 @@
     this.constructor.prototype.clear.apply(this);
     if (!preventUpdate) self.update();
   };
-  self.selection.update = function(elements, toggle) {
+  self.selection.update = function(elements, toggle, preventUpdate) {
     // If `elements` is falsy, clear selection
     if (!elements || elements.length == 0) {
 
@@ -88,7 +97,7 @@
       }
 
     }
-    self.update();
+    if (!preventUpdate) self.update();
   }.bind(self.selection);
 
   // TABS
