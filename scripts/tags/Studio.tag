@@ -94,29 +94,34 @@
   // TABS
   self.tabs = [];
   Object.defineProperty(self, 'tabs', { writable: false }); // Prevent from overwriting object
-  self.tabs.open = function(model, preventUpdate) {
-    if (!this.mapBy('id').contains(model.id)) {
+  self.tabs.open = function(modelId, preventUpdate) {
+    if (!this.contains(modelId)) {
       // Open existing model and set it as active
-      this.push(model);
+      this.push(modelId);
       if (!preventUpdate) self.update();
     }
   }.bind(self.tabs);
+  self.tabs.getObjects = function() {
+    return this.map(function(modelId) {
+      return self.models.getBy('id', modelId)[0];
+    });
+  }.bind(self.tabs);
   self.tabs.close = function(modelId) {
-    var index = this.mapBy('id').indexOf(modelId);
+    var index = this.indexOf(modelId);
 
-    // Change model selection if selected model is being removed
-    if (self.model.id == modelId) {
+    // Select different tab if currently selected tab is the one being closed
+    if (!self.model.id || self.model.id == modelId) {
       // Try selecting model immediately next to the left
       var next = index - 1;
       next = next < 0 ? 1 : next;
-      self.model = this[next];
+      self.model.set(this[next]);
     }
     this.splice(index, 1);
     self.update();
   }.bind(self.tabs);
 
   // CURRENT MODEL
-  var _modelHelperFunctions = self._model = {
+  var _modelHelperFunctions = {
     // Helper setter for calling from children
     set: function(model) {
       self.model = model;
@@ -124,34 +129,29 @@
     // Create new model and set it as active
     new: function() {
       ModelActions.add({}, function(model) {
-        self.model = model;
+        self.model.set(model.id);
       });
     }
   };
   Object.defineProperty(self, 'model', {
     get: function() {
-      return this._model;
+      var model = self.models.getBy('id', this._modelId)[0];
+      return $.extend({}, model, _modelHelperFunctions);
     },
-    set: function(model) {
+    set: function(modelId) {
+      console.log('setting', modelId);
       // HACK: riot/#1003 workaround. Prevents vertex labels switching DOM nodes.
-      this._model = _modelHelperFunctions;
+      this._modelId = '';
       this.update();
 
-      if (model) {
-        if (typeof model == 'string') {
-          ModelActions.get(model, function(m) {
-            self.model = m;
-          });
-          return;
-        }
-
-        this._model = $.extend({}, model, _modelHelperFunctions);
-        self.tabs.open(model, true);
+      if (modelId) {
+        this._modelId = modelId;
+        self.tabs.open(modelId, true);
         this.selection.clear();
 
         // Restore pan position // TODO: belongs in Canvas.tag
-        if (model.view && model.view.panzoom) {
-          $('#canvas-body').panzoom('setMatrix', model.view.panzoom);
+        if (self.model.view && self.model.view.panzoom) {
+          $('#canvas-body').panzoom('setMatrix', self.model.view.panzoom);
         } else {
           $('#canvas-body').panzoom('reset', { animate: false });
         }

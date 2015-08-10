@@ -5,7 +5,7 @@
     </sidebar-pane>
 
     <sidebar-pane heading="Models">
-      <models-pane model={ parent.opts.model } selection={ parent.opts.selection } tabs={ parent.opts.tabs }
+      <models-pane model={ parent.opts.model } selection={ parent.opts.selection }
         vertices={ parent.opts.vertices } edges={ parent.opts.edges } models={ parent.opts.models } />
     </sidebar-pane>
 

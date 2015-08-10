@@ -1,7 +1,11 @@
 <studio-tabs>
   <ul>
-    <li each={ opts.tabs }><div onclick={ selectTab } class="{ selected: parent.opts.model.id == id}">{ name }
-      <span onclick={ parent.closeTab }>[X]</span></div></li>
+    <li each={ opts.tabs.getObjects() }>
+      <div onclick={ selectTab } class="{ selected: parent.opts.model.id == id}">
+        { name }
+        <span onclick={ parent.closeTab }>[X]</span>
+      </div>
+    </li>
 
     <li><div id="add">&nbsp;<span onclick={ openTab }>[+]</span></div></li>
   </ul>
@@ -52,8 +56,8 @@
 
   ModelActions.addChangeListener(function(models) {
     // Close tabs belonging to recently removed models
-    opts.tabs.forEach(function(tab) {
-      if (!models.contains(tab)) self.opts.tabs.close(tab.id);
+    opts.tabs.forEach(function(modelId) {
+      if (!models.mapBy('id').contains(modelId)) self.opts.tabs.close(modelId);
     });
     self.update();
   });
@@ -72,7 +76,7 @@
   }
 
   selectTab(e) {
-    self.opts.model.set(e.item);
+    self.opts.model.set(e.item.id);
     e.preventUpdate = true; // Update is called indirectly above
   }
 </studio-tabs>

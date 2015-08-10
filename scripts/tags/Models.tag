@@ -90,7 +90,7 @@
   }
 
   openModel(e) {
-    self.opts.model.set(e.item.model);
+    self.opts.model.set(e.item.model.id);
   }
 
   searchFilter(el) {
