@@ -34,7 +34,7 @@ var config = {
                                'constants/StudioConstants', 'utils/mixins'],
         'tag/ConnectionPane': ['riot', 'actions/ConnectionActions'],
         'tag/TabBar'        : ['riot', 'actions/ModelActions'],
-        'tag/Studio'        : ['actions/VertexActions', 'constants/StudioConstants', 'panzoom']
+        'tag/Studio'        : ['actions/VertexActions', 'constants/StudioConstants', 'panzoom', 'keymaster']
       };
       var compiledShim = [];
       for (var prop in tagShims) {

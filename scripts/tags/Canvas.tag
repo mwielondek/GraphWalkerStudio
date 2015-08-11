@@ -415,6 +415,33 @@
       width: MINIMAP_SIZE
     });
 
+    // Set key listeners
+    // Select all vertices
+    key('command+a', function() {
+      self.opts.selection.update(opts.vertices);
+    });
+    // Remove selected vertices
+    key('backspace, delete', function() {
+      VertexActions.remove(opts.selection.filter(function(el) {
+        return el.type === StudioConstants.types.T_VERTEX;
+      }).mapBy('id'));
+      return false; // Don't trigger default browser event
+    });
+    // Enter name editing mode on selected vertex
+    key('enter', function() {
+      if (self.opts.selection.length > 1) return;
+      switch (self.opts.selection[0].type) {
+        case StudioConstants.types.T_VERTEX:
+          var domId = self.opts.selection[0].view.domId;
+          $('#'+domId).find('editable').click();
+          break;
+        case StudioConstants.types.T_EDGE:
+          var label = self.opts.selection[0]._jsp_connection.getOverlay('label').getElement();
+          $(label).find('editable').click();
+          break;
+      }
+    });
+
   });
 
   self.on('updated', function() {
