@@ -1,10 +1,13 @@
 <studio-canvas class="{ highlight: !selection.length }">
   <div class="zoom-button" id="zoom-in">+</div>
   <div class="zoom-button" id="zoom-out">–</div>
-  <input type="range" id="zoom-range" step="0.05" min="0.4" max="5">
+  <input type="range" id="zoom-range" step="0.05" min="0.1" max="3">
   <div id="canvas-body">
     <vertex each={ filterByModel(opts.vertices) } selection={ parent.opts.selection } />
     <edge each={ filterByModel(opts.edges) } selection={ parent.opts.selection } />
+  </div>
+  <div id="minimap">
+    <div id="viewport"></div>
   </div>
 
   <style>
@@ -51,6 +54,20 @@
     #zoom-out {
       right: 27px;
     }
+    #minimap {
+      border: 1px solid black;
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      background-color: rgb(203, 203, 203);
+      opacity: 0.6;
+    }
+    #minimap > #viewport {
+      border: 2px solid red;
+      background-color: white;
+      position: absolute;
+      box-sizing: border-box;
+    }
   </style>
 
   var $                 = require('jquery');
@@ -73,6 +90,7 @@
 
   // Canvas dimensions
   var CANVAS_SIZE = 10000;
+  var MINIMAP_SIZE = 160;
 
   var self = this
 
@@ -212,6 +230,8 @@
     $('#canvas-body').panzoom({
       cursor: 'default',
       contain: 'invert', // Don't show what's behind canvas
+      minScale: 0.14,
+      maxScale: 3,
       onEnd: _updateModel,
       $zoomIn: $('#zoom-in'),
       $zoomOut: $('#zoom-out'),
@@ -219,6 +239,24 @@
       onZoom: function(e, pz, scale) {
         jsp.setZoom(scale);
         _updateModel();
+      },
+      onChange: function(e, pz, matrix) {
+        // Container dimensions need to be updated once the canvas is drawn.
+        // Will trigger only once.
+        if (!pz.container.width) $('#canvas-body').panzoom('resetDimensions');
+
+        var zoom = matrix[0];
+        var panOffsetLeft = matrix[4];
+        var panOffsetTop = matrix[5];
+        var scalingFactor = MINIMAP_SIZE / CANVAS_SIZE;
+        var canvas = $('studio-canvas')[0];
+        var body = $('#canvas-body')[0];
+        $('#viewport').css({
+          height: canvas.clientHeight * scalingFactor / zoom,
+          width: canvas.clientWidth * scalingFactor / zoom,
+          top: -1 * body.offsetTop * scalingFactor - panOffsetTop * scalingFactor / zoom,
+          left: -1 * body.offsetLeft * scalingFactor - panOffsetLeft * scalingFactor / zoom
+        });
       },
       onReset: function() {
         // Find bounding box of all vertices and set zoom and pan around it
@@ -357,6 +395,12 @@
     // Fix contain dimensions upon browser window resize
     $(window).on('resize', function() {
       $('#canvas-body').panzoom('resetDimensions');
+    });
+
+    // Mount minimap
+    $('#minimap').css({
+      height: MINIMAP_SIZE,
+      width: MINIMAP_SIZE
     });
 
   });

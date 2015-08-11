@@ -148,7 +148,6 @@
       return $.extend({}, model, _modelHelperFunctions);
     },
     set: function(modelId) {
-      console.log('setting', modelId);
       // HACK: riot/#1003 workaround. Prevents vertex labels switching DOM nodes.
       this._modelId = '';
       this.update();
