@@ -1,6 +1,6 @@
-define(['riot', 'store/VertexStore', 'store/EdgeStore', 'store/ConnectionStore',
+define(['riot', 'jquery', 'store/VertexStore', 'store/EdgeStore', 'store/ConnectionStore',
  'store/ModelStore', 'store/GraphWalkerStore', 'tag/Studio', 'utils/mixins'],
-function(riot) {
+function(riot, $) {
 
   var tagUtils = {
     // Toggles boolean variable
@@ -11,11 +11,21 @@ function(riot) {
     }
   };
 
+  // Mount the studio tag and return the mounted instance
   var init = function(opts) {
-    // Mount the studio tag and return the mounted instance
-    var opts = opts || {}
+    var defaults = {
+      autoConnect: {
+        enabled: false,
+        url: ''
+      },
+      canvas: {
+        scrollIncrement: 1,
+        minimap: true
+      }
+    };
+    var mergedOpts = $.extend(true, {}, defaults, opts);
     riot.mixin('tagUtils', tagUtils);
-    return riot.mount('studio', opts);
+    return riot.mount('studio', mergedOpts);
   }
 
   return {
