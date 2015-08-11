@@ -1,4 +1,5 @@
 <edge id="{ id }" source="{ sourceVertexId }" target="{ targetVertexId }">
+<editable type="text" callback={ changeName } off={ !selected }>{ name }</editable>
 
   <style>
   .edge-label {
@@ -22,7 +23,6 @@
 
   var self = this;
   self.defaults = {
-    label: self.name,
     status: Constants.status.UNVERIFIED
   };
 
@@ -35,8 +35,11 @@
 
   self.on('mount', function() {
     self.connection = jsp.connect({source: self.sourceDomId, target: self.targetDomId});
-    self.connection.getOverlay('label').setLabel(self.label);
     self.connection.setParameter('_edgeObject', self);
+
+    // Append editable
+    var labelElement = $(self.root).find('editable').detach();
+    $(self.connection.getOverlay('label').getElement()).append(labelElement);
 
     // Fix the loopback connection spawning off center
     if (self.sourceDomId == self.targetDomId)
@@ -62,4 +65,9 @@
   self.on('unmount', function() {
     if (self.connection.connector) jsp.detach(self.connection);
   });
+
+  changeName(newValue) {
+    var props = {name: newValue};
+    EdgeActions.setProps(self.id, props);
+  }
 </edge>

@@ -60,7 +60,7 @@
   click(e) {
     // HACK: otherwise we get TypeError due to bug in riot/#1094
     e.preventUpdate = true;
-    
+
     // Don't do anything when already editing
     if (self.editing || opts.off) return;
 

@@ -161,7 +161,11 @@
                 length: 12,
                 foldback: 0.1
             } ],
-            [ 'Label', { id: 'label', cssClass: 'edge-label' }]
+            [ 'Label', { id: 'label', cssClass: 'edge-label', events: {
+              click: function(label) {
+                $(label.getElement()).find('editable').click();
+              }
+            } }]
         ]
       });
 

@@ -33,6 +33,7 @@ function(riot, Constants, RiotControl, $, Utils) {
     self.on(CALLS.CHANGE_EDGE, function(query, props) {
       var edge = _getEdge(query);
       $.extend(true, edge, props);
+      self.trigger(EMIT_CHANGE, self.edges);
     });
 
     self.on(CALLS.REMOVE_EDGE, function(edges) {
