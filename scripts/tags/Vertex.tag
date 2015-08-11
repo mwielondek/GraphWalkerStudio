@@ -1,7 +1,7 @@
 <vertex id="{ view.domId }" class="{ selected: selected } { status.toLowerCase() }" tabindex="1"
   vertex-id="{ id }">
   <div class="label-div">
-    <p class="label">{ name }</p>
+    <editable type="text" class="label" off={ !selected } callback={ changeName } >{ name }</editable>
   </div>
 
   <style>
@@ -66,6 +66,10 @@
 
   .jsplumb-drag-hover {
     border: 1px solid #21cfdf;
+  }
+
+  vertex input {
+    width: 90px;
   }
   </style>
 
@@ -299,4 +303,9 @@
   self.on('unmount', function() {
     jsp.remove(self.root);
   });
+
+  changeName(newValue) {
+    var props = {name: newValue};
+    VertexActions.setProps(self.id, props);
+  }
 </vertex>

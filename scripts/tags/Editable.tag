@@ -58,14 +58,16 @@
   });
 
   click(e) {
+    // HACK: otherwise we get TypeError due to bug in riot/#1094
+    e.preventUpdate = true;
+    
     // Don't do anything when already editing
-    if (self.editing) {
-      e.preventUpdate = true;
-      return;
-    }
+    if (self.editing || opts.off) return;
 
-    // Otherwise switcht to edit mode
+    // Otherwise switch to edit mode
     self.editing = true;
     self.editControl.val(self.root.innerText);
+
+    self.update();
   }
 </editable>
