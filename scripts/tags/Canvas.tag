@@ -6,7 +6,9 @@
     <vertex each={ filterByModel(opts.vertices) } selection={ parent.opts.selection } />
     <edge each={ filterByModel(opts.edges) } selection={ parent.opts.selection } />
   </div>
-  <div id="minimap" show={ opts.options.canvas.minimap }>
+  <div id="minimap" if={ opts.options.canvas.minimap }>
+    <div class="minimap-element" each={ filterByModel(opts.vertices) } data-view={ JSON.stringify(this.view) }
+    style="display:none;"></div>
     <div id="viewport"></div>
   </div>
 
@@ -67,6 +69,11 @@
       background-color: white;
       position: absolute;
       box-sizing: border-box;
+    }
+    #minimap > .minimap-element {
+      position: absolute;
+      background-color: #1c4105;
+      z-index: 1;
     }
   </style>
 
@@ -245,6 +252,7 @@
         // Will trigger only once.
         if (!pz.container.width) $('#canvas-body').panzoom('resetDimensions');
 
+        // Update minimap
         var zoom = matrix[0];
         var panOffsetLeft = matrix[4];
         var panOffsetTop = matrix[5];
@@ -405,10 +413,22 @@
 
   });
 
-  self.on('update', function() {
+  self.on('updated', function() {
     var selection = self.opts.selection.mapBy('view.domId');
     jsp.clearDragSelection();
     jsp.addToDragSelection(selection);
+
+    // Update minimap elements
+    var scalingFactor = MINIMAP_SIZE / CANVAS_SIZE;
+    $('.minimap-element').each(function(i, el) {
+      var view = JSON.parse($(el).attr('data-view'));
+      $(el).css({
+        top:  view.top * scalingFactor,
+        left: view.left * scalingFactor,
+        width: Math.max(view.width * scalingFactor, 2),
+        height: Math.max(view.height * scalingFactor, 2)
+      }).show();
+    });
   });
 
   // RUN TEST
