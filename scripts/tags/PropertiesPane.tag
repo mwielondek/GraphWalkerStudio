@@ -49,17 +49,29 @@
   }
 
   removeElement() {
-    // Call proper remove action
-    switch (self.element.type) {
-      case StudioConstants.types.T_VERTEX:
-        VertexActions.remove(opts.selection.mapBy('id'));
-        break;
-      case StudioConstants.types.T_EDGE:
-        EdgeActions.remove(self.element.id);
-        break;
-      case StudioConstants.types.T_MODEL:
-        ModelActions.remove(self.element.id);
-        break;
+    if (self.isDifferentTypes) {
+      // Selection is going to change after each remove action, make a copy of it.
+      var _selection = opts.selection.slice();
+
+      EdgeActions.remove(_selection.filter(function(el) {
+        return el.type === StudioConstants.types.T_EDGE;
+      }).mapBy('id'));
+
+      VertexActions.remove(_selection.filter(function(el) {
+        return el.type === StudioConstants.types.T_VERTEX;
+      }).mapBy('id'));
+    } else {
+      switch (self.element.type) {
+        case StudioConstants.types.T_VERTEX:
+          VertexActions.remove(opts.selection.mapBy('id'));
+          break;
+        case StudioConstants.types.T_EDGE:
+          EdgeActions.remove(opts.selection.mapBy('id'));
+          break;
+        case StudioConstants.types.T_MODEL:
+          ModelActions.remove(self.element.id);
+          break;
+      }
     }
   }
 </properties-pane>
