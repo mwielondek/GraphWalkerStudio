@@ -12,7 +12,8 @@
     display: table !important;
     border-radius: 15px;
     cursor: default;
-    background-color: rgba(255, 163, 42, 0.85);
+    background-color: rgba(254, 173, 67, 0.85);
+    box-sizing: border-box;
   }
 
   vertex:focus {
@@ -20,12 +21,12 @@
   }
 
   vertex.selected {
-    border: 1px solid #21cfdf;
+    border: 2px solid #379dc8;
     cursor: move;
   }
 
   vertex.rubberband-hover {
-    border: 1px solid #21cfdf;
+    border: 2px solid #379dc8;
   }
 
   vertex.unverified {
@@ -33,11 +34,11 @@
   }
 
   vertex.verified {
-    background-color: rgba(20, 187, 107, 0.85);
+    background-color: rgba(0, 198, 102, 0.85);
   }
 
   vertex.error {
-    background-color: rgba(221, 72, 72, 0.85);
+    background-color: rgba(255, 83, 83, 0.85);
   }
 
   .label-div {

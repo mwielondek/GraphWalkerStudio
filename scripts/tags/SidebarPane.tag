@@ -8,10 +8,18 @@
   <style scoped>
     :scope {
       display: block;
-      background-color: #01493a;
+      background-color: #325262;
       color: white;
-      margin: 10px;
+      margin: 2px;
       padding: 8px;
+    }
+    h4 {
+      background-color: #5b8590;
+      margin: -5px;
+      padding: 20px;
+    }
+    .pane-body {
+      margin-top: 15px;
     }
     .pane-body > * > ul {
       list-style: none;

@@ -12,8 +12,7 @@
 
   <style scoped>
     ul {
-      width: 100%;
-      background-color: rgb(115, 112, 112);
+      background-color: #f0f0f0;
       list-style: none;
       padding: 0;
       margin: 0;
@@ -25,11 +24,12 @@
       height: 20px;
       width: 150px;
       border: 1px solid black;
+      border-bottom: 0;
       padding: 5px;
       text-align: left;
       vertical-align: middle;
       line-height: 20px;
-      background-color: rgb(153, 153, 153);
+      background-color: #40697e;
     }
     span {
       float: right;
@@ -45,8 +45,8 @@
       margin-left: -5px;
     }
     div.selected {
-      border: 1px solid #0e9c14;
-      background-color: rgb(181, 181, 181);
+      border-top: 4px solid #5b8590;
+      background-color: #f0f0f0;
     }
   </style>
 

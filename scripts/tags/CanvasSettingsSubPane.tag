@@ -2,7 +2,7 @@
   <h5>Canvas settings</h5>
   <ul>
     <li>
-      Scroll zoom sensitivity
+      Scroll zoom sensitivity<br>
       <input name="sensitivity" type="range" onchange={ setSensitivity } />
       <span id="sensValue"></span>
     </li>

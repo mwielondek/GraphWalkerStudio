@@ -5,13 +5,13 @@
 
   <style>
     #connection-status {
-      color: red;
+      color: #cc0f0f;
       font-size: 8pt;
       vertical-align: text-top;
       margin-right: 5px;
     }
     #connection-status.connected {
-      color: green;
+      color: #15da52;
     }
   </style>
 

@@ -14,15 +14,15 @@
 
   <style>
     studio-canvas {
-      height: 100%;
+      height: calc(100% - 34px);
+      box-sizing: border-box;
       display: block;
       margin-right: 310px;
-      border: 2px solid #10586b;
+      border: 1px solid #5b8590;
+      border-left: 0;
+      border-bottom: 0;
       overflow: hidden;
       position: relative;
-    }
-    studio-canvas.highlight {
-      border: 2px solid #2cb9de;
     }
     #canvas-body {
       background: #f0f0f0;
@@ -34,7 +34,7 @@
     }
     .zoom-button {
       text-align: center;
-      background-color: navy;
+      background-color: #325262;
       color: white;
       width: 20px;
       height: 20px;

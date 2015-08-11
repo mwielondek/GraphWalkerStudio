@@ -23,7 +23,7 @@
       float: right;
       width: 310px;
       height: 100%;
-      background-color: #47866f;
+      background-color: #f0f0f0;
     }
   </style>
 

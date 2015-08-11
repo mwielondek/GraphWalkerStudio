@@ -9,7 +9,7 @@
     }
     input[type='text'] {
       border: none;
-      border-bottom: solid 4px #c9c9c9;
+      border-bottom: solid 4px #5b8590;
       outline: none;
     }
   </style>

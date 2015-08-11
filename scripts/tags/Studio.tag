@@ -1,18 +1,20 @@
 <studio>
-  <p>Studio</p>
-
-  <studio-tabs tabs={ tabs } model={ model } />
-
   <studio-sidebar selection={ selection } model={ model } options={ opts }
     vertices={ vertices } edges={ edges } models={ models }/>
+
+  <studio-tabs tabs={ tabs } model={ model } />
 
   <studio-canvas selection={ selection } model={ model } show={ tabs.length } options={ opts }
     vertices={ vertices } edges={ edges }/>
 
   <style>
     studio {
-      height: 90%;
+      height: 98%;
       display: block;
+      border: 1px solid black;
+      border-top: 0;
+      background-color: #dedede;
+      margin-bottom: 10px;
     }
   </style>
 

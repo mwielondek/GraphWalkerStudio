@@ -1,5 +1,5 @@
 <models-pane>
-  <ul class="models">
+  <ul>
     <li if={ !opts.models.length }><a href="" onclick={ opts.model.new }>Create new model</a></li>
     <li if={ opts.models.length }>
       <input type="text" name="searchInput" placeholder="Search" onkeyup={ search }>
@@ -9,6 +9,8 @@
       <a href="" onclick={ expandAll }>Expand all</a>
       <a href="" onclick={ hideAll }>Hide not active</a>
     </li>
+  </ul>
+  <ul class="models">
     <li each={ model in opts.models } class="{ active: parent.opts.model.id == model.id}">
       <span onclick={ toggleExpand }>{ parent.expanded.contains(model.id) ? ARROW_DOWN : ARROW_RIGHT }</span>
       <a class="{ active: parent.opts.model.id == model.id}" onclick={ openModel }>
@@ -32,16 +34,18 @@
       color: inherit;
     }
     a.active {
-      color: #72b7d5;
+      background-color: rgba(55, 157, 200, 0.4);
     }
     a.selected {
       background-color: rgba(55, 157, 200, 0.75);
     }
     li.active {
-      background-color: rgba(98, 171, 130, 0.3);
+      background-color: rgba(91, 133, 144, 0.2);
     }
     ul.models {
-      background-color: rgba(98, 171, 130, 0.1);
+      list-style: none;
+      background-color: #f0f0f0;
+      color: black;
     }
   </style>
 
