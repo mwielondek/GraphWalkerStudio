@@ -6,7 +6,7 @@
     <vertex each={ filterByModel(opts.vertices) } selection={ parent.opts.selection } />
     <edge each={ filterByModel(opts.edges) } selection={ parent.opts.selection } />
   </div>
-  <div id="minimap">
+  <div id="minimap" show={ opts.options.canvas.minimap }>
     <div id="viewport"></div>
   </div>
 
