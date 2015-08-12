@@ -6,6 +6,7 @@
   <style scoped>
     span {
       cursor: pointer;
+      text-decoration: underline;
     }
     input[type='text'] {
       border: none;

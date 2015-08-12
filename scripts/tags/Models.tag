@@ -47,6 +47,8 @@
       list-style: none;
       background-color: #f0f0f0;
       color: black;
+      overflow-y: auto;
+      max-height: 350px;
     }
   </style>
 
@@ -57,10 +59,6 @@
   var StudioConstants = require('constants/StudioConstants');
 
   var self = this;
-
-  // CONSTANTS
-  ARROW_RIGHT = '\u25b7';
-  ARROW_DOWN = '\u25bd';
 
   // State
   self.expanded = [];
