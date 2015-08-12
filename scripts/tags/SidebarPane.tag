@@ -21,6 +21,7 @@
       background-color: #5b8590;
       margin: -5px;
       padding: 20px 15px;
+      height: 20px;
     }
     .pane-body {
       margin-top: 15px;

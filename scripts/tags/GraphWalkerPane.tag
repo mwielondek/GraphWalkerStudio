@@ -4,17 +4,14 @@
   </ul>
 
   this.on('mount', function() {
-    this.headerElement = $(this.root).parents('sidebar-pane').find('span.icon');
-    this.headerElement.css({
-      'font-size': '18pt',
-      'vertical-align': 'middle'
-    });
+    var headerElement = $(this.root).parents('sidebar-pane').find('h4');
+    this.statusIcon = $('<span>').addClass('octicon octicon-primitive-dot').appendTo(headerElement);
   });
 
   this.on('updated', function() {
     if (this.isMounted) {
-      this.headerElement.css({
-        'color': opts.connected ? '#15da52' : '#cc0f0f'
+      this.statusIcon.css({
+        'color': opts.connected ? '#15da52' : '#cd2828'
       });
     }
   });

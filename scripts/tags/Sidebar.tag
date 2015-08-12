@@ -9,7 +9,7 @@
         vertices={ parent.opts.vertices } edges={ parent.opts.edges } models={ parent.opts.models } />
     </sidebar-pane>
 
-    <sidebar-pane heading="GraphWalker" icon="primitive-dot" collapsed={ true }>
+    <sidebar-pane heading="GraphWalker" icon="git-branch" collapsed={ true }>
       <graphwalker-pane connected={ parent.connectionOpen } />
     </sidebar-pane>
 
