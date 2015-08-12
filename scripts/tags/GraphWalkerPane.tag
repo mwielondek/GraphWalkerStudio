@@ -5,7 +5,10 @@
 
   this.on('mount', function() {
     var headerElement = $(this.root).parents('sidebar-pane').find('h4');
-    this.statusIcon = $('<span>').addClass('octicon octicon-primitive-dot').appendTo(headerElement);
+    this.statusIcon = $('<span>')
+      .addClass('octicon octicon-primitive-dot')
+      .css('transition', 'color 400ms ease-out 100ms')
+      .appendTo(headerElement);
   });
 
   this.on('updated', function() {
