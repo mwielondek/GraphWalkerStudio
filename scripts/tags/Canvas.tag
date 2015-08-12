@@ -19,8 +19,6 @@
       display: block;
       margin-right: 310px;
       border: 1px solid #5b8590;
-      border-left: 0;
-      border-bottom: 0;
       overflow: hidden;
       position: relative;
     }
@@ -41,6 +39,7 @@
       position: absolute;
       top: 10px;
       z-index: 1;
+      border-radius: 4px;
     }
     .zoom-button .octicon {
       font-size: 11px;

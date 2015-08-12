@@ -1,7 +1,7 @@
 <connection-subpane>
   <h5>GraphWalker settings</h5>
   <ul>
-    <li>URL: <input name="ws_url" disabled="{ connected }" type="text" />
+    <li><input name="ws_url" disabled="{ connected }" type="text" />
     <button class="connect" onclick="{ toggleConnection }">{ connected ? 'Disconnect' : 'Connect' }</button></li>
     <li><a href="" onclick={ toggle('showTextarea') }>{showTextarea ? 'Hide' : 'Show'} connection log</a></li>
     <li show={showTextarea}><textarea name="output" readonly="true"></textarea></li>
@@ -9,15 +9,19 @@
 
   <style scoped>
     button.connect {
-      width: 70px;
+      width: 75px;
     }
 
     textarea[name='output'] {
-      width: 235px;
+      width: 285px;
       min-height: 100px;
       resize: vertical;
       border: 0;
       outline: none;
+    }
+
+    input[name='ws_url'] {
+      width: 210px;
     }
   </style>
 

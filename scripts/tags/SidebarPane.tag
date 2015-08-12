@@ -24,6 +24,9 @@
       height: 20px;
       cursor: default;
     }
+    h4 .octicon {
+      padding-right: 5px;
+    }
     .pane-body {
       margin-top: 15px;
     }

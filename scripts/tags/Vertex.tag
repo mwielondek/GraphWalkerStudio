@@ -38,7 +38,7 @@
   }
 
   vertex.error {
-    background-color: rgba(255, 83, 83, 0.85);
+    background-color: rgba(213, 71, 71, 0.85);
   }
 
   .label-div {

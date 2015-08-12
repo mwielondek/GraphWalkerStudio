@@ -10,7 +10,8 @@
        { isDifferentTypes ? 'elements' : element.type.pluralize(isMultipleSelection) }
     </li>
     <li>
-      <button onclick={ removeElement }>
+      <button onclick={ removeElement } class="red">
+        <span class="octicon octicon-trashcan"></span>
         Remove { isDifferentTypes ? 'elements' : element.type.pluralize(isMultipleSelection) }
       </button>
     </li>

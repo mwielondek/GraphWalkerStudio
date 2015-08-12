@@ -1,6 +1,10 @@
 <models-pane>
   <ul>
-    <li if={ !opts.models.length }><a href="" onclick={ opts.model.new }>Create new model</a></li>
+    <li if={ !opts.models.length }>
+      <button onclick={ opts.model.new } class="green">
+      <span class="octicon octicon-plus"></span>
+      New model</button>
+    </li>
     <li if={ opts.models.length }>
       <input type="text" name="searchInput" placeholder="Search" onkeyup={ search }>
       <button onclick={ clearSearch }>Clear</button>
@@ -50,6 +54,13 @@
       color: black;
       overflow-y: auto;
       max-height: 350px;
+      border-radius: 2px;
+    }
+    ul.models span.octicon {
+      padding: 5px 0px 0px 10px;
+    }
+    input[name='searchInput'] {
+      width: 238px;
     }
   </style>
 

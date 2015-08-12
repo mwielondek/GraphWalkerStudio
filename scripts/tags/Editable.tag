@@ -6,7 +6,6 @@
   <style scoped>
     span {
       cursor: pointer;
-      text-decoration: underline;
     }
   </style>
 

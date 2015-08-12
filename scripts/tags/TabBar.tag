@@ -31,6 +31,7 @@
       line-height: 20px;
       background-color: #40697e;
       cursor: default;
+      border-radius: 6px 6px 0 0;
     }
     span {
       float: right;
@@ -39,11 +40,20 @@
     span:hover {
       color: black;
       cursor: default;
+      background-color: rgba(0, 0, 0, 0.21);
+    }
+    .octicon {
+      border-radius: 50%;
+      width: 15px;
+      height: 15px;
+      text-align: center;
+      padding: 3px;
     }
     div#add {
       border: 0px;
       width: 100%;
       margin-left: -5px;
+      border-top-left-radius: 0;
     }
     div.selected {
       border-top: 4px solid #5b8590;

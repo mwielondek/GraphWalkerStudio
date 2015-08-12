@@ -24,23 +24,43 @@ html, body {
   user-select: none;
 }
 
-.octicon {
-  margin: 2px;
-}
-
 button {
-  height: 20px;
   background: #5b8590;
-  padding: 5px;
-  padding-bottom: 18px;
+  padding: 4px 7px 2px 7px;
   color: white;
   border: 0;
   border-bottom: solid 3px #5b8590;
   outline: none;
   transition: border-color 0.2s ease-out;
+  border-radius: 2px;
 }
 button:hover {
-  border-bottom: solid 3px #f0f0f0;
+  border-bottom: solid 3px #76a6b3;
+}
+button:active {
+  background: #426770;
+}
+
+button.red {
+  background-color: #aa3b3b;
+  border-bottom: solid 3px #703131;
+}
+button.red:hover {
+  border-bottom: solid 3px #be4646;
+}
+button.red:active {
+  background: #903030;
+}
+
+button.green {
+  background-color: #4daa3b;
+  border-bottom: solid 3px #409031;
+}
+button.green:hover {
+  border-bottom: solid 3px #68b959;
+}
+button.green:active {
+  background: #30903d;
 }
 
 input[type='text'] {
@@ -49,6 +69,9 @@ input[type='text'] {
   border-bottom: solid 3px #f0f0f0;
   outline: none;
   transition: border-color 0.2s ease-out;
+  box-sizing: border-box;
+  height: 22px;
+  padding-top: 4px;
 }
 input[type='text']:focus {
   border-bottom: solid 3px #5b8590;
