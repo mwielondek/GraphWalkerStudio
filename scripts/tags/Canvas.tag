@@ -25,7 +25,7 @@
       position: relative;
     }
     #canvas-body {
-      background: #f0f0f0;
+      background: #f9f9f9;
       background-image: url('grid.png');
       background-blend-mode: overlay;
       position: absolute;
@@ -59,8 +59,8 @@
     #minimap {
       border: 1px solid black;
       position: absolute;
-      right: 10px;
-      bottom: 10px;
+      right: 5px;
+      bottom: 5px;
       background-color: rgb(203, 203, 203);
       opacity: 0.6;
     }

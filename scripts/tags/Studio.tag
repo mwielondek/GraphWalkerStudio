@@ -11,7 +11,7 @@
     studio {
       height: 98%;
       display: block;
-      border: 1px solid black;
+      border: 1px solid #5b8590;
       border-top: 0;
       background-color: #dedede;
       margin-bottom: 10px;
