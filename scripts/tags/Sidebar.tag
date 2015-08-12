@@ -24,6 +24,7 @@
       width: 310px;
       height: 100%;
       background-color: #f0f0f0;
+      overflow-y: overlay;
     }
   </style>
 
