@@ -7,17 +7,17 @@
     </li>
     <li if={ opts.models.length }>
       <a href="" onclick={ expandAll }>Expand all</a>
-      <a href="" onclick={ hideAll }>Hide not active</a>
+      <a href="" onclick={ hideAll }>Collapse all</a>
     </li>
   </ul>
   <ul class="models">
     <li each={ model in opts.models } class="{ active: parent.opts.model.id == model.id}">
       <span onclick={ toggleExpand }
-        class="octicon octicon-chevron-{ parent.expanded.contains(model.id) ? 'down' : 'right' }"></span>
+        class="octicon octicon-chevron-{ !parent.collapsed.contains(model.id) ? 'down' : 'right' }"></span>
       <a class="{ active: parent.opts.model.id == model.id}" onclick={ openModel }>
         { model.name }
       </a>
-      <ul if={ parent.expanded.contains(model.id) }>
+      <ul if={ !parent.collapsed.contains(model.id) }>
         <li each={ filterByModel(parent.opts.vertices, model).filter(searchFilter) }>
           <a class="vertex { selected: parent.parent.opts.selection.mapBy('id').contains(id) }"
            onclick={ select }>{ name }</a>
@@ -62,12 +62,8 @@
   var self = this;
 
   // State
-  self.expanded = [];
+  self.collapsed = [];
   self.searchQuery = '';
-
-  self.on('update', function() {
-    if (!self.expanded.contains(opts.model.id)) self.expanded.push(opts.model.id);
-  });
 
   filterByModel(elements, model) {
     return elements.filter(function(el) { return el.modelId == model.id });
@@ -75,15 +71,15 @@
 
   toggleExpand(e) {
     var modelId = e.item.model.id;
-    self.expanded.toggle(modelId);
-  }
-
-  expandAll() {
-    self.expanded = self.opts.models.mapBy('id');
+    self.collapsed.toggle(modelId);
   }
 
   hideAll() {
-    self.expanded = [];
+    self.collapsed = self.opts.models.mapBy('id');
+  }
+
+  expandAll() {
+    self.collapsed = [];
   }
 
   select(e) {
@@ -102,15 +98,15 @@
   }
 
   search() {
-    if (!self.expandedBeforeSearch) self.expandedBeforeSearch = self.expanded;
+    if (!self.collapsedBeforeSearch) self.collapsedBeforeSearch = self.collapsed;
     self.searchQuery = self.searchInput.value;
     self.expandAll();
   }
 
   clearSearch() {
     self.searchQuery = self.searchInput.value = '';
-    self.expanded = self.expandedBeforeSearch;
-    delete self.expandedBeforeSearch;
+    self.collapsed = self.collapsedBeforeSearch;
+    delete self.collapsedBeforeSearch;
   }
 
 </models-pane>
