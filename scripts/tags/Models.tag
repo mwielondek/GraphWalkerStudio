@@ -105,8 +105,10 @@
 
   clearSearch() {
     self.searchQuery = self.searchInput.value = '';
-    self.collapsed = self.collapsedBeforeSearch;
-    delete self.collapsedBeforeSearch;
+    if (self.collapsedBeforeSearch) {
+      self.collapsed = self.collapsedBeforeSearch;
+      delete self.collapsedBeforeSearch;
+    }
   }
 
 </models-pane>
