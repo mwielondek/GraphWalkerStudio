@@ -1,19 +1,19 @@
 <studio-sidebar>
   <div id="sidebar">
-    <sidebar-pane heading="Properties" if={ opts.model.id }>
+    <sidebar-pane heading="Properties" icon="list-unordered" if={ opts.model.id }>
       <properties-pane model={ parent.opts.model } selection={ parent.opts.selection } />
     </sidebar-pane>
 
-    <sidebar-pane heading="Models">
+    <sidebar-pane heading="Models" icon="file-directory">
       <models-pane model={ parent.opts.model } selection={ parent.opts.selection }
         vertices={ parent.opts.vertices } edges={ parent.opts.edges } models={ parent.opts.models } />
     </sidebar-pane>
 
-    <sidebar-pane heading="GraphWalker" collapsed={ true }>
+    <sidebar-pane heading="GraphWalker" icon="primitive-dot" collapsed={ true }>
       <graphwalker-pane connected={ parent.connectionOpen } />
     </sidebar-pane>
 
-    <sidebar-pane heading="Settings" collapsed={ true }>
+    <sidebar-pane heading="Settings" icon="gear" collapsed={ true }>
       <settings-pane options={ parent.opts.options } />
     </sidebar-pane>
   </div>

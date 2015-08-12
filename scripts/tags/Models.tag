@@ -12,7 +12,8 @@
   </ul>
   <ul class="models">
     <li each={ model in opts.models } class="{ active: parent.opts.model.id == model.id}">
-      <span onclick={ toggleExpand }>{ parent.expanded.contains(model.id) ? ARROW_DOWN : ARROW_RIGHT }</span>
+      <span onclick={ toggleExpand }
+        class="octicon octicon-chevron-{ parent.expanded.contains(model.id) ? 'down' : 'right' }"></span>
       <a class="{ active: parent.opts.model.id == model.id}" onclick={ openModel }>
         { model.name }
       </a>

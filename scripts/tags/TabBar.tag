@@ -3,11 +3,11 @@
     <li each={ opts.tabs.getObjects() }>
       <div onclick={ selectTab } class="{ selected: parent.opts.model.id == id}">
         { name }
-        <span onclick={ parent.closeTab }>[X]</span>
+        <span onclick={ parent.closeTab } class="octicon octicon-x"></span>
       </div>
     </li>
 
-    <li><div id="add">&nbsp;<span onclick={ openTab }>[+]</span></div></li>
+    <li><div id="add">&nbsp;<span onclick={ openTab } class="octicon octicon-plus"></span></div></li>
   </ul>
 
   <style scoped>

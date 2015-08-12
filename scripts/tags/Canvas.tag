@@ -1,6 +1,6 @@
 <studio-canvas class="{ highlight: !selection.length }">
-  <div class="zoom-button" id="zoom-in">+</div>
-  <div class="zoom-button" id="zoom-out">–</div>
+  <div class="zoom-button" id="zoom-in"><span class="octicon octicon-plus"></span></div>
+  <div class="zoom-button" id="zoom-out"><span class="octicon octicon-dash"></span></div>
   <input type="range" id="zoom-range" step="0.05" min="0.1" max="3">
   <div id="canvas-body">
     <vertex each={ filterByModel(opts.vertices) } selection={ parent.opts.selection } />
@@ -41,6 +41,9 @@
       position: absolute;
       top: 10px;
       z-index: 1;
+    }
+    .zoom-button .octicon {
+      font-size: 11px;
     }
     #zoom-range {
       position: absolute;

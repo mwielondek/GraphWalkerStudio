@@ -23,3 +23,7 @@ html, body {
   -ms-user-select: none;
   user-select: none;
 }
+
+.octicon {
+  margin: 2px;
+}

@@ -1,5 +1,9 @@
 <sidebar-pane>
-  <h4 onclick={ toggle('expanded') }>{ opts.heading }<span class="minimize">[{ expanded ? '–' : '+'}]</span></h4>
+  <h4 onclick={ toggle('expanded') }>
+    <span if={ opts.icon } class="icon octicon octicon-{ opts.icon }"></span>
+    { opts.heading }
+    <span class="minimize octicon octicon-diff-{ expanded ? 'removed' : 'added'}"></span>
+  </h4>
   <div class="pane-body" show={ expanded }>
     <yield/>
   </div>
@@ -16,7 +20,7 @@
     h4 {
       background-color: #5b8590;
       margin: -5px;
-      padding: 20px;
+      padding: 20px 15px;
     }
     .pane-body {
       margin-top: 15px;

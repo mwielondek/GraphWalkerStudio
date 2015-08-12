@@ -3,27 +3,19 @@
     <li>Status: { opts.connected ? 'Connected' : 'Disconnected' }</li>
   </ul>
 
-  <style>
-    #connection-status {
-      color: #cc0f0f;
-      font-size: 8pt;
-      vertical-align: text-top;
-      margin-right: 5px;
-    }
-    #connection-status.connected {
-      color: #15da52;
-    }
-  </style>
-
   this.on('mount', function() {
-    var headerElement = $(this.root).parents('sidebar-pane').find('h4');
-    headerElement.prepend('<span id="connection-status">\u2B24</span>');
+    this.headerElement = $(this.root).parents('sidebar-pane').find('span.icon');
+    this.headerElement.css({
+      'font-size': '18pt',
+      'vertical-align': 'middle'
+    });
   });
 
   this.on('updated', function() {
     if (this.isMounted) {
-      var headerElement = $(this.root).parents('sidebar-pane').find('h4');
-      headerElement.find('#connection-status').toggleClass('connected', opts.connected);
+      this.headerElement.css({
+        'color': opts.connected ? '#15da52' : '#cc0f0f'
+      });
     }
   });
 
