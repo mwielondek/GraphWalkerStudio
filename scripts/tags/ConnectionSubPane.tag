@@ -1,11 +1,25 @@
 <connection-subpane>
   <h5>GraphWalker settings</h5>
   <ul>
-    <li>URL: <input name="ws_url" disabled="{ connected }" />
-    <button onclick="{ toggleConnection }">{ connected ? 'Disconnect' : 'Connect' }</button></li>
+    <li>URL: <input name="ws_url" disabled="{ connected }" type="text" />
+    <button class="connect" onclick="{ toggleConnection }">{ connected ? 'Disconnect' : 'Connect' }</button></li>
     <li><a href="" onclick={ toggle('showTextarea') }>{showTextarea ? 'Hide' : 'Show'} connection log</a></li>
     <li show={showTextarea}><textarea name="output" readonly="true"></textarea></li>
   </ul>
+
+  <style scoped>
+    button.connect {
+      width: 70px;
+    }
+
+    textarea[name='output'] {
+      width: 235px;
+      min-height: 100px;
+      resize: vertical;
+      border: 0;
+      outline: none;
+    }
+  </style>
 
   var ConnectionActions = require('actions/ConnectionActions');
   this.mixin('tagUtils');

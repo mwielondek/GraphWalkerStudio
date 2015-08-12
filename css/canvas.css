@@ -27,3 +27,29 @@ html, body {
 .octicon {
   margin: 2px;
 }
+
+button {
+  height: 20px;
+  background: #5b8590;
+  padding: 5px;
+  padding-bottom: 18px;
+  color: white;
+  border: 0;
+  border-bottom: solid 3px #5b8590;
+  outline: none;
+  transition: border-color 0.2s ease-out;
+}
+button:hover {
+  border-bottom: solid 3px #f0f0f0;
+}
+
+input[type='text'] {
+  height: 20px;
+  border: none;
+  border-bottom: solid 3px #f0f0f0;
+  outline: none;
+  transition: border-color 0.2s ease-out;
+}
+input[type='text']:focus {
+  border-bottom: solid 3px #5b8590;
+}

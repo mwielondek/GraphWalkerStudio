@@ -30,6 +30,7 @@
       vertical-align: middle;
       line-height: 20px;
       background-color: #40697e;
+      cursor: default;
     }
     span {
       float: right;

@@ -33,6 +33,7 @@
   <style scoped>
     a {
       color: inherit;
+      cursor: pointer;
     }
     a.active {
       background-color: rgba(55, 157, 200, 0.4);

@@ -8,11 +8,6 @@
       cursor: pointer;
       text-decoration: underline;
     }
-    input[type='text'] {
-      border: none;
-      border-bottom: solid 4px #5b8590;
-      outline: none;
-    }
   </style>
 
   var ENTER_KEY = 13;

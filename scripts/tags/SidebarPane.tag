@@ -22,6 +22,7 @@
       margin: -5px;
       padding: 20px 15px;
       height: 20px;
+      cursor: default;
     }
     .pane-body {
       margin-top: 15px;
@@ -33,11 +34,6 @@
     }
     .pane-body > * > ul > li {
       padding: 0 0 10px 0;
-    }
-    .pane-body textarea {
-      vertical-align: top;
-      width: 255px;
-      min-height: 100px;
     }
     .pane-body a {
       color: inherit;
