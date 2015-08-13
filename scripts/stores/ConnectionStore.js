@@ -31,6 +31,7 @@ function() {
         self.trigger(EVENTS.CONNECTION_ESTABLISHED, ws);
       };
       ws.onclose = function() {
+        delete self.websocket;
         self.trigger(EVENTS.CONNECTION_CLOSED);
       };
       ws.onmessage = function(evt) {
