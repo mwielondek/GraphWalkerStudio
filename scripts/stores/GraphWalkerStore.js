@@ -20,7 +20,8 @@ function() {
 
     // Event listeners
     var VCALLS   = VertexConstants.calls;
-    var METHODS = Constants.methods;
+    var ECALLS   = EdgeConstants.calls;
+    var METHODS  = Constants.methods;
 
     // React to VertexStore events
     self.on(VCALLS.ADD_VERTEX, function(vertex) {
@@ -36,7 +37,20 @@ function() {
       vertices.forEach(Actions.removeVertex);
     });
 
-    // TODO: React to EdgeStore events
+    // React to EdgeStore events
+    self.on(ECALLS.ADD_EDGE, function(edge) {
+      Actions.addEdge(edge);
+    });
+
+    self.on(ECALLS.CHANGE_EDGE, function(query, props) {
+      // Determine whether the change should be verified with GW
+      if (props.name) Actions.changeEdge(query, props);
+    });
+
+    self.on(ECALLS.REMOVE_EDGE, function(edges) {
+      edges.forEach(Actions.removeEdge);
+    });
+
     // TODO: React to ModelStore events
 
   }

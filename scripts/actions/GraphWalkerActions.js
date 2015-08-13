@@ -6,6 +6,7 @@ function() {
   var connection      = require('actions/ConnectionActions');
   var Constants       = require('constants/GraphWalkerConstants');
   var RiotControl     = require('app/RiotControl');
+  var EdgeActions     = require('actions/EdgeActions');
   var VertexActions   = require('actions/VertexActions');
   var StudioConstants = require('constants/StudioConstants');
   var VertexConstants = require('constants/VertexConstants');
@@ -44,11 +45,11 @@ function() {
       this.sendRequest(request,
         // On success
         function(response) {
-          VertexActions.setProps(newVertex, {label: response.body.id, id: response.body.id, status: STATUS.VERIFIED});
+          VertexActions.setProps(newVertex, {id: response.body.id, status: STATUS.VERIFIED});
         },
         // On error
         function(response) {
-          VertexActions.setProps(newVertex, {id: response.body.id, status: STATUS.ERROR});
+          VertexActions.setProps(newVertex, {status: STATUS.ERROR});
         }
       );
     },
@@ -73,6 +74,45 @@ function() {
       );
     },
     removeVertex: function(vertexId) {
+      // TODO
+    },
+    addEdge: function(newEdge) {
+      // Prepare server request
+      var request = {
+        command: METHODS.ADDEDGE
+      };
+      this.sendRequest(request,
+        // On success
+        function(response) {
+          EdgeActions.setProps(newEdge, {id: response.body.id, status: STATUS.VERIFIED});
+        },
+        // On error
+        function(response) {
+          EdgeActions.setProps(newEdge, {status: STATUS.ERROR});
+        }
+      );
+    },
+    changeEdge: function(edgeId, props) {
+      // Prepare server request
+      var request = {
+        command: METHODS.CHANGEEDGE,
+        id: edgeId,
+        properties: props
+      };
+      // Mark as unverified
+      EdgeActions.setProps(edgeId, {status: STATUS.UNVERIFIED});
+      this.sendRequest(request,
+        // On success
+        function(response) {
+          EdgeActions.setProps(edgeId, {errorMessage: null, status: STATUS.VERIFIED});
+        },
+        // On error
+        function(response) {
+          EdgeActions.setProps(edgeId, {errorMessage: response.body.error, status: STATUS.ERROR});
+        }
+      );
+    },
+    removeEdge: function(edgeId) {
       // TODO
     }
   }

@@ -7,7 +7,9 @@ define(function() {
   // only the values upon GW API change etc.
   constants.methods = {
     'ADDVERTEX': 'addVertex',
-    'CHANGEVERTEX': 'changeVertex'
+    'CHANGEVERTEX': 'changeVertex',
+    'ADDEDGE': 'addEdge',
+    'CHANGEEDGE': 'changeEdge'
   }
 
   return constants;
