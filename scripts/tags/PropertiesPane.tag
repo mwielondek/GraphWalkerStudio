@@ -21,11 +21,11 @@
 
   <style>
     .bg-warning {
-      background-color: #E2955E;
+      background-color: rgba(255, 200, 128, 0.85);
       padding: 5px;
       margin: 5px 2px;
       border-radius: 4px;
-      border: 1px solid #AD5E26;
+      border: 1px solid #813c0c;
       color: black;
     }
   </style>

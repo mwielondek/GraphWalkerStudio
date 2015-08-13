@@ -7,12 +7,12 @@
   <style>
   vertex {
     background-clip: padding-box;
-    border: 1px solid black;
+    border: 1px solid #325262;
     position: absolute !important;
     display: table !important;
     border-radius: 15px;
     cursor: default;
-    background-color: rgba(254, 173, 67, 0.85);
+    background-color: rgba(192, 215, 221, 0.85);
     box-sizing: border-box;
   }
 
@@ -21,24 +21,20 @@
   }
 
   vertex.selected {
-    border: 3px solid #3db2e3;
+    border: 2px solid #3db2e3;
     cursor: move;
   }
 
   vertex.rubberband-hover {
-    border: 2px solid #379dc8;
+    border: 2px solid #21cfdf;
   }
 
   vertex.unverified {
-    opacity: 0.7;
-  }
-
-  vertex.verified {
-    background-color: rgba(0, 198, 102, 0.85);
+    border: 1px dashed #325262;
   }
 
   vertex.error {
-    background-color: rgba(213, 71, 71, 0.85);
+    background-color: rgba(255, 200, 128, 0.85);
   }
 
   .label-div {

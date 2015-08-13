@@ -7,6 +7,7 @@
     opacity: 0.8;
     padding: 5px;
     border: 1px solid black;
+    border-radius: 2px;
     min-width: 10px;
     min-height: 8pt;
   }

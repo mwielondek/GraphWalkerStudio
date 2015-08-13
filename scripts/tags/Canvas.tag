@@ -154,8 +154,8 @@
             curviness: 0,
             proximityLimit: 260
         }],
-        HoverPaintStyle: {strokeStyle: '#379dc8', lineWidth: 1 },
-        PaintStyle: {strokeStyle: '#000000', lineWidth: 1 },
+        HoverPaintStyle: {strokeStyle: '#21cfdf', lineWidth: 1 },
+        PaintStyle: {strokeStyle: '#325262', lineWidth: 1, dashstyle: "4 2" },
         ConnectionOverlays: [
             [ 'Arrow', {
                 location: 1,
@@ -173,20 +173,13 @@
 
       // Register connection types
       jsp.registerConnectionType('selected', {
-        // Same as HoverPaintStyle
-        paintStyle: {strokeStyle: '#379dc8', lineWidth: 3 }
+        paintStyle: {strokeStyle: '#3db2e3', lineWidth: 2 }
       });
       jsp.registerConnectionType('verified', {
-        // Same as HoverPaintStyle
-        paintStyle: {strokeStyle: '#0b771b', lineWidth: 1 }
-      });
-      jsp.registerConnectionType('unverified', {
-        // Same as HoverPaintStyle
-        paintStyle: {strokeStyle: '#877709', lineWidth: 1 }
+        paintStyle: {strokeStyle: '#325262', lineWidth: 1, dashstyle: "0 0" }
       });
       jsp.registerConnectionType('error', {
-        // Same as HoverPaintStyle
-        paintStyle: {strokeStyle: '#770b0b', lineWidth: 1 }
+        paintStyle: {strokeStyle: '#ffc880', lineWidth: 1, dashstyle: "0 0" }
       });
 
       // Set canvas as container
