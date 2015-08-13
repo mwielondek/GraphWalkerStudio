@@ -29,8 +29,10 @@ function() {
     });
 
     self.on(VCALLS.CHANGE_VERTEX, function(query, props) {
-      // Determine whether the change should be verified with GW
-      if (props.name) Actions.changeVertex(query, props);
+      // Determine whether the change should be verified with GW.
+      // Add the entire `prop` object if you wish all changes to be verified.
+      var changesToVerify = [props.name, props.view];
+      if (changesToVerify.some(function(el) { return el})) Actions.changeVertex(query, props);
     });
 
     self.on(VCALLS.REMOVE_VERTEX, function(vertices) {
