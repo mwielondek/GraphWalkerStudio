@@ -51,12 +51,8 @@ function() {
     getForVertices: function(vertexIds, callback) {
       if (!Array.isArray(vertexIds)) vertexIds = [vertexIds];
       this.getAll(function(allEdges) {
-        var results = [];
-        vertexIds.forEach(function(vertexId) {
-          var matchingEdges = allEdges.filter(function(el) {
-            return el.sourceVertexId === vertexId || el.targetVertexId === vertexId;
-          });
-          results = results.concat(matchingEdges.filter(function(el) { return !results.contains(el) }));
+        var results = allEdges.filter(function(el) {
+          return vertexIds.contains(el.sourceVertexId) || vertexIds.contains(el.targetVertexId);
         });
         callback(results);
       });
