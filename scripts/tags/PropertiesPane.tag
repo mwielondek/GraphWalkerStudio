@@ -1,10 +1,12 @@
 <properties-pane>
   <ul>
+    <li if={!isMultipleSelection && element.errorMessage}>
+      <div class="bg-warning"><span class="octicon octicon-alert"></span> { element.errorMessage }</div>
+    </li>
     <li if={!isMultipleSelection}><b>Name:</b><br>
       <editable type='text' callback={ change('name') }>{ parent.element.name || 'unnamed' }</editable>
     </li>
     <li if={!isMultipleSelection}><b>ID:</b><br>{ element.id }</li>
-    <li if={!isMultipleSelection && element.errorMessage}>Error: { element.errorMessage }</li>
     <li if={isMultipleSelection}>
       Selected { opts.selection.length }
        { isDifferentTypes ? 'elements' : element.type.pluralize(isMultipleSelection) }
@@ -16,6 +18,17 @@
       </button>
     </li>
   </ul>
+
+  <style>
+    .bg-warning {
+      background-color: #E2955E;
+      padding: 5px;
+      margin: 5px 2px;
+      border-radius: 4px;
+      border: 1px solid #AD5E26;
+      color: black;
+    }
+  </style>
 
   var VertexActions    = require('actions/VertexActions');
   var EdgeActions      = require('actions/EdgeActions');
