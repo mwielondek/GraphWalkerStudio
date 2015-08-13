@@ -13,7 +13,7 @@ function() {
   var EVENTS = Constants.events;
   var STATUS = Constants.status;
 
-  var counter = 65; // 'A'
+  var counter = 0; // 'A'
 
   return {
     // Listeners
@@ -30,8 +30,8 @@ function() {
     },
     add: function(newVertex) {
       // Give vertex temporary ID if not already set
-      newVertex.id = newVertex.id || 'v_' + String.fromCharCode(counter++);
-      newVertex.name = newVertex.name || newVertex.id;
+      newVertex.id = newVertex.id || 'v_' + ++counter;
+      newVertex.name = newVertex.name || 'Vertex ' + counter;
       newVertex.type = StudioConstants.types.T_VERTEX;
       RiotControl.trigger(CALLS.ADD_VERTEX, newVertex);
     },

@@ -13,7 +13,7 @@ function() {
   var STATUS = Constants.status;
 
 
-  var counter = 1;
+  var counter = 0;
 
   return {
     // Listeners
@@ -32,8 +32,8 @@ function() {
     },
     add: function(newEdge) {
       // Give edge temporary ID if not already set
-      newEdge.id = newEdge.id || 'e_' + counter++;
-      newEdge.name = newEdge.name || newEdge.id;
+      newEdge.id = newEdge.id || 'e_' + ++counter;
+      newEdge.name = newEdge.name || 'Edge ' + counter;
 
       newEdge.type = StudioConstants.types.T_EDGE;
       RiotControl.trigger(CALLS.ADD_EDGE, newEdge);

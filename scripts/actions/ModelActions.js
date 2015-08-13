@@ -13,7 +13,7 @@ function() {
   var EVENTS = Constants.events;
 
 
-  var counter = 65; // 'A'
+  var counter = 0;
 
   return {
     // Listeners
@@ -31,9 +31,9 @@ function() {
     add: function(newModel, callback) {
       newModel = newModel || {};
       // Give vertex temporary ID if not already set
-      newModel.id = newModel.id || 'model' + String.fromCharCode(counter++);
+      newModel.id = newModel.id || 'model' + ++counter;
 
-      newModel.name = newModel.name || newModel.id;
+      newModel.name = newModel.name || 'Model ' + counter;
       newModel.type = StudioConstants.types.T_MODEL;
       RiotControl.trigger(CALLS.ADD_MODEL, newModel);
       callback(newModel);
