@@ -3,7 +3,7 @@ function(riot, RiotControl, Constants) {
   function ConnectionStore() {
     'use strict';
 
-    var self = riot.observable(this)
+    var self = riot.observable(this);
 
     var EVENTS = Constants.events;
     var CALLS  = Constants.calls;

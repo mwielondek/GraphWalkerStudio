@@ -101,7 +101,7 @@
   var CANVAS_SIZE = 10000;
   var MINIMAP_SIZE = 160;
 
-  var self = this
+  var self = this;
 
 
   addVertex(e) {
