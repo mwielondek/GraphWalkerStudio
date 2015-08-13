@@ -10,7 +10,7 @@ function() {
 
   var CALLS  = Constants.calls;
   var EVENTS = Constants.events;
-  var STATUS = Constants.status;
+  var STATUS = StudioConstants.status;
 
 
   var counter = 0;

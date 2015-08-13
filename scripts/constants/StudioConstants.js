@@ -9,6 +9,12 @@ define(['constants/Utils'], function(Utils) {
     'T_MODEL': 'model'
   };
 
+  constants.status = new Enum([
+    'UNVERIFIED',
+    'VERIFIED',
+    'ERROR'
+  ]);
+
   constants.calls = new Enum([
     'CLEAR_SELECTION'
   ]);

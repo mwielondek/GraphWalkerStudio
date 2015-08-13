@@ -21,7 +21,7 @@
   }
 
   vertex.selected {
-    border: 2px solid #379dc8;
+    border: 3px solid #3db2e3;
     cursor: move;
   }
 
@@ -88,7 +88,7 @@
 
   self.defaults = {
     label: self.id,
-    status: Constants.status.UNVERIFIED,
+    status: StudioConstants.status.UNVERIFIED,
     view: {
       domId: 'd_'+self.id,
       width: 120,

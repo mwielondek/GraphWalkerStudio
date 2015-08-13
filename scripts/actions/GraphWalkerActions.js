@@ -1,4 +1,4 @@
-define(['./ConnectionActions', './VertexActions', 'constants/GraphWalkerConstants', 'constants/VertexConstants'],
+define(['./ConnectionActions', './VertexActions', 'constants/GraphWalkerConstants', 'constants/StudioConstants'],
 function() {
   'use strict';
 
@@ -9,10 +9,9 @@ function() {
   var EdgeActions     = require('actions/EdgeActions');
   var VertexActions   = require('actions/VertexActions');
   var StudioConstants = require('constants/StudioConstants');
-  var VertexConstants = require('constants/VertexConstants');
 
   var METHODS = Constants.methods;
-  var STATUS  = VertexConstants.status;
+  var STATUS  = StudioConstants.status;
 
   var _sendRequestRaw = function(request, callback) {
     // Add unique request ID

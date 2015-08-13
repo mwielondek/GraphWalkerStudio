@@ -15,12 +15,5 @@ define(['constants/Utils'], function(Utils) {
     'VERTEX_LIST_CHANGED'
   ]);
 
-  constants.status = new Enum([
-    'UNVERIFIED',
-    'VERIFIED',
-    'ERROR'
-  ]);
-
-
   return constants;
 });

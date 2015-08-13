@@ -17,12 +17,5 @@ define(['constants/Utils'], function(Utils) {
     'EDGE_LIST_CHANGED'
   ]);
 
-  constants.status = new Enum([
-    'UNVERIFIED',
-    'VERIFIED',
-    'ERROR'
-  ]);
-
-
   return constants;
 });

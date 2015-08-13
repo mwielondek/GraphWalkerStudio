@@ -20,10 +20,11 @@
   var jsp = require('jsplumb');
   var Constants = require('constants/EdgeConstants');
   var EdgeActions = require('actions/EdgeActions');
+  var StudioConstants = require('constants/StudioConstants');
 
   var self = this;
   self.defaults = {
-    status: Constants.status.UNVERIFIED
+    status: StudioConstants.status.UNVERIFIED
   };
 
   self.one('update', function() {
@@ -57,8 +58,9 @@
     var connection = self.connection;
     var SELECTED = 'selected';
     if (connection && connection.connector) {
-      if (self.selected && !connection.hasType(SELECTED)) connection.addType(SELECTED);
-      if (!self.selected && connection.hasType(SELECTED)) connection.removeType(SELECTED);
+      connection.clearTypes();
+      connection.addType(self.status.toLowerCase());
+      if (self.selected) connection.addType(SELECTED);
     }
   })
 
