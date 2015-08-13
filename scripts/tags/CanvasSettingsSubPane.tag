@@ -12,25 +12,27 @@
     </li>
   </ul>
 
-  this.on('mount', function() {
-    $.extend(this.sensitivity, {
+  var self = this;
+
+  self.on('mount', function() {
+    $.extend(self.sensitivity, {
       max: 1,
       min: 0.01,
       step: 0.01,
       value: opts.options.canvas && opts.options.canvas.scrollIncrement || 0.3
     });
-    this.setSensitivity();
+    self.setSensitivity();
 
-    this.minimap.checked = this.opts.options.canvas.minimap;
+    self.minimap.checked = self.opts.options.canvas.minimap;
   });
 
   setSensitivity() {
-    var sensValue = this.sensValue.innerHTML = this.sensitivity.value;
-    $.extend(true, this.opts.options, {canvas: {scrollIncrement: sensValue}})
+    var sensValue = self.sensValue.innerHTML = self.sensitivity.value;
+    $.extend(true, self.opts.options, {canvas: {scrollIncrement: sensValue}})
   }
 
   setMinimap() {
-    $.extend(true, this.opts.options, {canvas: {minimap: this.minimap.checked}})
+    $.extend(true, self.opts.options, {canvas: {minimap: self.minimap.checked}})
     riot.update();
   }
 

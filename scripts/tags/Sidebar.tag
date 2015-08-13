@@ -32,7 +32,7 @@
 
   var self = this;
 
-  this.connectionOpen = false;
+  self.connectionOpen = false;
 
   var _toggle = function(toggle) {
     self.connectionOpen = toggle === undefined ?  !self.connectionOpen : toggle;

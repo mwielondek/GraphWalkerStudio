@@ -87,9 +87,8 @@
       if (toggle) {
         // If element isn't currently selected, add
         // it to selection otherwise deselect it.
-        var _this = self;
         elements.forEach(function(element) {
-          _this.selection.toggle(element);
+          self.selection.toggle(element);
         });
       } else {
         this.clear(true);

@@ -46,11 +46,13 @@
     }
   </style>
 
-  this.mixin('tagUtils');
+  var self = this;
 
-  this.expanded = true;
+  self.mixin('tagUtils');
 
-  this.one('update', function() {
-    this.expanded = !this.opts.collapsed;
+  self.expanded = true;
+
+  self.one('update', function() {
+    self.expanded = !self.opts.collapsed;
   });
 </sidebar-pane>

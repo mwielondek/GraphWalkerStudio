@@ -26,40 +26,42 @@
   </style>
 
   var ConnectionActions = require('actions/ConnectionActions');
-  this.mixin('tagUtils');
 
-  this.connected = false;
-  this.showTextarea = false;
+  var self = this;
+
+  self.mixin('tagUtils');
+
+  self.connected = false;
+  self.showTextarea = false;
 
 
-  var _this = this;
-  this.on("mount", function() {
-    _this.ws_url.value = (window.debug ? 'ws://localhost:9999' : '');
+  self.on("mount", function() {
+    self.ws_url.value = (window.debug ? 'ws://localhost:9999' : '');
     // Set up connection listeners
     ConnectionActions.addConnectionListener({
       onopen: function(websocket) {
-        _this.write('connection opened');
-        _this.connected = true;
-        _this.ws_url.value = websocket.url;
-        _this.update();
+        self.write('connection opened');
+        self.connected = true;
+        self.ws_url.value = websocket.url;
+        self.update();
       },
       onclose: function() {
-        _this.write('disconnected');
-        _this.connected = false;
-        _this.update();
+        self.write('disconnected');
+        self.connected = false;
+        self.update();
       },
       onmessage: function(message) {
-        _this.write(JSON.stringify(message));
+        self.write(JSON.stringify(message));
       }
     });
   });
 
   toggleConnection() {
-    this.connected ? this.disconnect() : this.connect();
+    self.connected ? self.disconnect() : self.connect();
   }
   connect() {
-    var url = this.ws_url.value;
-    this.write('connecting to', url);
+    var url = self.ws_url.value;
+    self.write('connecting to', url);
 
     ConnectionActions.isSocketOpen(function(isOpen) {
       // Close existing connection before connecting anew
@@ -71,6 +73,6 @@
     ConnectionActions.disconnect();
   }
   write() {
-    this.output.value += '\n' + [].slice.call(arguments, 0).join(' ');
+    self.output.value += '\n' + [].slice.call(arguments, 0).join(' ');
   }
 </connection-subpane>

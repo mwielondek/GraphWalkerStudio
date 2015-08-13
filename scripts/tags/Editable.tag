@@ -14,7 +14,7 @@
 
   var self = this;
 
-  this.editing = false;
+  self.editing = false;
 
   self.on('mount', function() {
     // Create editable element

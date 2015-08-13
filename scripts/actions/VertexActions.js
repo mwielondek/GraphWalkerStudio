@@ -54,14 +54,13 @@ function(RiotControl, Constants, $) {
       if (!Array.isArray(idArray)) idArray = [idArray];
       // TODO instead of using a counter, use promises
       var DomIdDictionary = {_counter: 0};
-      var _this = this;
       idArray.forEach(function(el) {
-        _this.get(el, function(vertex) {
+        this.get(el, function(vertex) {
           console.assert(vertex, 'Couldn\'t fetch vertex for id', el);
           DomIdDictionary[el] = vertex.view.domId;
           if (++DomIdDictionary._counter === idArray.length) callback(DomIdDictionary);
         });
-      });
+      }, this);
     }
   }
 });
