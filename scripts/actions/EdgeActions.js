@@ -1,6 +1,7 @@
 define(['app/RiotControl', 'constants/EdgeConstants', './ConnectionActions',
 'jquery', 'jsplumb', 'constants/StudioConstants'],
 function(RiotControl, Constants, connection, $) {
+  'use strict';
 
   var CALLS  = Constants.calls;
   var EVENTS = Constants.events;

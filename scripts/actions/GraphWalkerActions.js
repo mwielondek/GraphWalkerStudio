@@ -1,5 +1,6 @@
 define(['./ConnectionActions', './VertexActions', 'constants/GraphWalkerConstants', 'constants/VertexConstants'],
 function(connection, VertexActions, Constants, VertexConstants) {
+  'use strict';
 
   var METHODS = Constants.methods;
   var STATUS  = VertexConstants.status;

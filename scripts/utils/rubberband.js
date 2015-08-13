@@ -1,4 +1,6 @@
 define(['jquery'], function($) {
+  'use strict';
+
   // Rubberband helper functions
   var _getElementOffset = function(element) {
     var elementOffset = {};

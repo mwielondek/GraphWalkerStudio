@@ -2,6 +2,8 @@ define(['riot', 'jquery', 'store/VertexStore', 'store/EdgeStore', 'store/Connect
  'store/ModelStore', 'store/GraphWalkerStore', 'tag/Studio', 'utils/mixins'],
 function(riot, $) {
 
+  'use strict';
+
   var tagUtils = {
     // Toggles boolean variable
     toggle: function(variable) {

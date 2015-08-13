@@ -1,4 +1,5 @@
 define(['app/RiotControl', 'constants/ConnectionConstants'], function(RiotControl, Constants) {
+  'use strict';
 
   var CALLS  = Constants.calls;
   var EVENTS = Constants.events;

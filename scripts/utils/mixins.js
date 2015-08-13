@@ -1,5 +1,7 @@
 define(['jquery'], function($) {
 
+  'use strict';
+
   // Extract given property for all elements in an array.
   // Accepts nested arguments like eg. `mapBy('foo.bar')`.
   Array.prototype.mapBy = function(prop) {

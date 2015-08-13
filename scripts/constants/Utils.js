@@ -1,4 +1,6 @@
 define(function() {
+  'use strict';
+  
   return {
     // Creates an enum object => {ENUM: 'ENUM'}
     Enum: function(constantsList) {

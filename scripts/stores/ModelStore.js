@@ -1,5 +1,6 @@
 define(['riot', 'constants/ModelConstants', 'app/RiotControl', 'jquery', 'jsplumb', 'store/Utils'],
  function(riot, Constants, RiotControl, $) {
+  'use strict';
 
   var jsp   = require('jsplumb');
   var Utils = require('store/Utils');

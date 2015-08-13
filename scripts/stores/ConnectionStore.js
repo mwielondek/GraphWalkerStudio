@@ -1,6 +1,8 @@
 define(['riot', 'app/RiotControl', 'constants/ConnectionConstants', 'constants/VertexConstants'],
 function(riot, RiotControl, Constants) {
   function ConnectionStore() {
+    'use strict';
+
     var self = riot.observable(this)
 
     var EVENTS = Constants.events;

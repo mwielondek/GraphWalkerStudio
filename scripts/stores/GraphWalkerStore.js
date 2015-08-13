@@ -1,6 +1,7 @@
 define(['riot', 'app/RiotControl', 'constants/GraphWalkerConstants', 'actions/GraphWalkerActions',
 'constants/VertexConstants', 'constants/EdgeConstants'],
 function(riot, RiotControl, Constants, Actions) {
+  'use strict';
 
   var VertexConstants = require('constants/VertexConstants');
   var EdgeConstants   = require('constants/EdgeConstants');

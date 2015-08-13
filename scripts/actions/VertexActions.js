@@ -1,6 +1,7 @@
 define(['app/RiotControl', 'constants/VertexConstants',
 'jquery', './EdgeActions', 'constants/StudioConstants'],
 function(RiotControl, Constants, $) {
+  'use strict';
 
   var CALLS  = Constants.calls;
   var EVENTS = Constants.events;

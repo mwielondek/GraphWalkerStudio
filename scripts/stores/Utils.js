@@ -1,4 +1,5 @@
 define(function() {
+  'use strict';
 
   return {
     // Get element either by object or by ID

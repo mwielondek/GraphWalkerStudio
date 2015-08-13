@@ -1,4 +1,6 @@
 define(function() {
+  'use strict';
+  
   return {
     /**
     * Captures a series of actions and dispatches them all at a pre-set point in the future.
