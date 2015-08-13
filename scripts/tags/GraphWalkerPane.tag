@@ -8,6 +8,7 @@
     this.statusIcon = $('<span>')
       .addClass('octicon octicon-primitive-dot')
       .css('transition', 'color 400ms ease-out 100ms')
+      .css('color', '#cd2828')
       .appendTo(headerElement);
   });
 
