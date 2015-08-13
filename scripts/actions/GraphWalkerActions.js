@@ -11,7 +11,7 @@ function(connection, VertexActions, Constants, VertexConstants) {
     connection.send(JSON.stringify(request));
     // Wait for relevant response
     connection.readUntil(function(message) {
-      if (message['requestId'] == request['requestId']) {
+      if (message['requestId'] === request['requestId']) {
         callback(message);
         return true; // stop listening
       }

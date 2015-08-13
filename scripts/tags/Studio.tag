@@ -75,10 +75,10 @@
   };
   self.selection.update = function(elements, toggle, preventUpdate) {
     // If `elements` is falsy, clear selection
-    if (!elements || elements.length == 0) {
+    if (!elements || elements.length === 0) {
 
       // If selection already is null prevent update.
-      if (this.length == 0) return;
+      if (this.length === 0) return;
 
       this.clear(true);
     } else {
@@ -119,7 +119,7 @@
     var index = this.indexOf(modelId);
 
     // Select different tab if currently selected tab is the one being closed
-    if (!self.model.id || self.model.id == modelId) {
+    if (!self.model.id || self.model.id === modelId) {
       // Try selecting model immediately next to the left
       var next = index - 1;
       next = next < 0 ? 1 : next;

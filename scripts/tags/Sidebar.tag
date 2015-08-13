@@ -35,7 +35,7 @@
   this.connectionOpen = false;
 
   var _toggle = function(toggle) {
-    self.connectionOpen = toggle == undefined ?  !self.connectionOpen : toggle;
+    self.connectionOpen = toggle === undefined ?  !self.connectionOpen : toggle;
     self.update();
   };
   ConnectionActions.addConnectionListener({

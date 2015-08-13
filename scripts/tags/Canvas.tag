@@ -131,7 +131,7 @@
   }
 
   filterByModel(elements) {
-    return elements.filter(function(el) { return el.modelId == opts.model.id });
+    return elements.filter(function(el) { return el.modelId === opts.model.id });
   }
 
   self.on('mount', function() {
@@ -210,11 +210,11 @@
       })
       // Deselect vertices on click
       .on('click', function(e) {
-        if (e.target == this) self.opts.selection.clear();
+        if (e.target === this) self.opts.selection.clear();
       })
       .on('mousedown', function(e) {
         // Create rubberband on left click-n-drag
-        if (e.button == LEFT_BUTTON) {
+        if (e.button === LEFT_BUTTON) {
           $(this).trigger('rubberband', e);
         } else {
           $(this)
@@ -355,11 +355,11 @@
     // Alt-click zooming
     $('body').on('keydown', function(e) {
       if (e.target != this) return;
-      if (e.keyCode == ALT_KEY || e.keyCode == ALT_KEY_FF) {
+      if (e.keyCode === ALT_KEY || e.keyCode === ALT_KEY_FF) {
         var zoomOut = false;
         var zoomHandler = function (e) {
           // Don't zoom on right click or when clicking elements
-          if (e.button == RIGHT_BUTTON || e.target != this) return;
+          if (e.button === RIGHT_BUTTON || e.target != this) return;
           $('#canvas-body').panzoom('zoom', zoomOut, {
             focal: {
               clientX: e.clientX + CANVAS_SIZE/2,
@@ -369,7 +369,7 @@
           });
         };
         var zoomOutHandler = function(e) {
-          if (e.keyCode == SHIFT_KEY) {
+          if (e.keyCode === SHIFT_KEY) {
             zoomOut = true;
             $('#canvas-body')
               .css('cursor', 'zoom-out')
@@ -377,7 +377,7 @@
           }
         };
         var keyUpHandler = function(e) {
-          if (e.keyCode == ALT_KEY  || e.keyCode == ALT_KEY_FF) {
+          if (e.keyCode === ALT_KEY  || e.keyCode === ALT_KEY_FF) {
             // Remove all listeners
             $('#canvas-body')
               .css('cursor', 'default')
@@ -385,7 +385,7 @@
             $(this)
               .off('keydown', zoomOutHandler)
               .off('keyup', keyUpHandler);
-          } else if (e.keyCode == SHIFT_KEY) {
+          } else if (e.keyCode === SHIFT_KEY) {
             zoomOut = false;
             $('#canvas-body')
               .css('cursor', 'zoom-in')
@@ -401,7 +401,7 @@
         $(this)
           .on('keydown', zoomOutHandler)
           .on('keyup', keyUpHandler);
-      } else if (e.keyCode == SPACEBAR) {
+      } else if (e.keyCode === SPACEBAR) {
         // Reset pan and zoom on spacebar press
         $('#canvas-body').panzoom('reset');
       }

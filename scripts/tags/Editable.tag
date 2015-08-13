@@ -28,7 +28,7 @@
     editControl.on('change blur keydown', function(e) {
       switch (e.type) {
         case 'keydown':
-          if (e.keyCode == ENTER_KEY || e.keyCode == ESC_KEY) this.blur();
+          if (e.keyCode === ENTER_KEY || e.keyCode === ESC_KEY) this.blur();
           break;
         case 'change':
           // Call callback with new value

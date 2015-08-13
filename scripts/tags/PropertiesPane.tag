@@ -29,7 +29,7 @@
     self.isMultipleSelection = opts.selection.length > 1;
     self.isDifferentTypes = !self.isMultipleSelection ? false :
       !opts.selection.mapBy('type').every(function(el, i, array) {
-        return i > 0 ? el == array[i-1] : true;
+        return i > 0 ? el === array[i-1] : true;
       });
   });
 

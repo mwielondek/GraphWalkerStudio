@@ -15,10 +15,10 @@
     </li>
   </ul>
   <ul class="models">
-    <li each={ model in opts.models } class="{ active: parent.opts.model.id == model.id}">
+    <li each={ model in opts.models } class="{ active: parent.opts.model.id === model.id}">
       <span onclick={ toggleExpand }
         class="octicon octicon-chevron-{ !parent.collapsed.contains(model.id) ? 'down' : 'right' }"></span>
-      <a class="{ active: parent.opts.model.id == model.id}" onclick={ openModel }>
+      <a class="{ active: parent.opts.model.id === model.id}" onclick={ openModel }>
         { model.name }
       </a>
       <ul if={ !parent.collapsed.contains(model.id) }>
@@ -77,7 +77,7 @@
   self.searchQuery = '';
 
   filterByModel(elements, model) {
-    return elements.filter(function(el) { return el.modelId == model.id });
+    return elements.filter(function(el) { return el.modelId === model.id });
   }
 
   toggleExpand(e) {

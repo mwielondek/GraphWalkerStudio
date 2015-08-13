@@ -190,7 +190,7 @@
     // Make selectable on focus and on click
     $root.on('focus click', function(e) {
       // Toggle if meta key was down during the click.
-      var toggle = e.type == 'click' ? e.metaKey : false;
+      var toggle = e.type === 'click' ? e.metaKey : false;
       self.opts.selection.update(self, toggle);
     });
 
@@ -261,7 +261,7 @@
 
   self.on('update', function() {
     self.selected = opts.selection.mapBy('id').contains(self.id);
-    self.resizable = opts.selection.length == 1;
+    self.resizable = opts.selection.length === 1;
   });
 
   self.on('updated', function() {

@@ -23,7 +23,7 @@ define(['jquery'], function($) {
   // Return element whose certain property matches the query
   Array.prototype.getBy = function(prop, query) {
     return this.filter(function(el) {
-      return el[prop] == query;
+      return el[prop] === query;
     })
   }
 

@@ -1,7 +1,7 @@
 <studio-tabs>
   <ul>
     <li each={ opts.tabs.getObjects() }>
-      <div onclick={ selectTab } class="{ selected: parent.opts.model.id == id}">
+      <div onclick={ selectTab } class="{ selected: parent.opts.model.id === id}">
         { name }
         <span onclick={ parent.closeTab } class="octicon octicon-x"></span>
       </div>

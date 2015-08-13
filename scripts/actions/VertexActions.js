@@ -47,7 +47,7 @@ function(RiotControl, Constants, $) {
       RiotControl.trigger(StudioConstants.calls.CLEAR_SELECTION);
     },
     getDomId: function(idArray, callback) {
-      if (!idArray || idArray.length == 0) {
+      if (!idArray || idArray.length === 0) {
         callback([]);
         return;
       };
@@ -59,7 +59,7 @@ function(RiotControl, Constants, $) {
         _this.get(el, function(vertex) {
           console.assert(vertex, 'Couldn\'t fetch vertex for id', el);
           DomIdDictionary[el] = vertex.view.domId;
-          if (++DomIdDictionary._counter == idArray.length) callback(DomIdDictionary);
+          if (++DomIdDictionary._counter === idArray.length) callback(DomIdDictionary);
         });
       });
     }

@@ -42,7 +42,7 @@
     $(self.connection.getOverlay('label').getElement()).append(labelElement);
 
     // Fix the loopback connection spawning off center
-    if (self.sourceDomId == self.targetDomId)
+    if (self.sourceDomId === self.targetDomId)
       setTimeout(function() {jsp.revalidate(self.sourceDomId)}, 0);
 
     EdgeActions.setProps(self.id, {_jsp_connection: self.connection});
