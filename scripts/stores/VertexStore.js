@@ -22,7 +22,7 @@ define(['riot', 'constants/VertexConstants', 'app/RiotControl', 'jquery', 'jsplu
     // Event listeners
     var CALLS = Constants.calls;
     var EVENTS = Constants.events;
-    const EMIT_CHANGE = EVENTS.VERTEX_LIST_CHANGED;
+    var EMIT_CHANGE = EVENTS.VERTEX_LIST_CHANGED;
 
     self.on(CALLS.GET_ALL_VERTICES, function(callback) {
       callback(self.vertices)

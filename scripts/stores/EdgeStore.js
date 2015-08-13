@@ -18,7 +18,7 @@ function(riot, Constants, RiotControl, $, Utils) {
     // Event listeners
     var CALLS = Constants.calls;
     var EVENTS = Constants.events;
-    const EMIT_CHANGE = EVENTS.EDGE_LIST_CHANGED;
+    var EMIT_CHANGE = EVENTS.EDGE_LIST_CHANGED;
     self.on(CALLS.GET_ALL_EDGES, function(callback) {
       callback(self.edges)
     });
