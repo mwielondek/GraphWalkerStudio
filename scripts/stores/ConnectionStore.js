@@ -12,6 +12,8 @@ function() {
     var EVENTS = Constants.events;
     var CALLS  = Constants.calls;
 
+    self.cache = [];
+
     // Register store with RiotControl. All subsequent `trigger` and `on` method calls through
     // RiotControl will be passed on to this store.
     RiotControl.addStore(self)
@@ -21,7 +23,11 @@ function() {
     });
 
     self.on(CALLS.SEND, function(message) {
-      if (self.websocket) self.websocket.send(message);
+      if (self.websocket) {
+        self.websocket.send(message)
+      } else {
+        self.cache.push(message);
+      };
     });
 
     self.on(CALLS.CONNECT, function(url) {
@@ -29,6 +35,10 @@ function() {
       ws.onopen = function() {
         self.websocket = ws;
         self.trigger(EVENTS.CONNECTION_ESTABLISHED, ws);
+        self.cache.forEach(function(message) {
+          self.websocket.send(message);
+        });
+        self.cache.clear();
       };
       ws.onclose = function() {
         delete self.websocket;
