@@ -1,8 +1,14 @@
 define(['riot', 'constants/EdgeConstants', 'app/RiotControl', 'jquery', 'store/Utils'],
-function(riot, Constants, RiotControl, $, Utils) {
+function() {
+  'use strict';
+
+  var $           = require('jquery');
+  var riot        = require('riot');
+  var Utils       = require('store/Utils');
+  var Constants   = require('constants/EdgeConstants');
+  var RiotControl = require('app/RiotControl');
+
   function EdgeStore() {
-    'use strict';
-    
     var self = riot.observable(this);
 
     // Register store with RiotControl. All subsequent `trigger` and `on` method calls through

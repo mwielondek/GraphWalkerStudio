@@ -1,6 +1,14 @@
 define(['./ConnectionActions', './VertexActions', 'constants/GraphWalkerConstants', 'constants/VertexConstants'],
-function(connection, VertexActions, Constants, VertexConstants) {
+function() {
   'use strict';
+
+  var $               = require('jquery');
+  var connection      = require('actions/ConnectionActions');
+  var Constants       = require('constants/GraphWalkerConstants');
+  var RiotControl     = require('app/RiotControl');
+  var VertexActions   = require('actions/VertexActions');
+  var StudioConstants = require('constants/StudioConstants');
+  var VertexConstants = require('constants/VertexConstants');
 
   var METHODS = Constants.methods;
   var STATUS  = VertexConstants.status;

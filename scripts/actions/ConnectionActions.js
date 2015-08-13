@@ -1,5 +1,9 @@
-define(['app/RiotControl', 'constants/ConnectionConstants'], function(RiotControl, Constants) {
+define(['app/RiotControl', 'constants/ConnectionConstants'],
+function() {
   'use strict';
+
+  var Constants       = require('constants/ConnectionConstants');
+  var RiotControl     = require('app/RiotControl');
 
   var CALLS  = Constants.calls;
   var EVENTS = Constants.events;

@@ -1,10 +1,15 @@
 define(['riot', 'app/RiotControl', 'constants/GraphWalkerConstants', 'actions/GraphWalkerActions',
 'constants/VertexConstants', 'constants/EdgeConstants'],
-function(riot, RiotControl, Constants, Actions) {
+function() {
   'use strict';
 
-  var VertexConstants = require('constants/VertexConstants');
+  var riot            = require('riot');
+  var Actions         = require('actions/GraphWalkerActions');
+  var Constants       = require('constants/GraphWalkerConstants');
+  var RiotControl     = require('app/RiotControl');
   var EdgeConstants   = require('constants/EdgeConstants');
+  var VertexConstants = require('constants/VertexConstants');
+
 
   function GraphWalkerStore() {
     var self = riot.observable(this);

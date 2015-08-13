@@ -1,13 +1,17 @@
 define(['app/RiotControl', 'constants/ModelConstants',
 'jquery', 'constants/StudioConstants', './VertexActions'],
-function(RiotControl, Constants, $) {
+function() {
   'use strict';
+
+  var $               = require('jquery');
+  var Constants       = require('constants/ModelConstants');
+  var RiotControl     = require('app/RiotControl');
+  var VertexActions   = require('actions/VertexActions');
+  var StudioConstants = require('constants/StudioConstants');
 
   var CALLS  = Constants.calls;
   var EVENTS = Constants.events;
 
-  var StudioConstants = require('constants/StudioConstants');
-  var VertexActions   = require('actions/VertexActions');
 
   var counter = 65; // 'A'
 

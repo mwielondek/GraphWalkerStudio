@@ -1,10 +1,13 @@
 define(['riot', 'constants/VertexConstants', 'app/RiotControl', 'jquery', 'jsplumb', 'store/Utils'],
- function(riot, Constants, RiotControl, $) {
-
+ function() {
   'use strict';
 
-  var jsp   = require('jsplumb');
-  var Utils = require('store/Utils');
+  var $           = require('jquery');
+  var jsp         = require('jsplumb');
+  var riot        = require('riot');
+  var Utils       = require('store/Utils');
+  var Constants   = require('constants/VertexConstants');
+  var RiotControl = require('app/RiotControl');
 
   function VertexStore() {
     var self = riot.observable(this);

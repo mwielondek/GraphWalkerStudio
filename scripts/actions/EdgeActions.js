@@ -1,15 +1,17 @@
-define(['app/RiotControl', 'constants/EdgeConstants', './ConnectionActions',
-'jquery', 'jsplumb', 'constants/StudioConstants'],
-function(RiotControl, Constants, connection, $) {
+define(['app/RiotControl', 'constants/EdgeConstants', 'jquery', 'jsplumb', 'constants/StudioConstants'],
+function() {
   'use strict';
+
+  var $               = require('jquery');
+  var jsp             = require('jsplumb');
+  var Constants       = require('constants/EdgeConstants');
+  var RiotControl     = require('app/RiotControl');
+  var StudioConstants = require('constants/StudioConstants');
 
   var CALLS  = Constants.calls;
   var EVENTS = Constants.events;
   var STATUS = Constants.status;
 
-  var StudioConstants = require('constants/StudioConstants');
-
-  var jsp = require('jsplumb');
 
   var counter = 1;
 
