@@ -3,6 +3,9 @@
     <li if={ errorMessage }>
       <div class="bg-warning"><span class="octicon octicon-alert"></span> { errorMessage }</div>
     </li>
+    <li if={ successMessage }>
+      <div class="bg-success"><span class="octicon octicon-check"></span> { successMessage }</div>
+    </li>
     <li><b>Status:</b><br> { opts.connected ? 'Connected' : 'Disconnected' }</li>
     <li>
       <button show={ opts.connected && opts.model.id && !running } onclick={ startRunning } class="green">
@@ -41,17 +44,24 @@
   });
 
   startRunning() {
+    self.running = true;
     delete self.errorMessage;
+    delete self.successMessage;
     var modelId = opts.model.id;
     Actions.startRunningModel(modelId, function(success, response) {
       if (!success) {
-        self.running = false;
+        self.stopRunning();
         self.errorMessage = response;
         self.update();
       } else {
-        self.running = true;
         // TODO discern between vertices and edges
-        VertexActions.get(response, opts.selection.update);
+        if (response.next) {
+          VertexActions.get(response.next, opts.selection.update);
+        } else {
+          self.stopRunning();
+          self.successMessage = response.message;
+          self.update();
+        }
       }
     });
   }

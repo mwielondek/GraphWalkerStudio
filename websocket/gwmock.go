@@ -131,17 +131,11 @@ func GWMockServer(ws *websocket.Conn) {
           }
         }
       case NEXT:
-        if len(elements) == 0 {
+       if counter == len(elements) * 3 || counter == -1 {
           response = &Response{
             Requestid: req["requestId"].(string),
-            Success: false,
-            Body: map[string]string{"error": "Model is empty"},
-          }
-        } else if counter == len(elements) * 4 || counter == -1 {
-          response = &Response{
-            Requestid: req["requestId"].(string),
-            Success: false,
-            Body: map[string]string{"error": "Finished running"},
+            Success: true,
+            Body: map[string]string{"message": "Finished running"},
           }
         } else {
           response = &Response{
@@ -153,10 +147,18 @@ func GWMockServer(ws *websocket.Conn) {
           counter++
         }
       case START:
-        counter = 0
-        response = &Response{
-          Requestid: req["requestId"].(string),
-          Success: true,
+        if len(elements) == 0 {
+          response = &Response{
+            Requestid: req["requestId"].(string),
+            Success: false,
+            Body: map[string]string{"error": "Model is empty"},
+          }
+        } else {
+          counter = 0
+          response = &Response{
+            Requestid: req["requestId"].(string),
+            Success: true,
+          }
         }
       case STOP:
         counter = -1

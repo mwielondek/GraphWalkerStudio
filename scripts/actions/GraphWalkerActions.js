@@ -46,10 +46,12 @@ function() {
     _sendRequest(request,
       // On success
       function(response) {
-        callback(true, response.body.next);
-        setTimeout(function () {
-          _getNextElement(callback);
-        }, RUN_DELAY);
+        callback(true, response.body);
+        if (response.body.next) {
+          setTimeout(function () {
+            _getNextElement(callback);
+          }, RUN_DELAY);
+        }
       },
       // On error
       function(response) {
