@@ -10,7 +10,8 @@
     </sidebar-pane>
 
     <sidebar-pane heading="GraphWalker" icon="git-branch" collapsed={ true }>
-      <graphwalker-pane connected={ parent.connectionOpen } model={ parent.opts.model } />
+      <graphwalker-pane connected={ parent.connectionOpen } model={ parent.opts.model }
+        selection={ parent.opts.selection } />
     </sidebar-pane>
 
     <sidebar-pane heading="Settings" icon="gear" collapsed={ true }>

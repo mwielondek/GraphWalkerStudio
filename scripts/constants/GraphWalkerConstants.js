@@ -11,6 +11,7 @@ define(function() {
     'ADDEDGE': 'addEdge',
     'CHANGEEDGE': 'changeEdge',
     'START': 'startRunning',
+    'NEXT': 'getNextElement',
     'STOP': 'stopRunning'
   }
 

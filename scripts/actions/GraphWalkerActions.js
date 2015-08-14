@@ -13,6 +13,8 @@ function() {
   var METHODS = Constants.methods;
   var STATUS  = StudioConstants.status;
 
+  var RUN_DELAY = 500;
+
   var _sendRequestRaw = function(request, callback) {
     // Add unique request ID
     request['requestId'] = Math.random().toString(36).substr(2);
@@ -29,11 +31,31 @@ function() {
   var _sendRequest = function(request, onsuccess, onerror) {
     _sendRequestRaw(request, function(response) {
       if (response.success) {
-        onsuccess(response);
+        onsuccess && onsuccess(response);
       } else {
-        onerror(response);
+        onerror && onerror(response);
       }
     });
+  };
+
+  var _getNextElement = function(callback) {
+    // Prepare server request
+    var request = {
+      command: METHODS.NEXT,
+    };
+    _sendRequest(request,
+      // On success
+      function(response) {
+        callback(true, response.body.next);
+        setTimeout(function () {
+          _getNextElement(callback);
+        }, RUN_DELAY);
+      },
+      // On error
+      function(response) {
+        callback(false, response.body.error);
+      }
+    );
   };
 
   return {
@@ -121,10 +143,11 @@ function() {
         command: METHODS.START,
         id: modelId
       };
+      var _this = this;
       _sendRequest(request,
         // On success
         function(response) {
-          callback(true, response.body.next);
+          _getNextElement(callback);
         },
         // On error
         function(response) {

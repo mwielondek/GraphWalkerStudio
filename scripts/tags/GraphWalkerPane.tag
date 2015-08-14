@@ -16,7 +16,8 @@
     </li>
   </ul>
 
-  var Actions = require('actions/GraphWalkerActions');
+  var Actions       = require('actions/GraphWalkerActions');
+  var VertexActions = require('actions/VertexActions');
 
   var self = this;
 
@@ -44,11 +45,13 @@
     var modelId = opts.model.id;
     Actions.startRunningModel(modelId, function(success, response) {
       if (!success) {
+        self.running = false;
         self.errorMessage = response;
         self.update();
       } else {
-        // TODO
         self.running = true;
+        // TODO discern between vertices and edges
+        VertexActions.get(response, opts.selection.update);
       }
     });
   }

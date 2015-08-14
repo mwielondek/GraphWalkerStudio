@@ -8,7 +8,8 @@ import (
   "fmt"
   "encoding/json"
   "encoding/hex"
-  "crypto/rand"
+  crand "crypto/rand"
+  "math/rand"
   "time"
   "os"
   "strconv"
@@ -22,6 +23,7 @@ const (
   ADDEDGE = "addEdge"
   CHANGEEDGE = "changeEdge"
   START = "startRunning"
+  NEXT = "getNextElement"
   STOP = "stopRunning"
 )
 
@@ -47,7 +49,7 @@ func (l Logger) Print(format string, a ...interface{}) {
 
 func randId() string {
   u := make([]byte, 3)
-  rand.Read(u)
+  crand.Read(u)
   return hex.EncodeToString(u)
 }
 
@@ -58,6 +60,8 @@ func GWMockServer(ws *websocket.Conn) {
   DELAY := time.Duration(d)
   logger := new(Logger)
   logger.Print("Connection from %s", ws.LocalAddr().String())
+  elements := make([]string, 0)
+  counter := 0
   var request interface{}
   var response *Response
 
@@ -77,11 +81,15 @@ func GWMockServer(ws *websocket.Conn) {
     logger.SetPrefix("* .. ")
     switch req["command"] {
       case ADDVERTEX:
+        // Generate id
+        id := "v_"+randId()
+        // Add element to array
+        elements = append(elements, id)
         // Return element ID
         response = &Response{
           Requestid: req["requestId"].(string),
           Success: true,
-          Body: map[string]string{"id": "v_"+randId()},
+          Body: map[string]string{"id": id},
         }
       case CHANGEVERTEX:
         // In the case of changing element name, check if
@@ -122,11 +130,39 @@ func GWMockServer(ws *websocket.Conn) {
             Body: map[string]string{"error": "Bad name!"},
           }
         }
+      case NEXT:
+        if len(elements) == 0 {
+          response = &Response{
+            Requestid: req["requestId"].(string),
+            Success: false,
+            Body: map[string]string{"error": "Model is empty"},
+          }
+        } else if counter == len(elements) * 4 || counter == -1 {
+          response = &Response{
+            Requestid: req["requestId"].(string),
+            Success: false,
+            Body: map[string]string{"error": "Finished running"},
+          }
+        } else {
+          response = &Response{
+            Requestid: req["requestId"].(string),
+            Success: true,
+            // Return just a random element
+            Body: map[string]string{"next": elements[rand.Intn(len(elements))]},
+          }
+          counter++
+        }
       case START:
+        counter = 0
         response = &Response{
           Requestid: req["requestId"].(string),
-          Success: false,
-          Body: map[string]string{"error": "Not implemented!"},
+          Success: true,
+        }
+      case STOP:
+        counter = -1
+        response = &Response{
+          Requestid: req["requestId"].(string),
+          Success: true,
         }
       default:
         logger.Print("Unknown command %s", req["command"])
