@@ -6,7 +6,7 @@
     <li if={ successMessage }>
       <div class="bg-success"><span class="octicon octicon-check"></span> { successMessage }</div>
     </li>
-    <li><b>Status:</b><br> { opts.connected ? 'Connected' : 'Disconnected' }</li>
+    <li><b>Connection status:</b><br> { opts.connected ? 'Connected' : 'Disconnected' }</li>
     <li>
       <button show={ opts.connected && opts.model.id && !running } onclick={ startRunning } class="green">
         <span class="octicon octicon-rocket"></span>
@@ -19,8 +19,10 @@
     </li>
   </ul>
 
-  var Actions       = require('actions/GraphWalkerActions');
-  var VertexActions = require('actions/VertexActions');
+  var Actions         = require('actions/GraphWalkerActions');
+  var EdgeActions     = require('actions/EdgeActions');
+  var VertexActions   = require('actions/VertexActions');
+  var StudioConstants = require('constants/StudioConstants');
 
   var self = this;
 
@@ -54,9 +56,15 @@
         self.errorMessage = response;
         self.update();
       } else {
-        // TODO discern between vertices and edges
         if (response.next) {
-          VertexActions.get(response.next, opts.selection.update);
+          switch (response.type) {
+            case StudioConstants.types.T_VERTEX:
+              VertexActions.get(response.next, opts.selection.update);
+              break;
+            case StudioConstants.types.T_EDGE:
+              EdgeActions.get(response.next, opts.selection.update);
+              break;
+          }
         } else {
           self.stopRunning();
           self.successMessage = response.message;

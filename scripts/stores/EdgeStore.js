@@ -41,7 +41,6 @@ function() {
     self.on(CALLS.CHANGE_EDGE, function(query, props) {
       var edge = _getEdge(query);
       $.extend(true, edge, props);
-      console.log(edge);
       self.trigger(EMIT_CHANGE, self.edges);
     });
 

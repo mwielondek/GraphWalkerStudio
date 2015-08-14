@@ -108,11 +108,15 @@ func GWMockServer(ws *websocket.Conn) {
           }
         }
       case ADDEDGE:
+        // Generate id
+        id := "e_"+randId()
+        // Add element to array
+        elements = append(elements, id)
         // Return element ID
         response = &Response{
           Requestid: req["requestId"].(string),
           Success: true,
-          Body: map[string]string{"id": "e_"+randId()},
+          Body: map[string]string{"id": id},
         }
       case CHANGEEDGE:
         // In the case of changing element name, check if
@@ -138,11 +142,22 @@ func GWMockServer(ws *websocket.Conn) {
             Body: map[string]string{"message": "Finished running"},
           }
         } else {
+          element := elements[rand.Intn(len(elements))]
+          var elementType string
+          switch element[0:1] {
+            case "v":
+              elementType = "vertex"
+            case "e":
+              elementType = "edge"
+          }
           response = &Response{
             Requestid: req["requestId"].(string),
             Success: true,
             // Return just a random element
-            Body: map[string]string{"next": elements[rand.Intn(len(elements))]},
+            Body: map[string]string{
+              "next": element,
+              "type": elementType,
+            },
           }
           counter++
         }

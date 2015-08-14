@@ -25,10 +25,8 @@ function() {
     getAll: function(callback) {
       RiotControl.trigger(CALLS.GET_ALL_EDGES, callback);
     },
-    getById: function(edgeId, callback) {
-      RiotControl.trigger(CALLS.GET_EDGE, edgeId, function(edge) {
-        callback(edge);
-      });
+    get: function(edgeId, callback) {
+      RiotControl.trigger(CALLS.GET_EDGE, edgeId, callback);
     },
     add: function(newEdge) {
       // Give edge temporary ID if not already set
