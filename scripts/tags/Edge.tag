@@ -48,6 +48,9 @@
       setTimeout(function() {jsp.revalidate(self.sourceDomId)}, 0);
 
     EdgeActions.setProps(self.id, {_jsp_connection: self.connection});
+
+    // Apply the right style
+    self.trigger('updated');
   });
 
   self.on('update', function() {
