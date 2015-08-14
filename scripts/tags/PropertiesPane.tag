@@ -16,6 +16,10 @@
         <span class="octicon octicon-trashcan"></span>
         Remove { isDifferentTypes ? 'elements' : element.type.pluralize(isMultipleSelection) }
       </button>
+      <button show={ !isMultipleSelection && element == opts.model } onclick={ saveModel }>
+        <span class="octicon octicon-desktop-download"></span>
+        Save model
+      </button>
     </li>
   </ul>
 
@@ -34,6 +38,17 @@
         return i > 0 ? el === array[i-1] : true;
       });
   });
+
+  saveModel() {
+    var data = [
+      JSON.stringify(opts.model) // TODO append model specific vertices and edges
+    ];
+    var blob = new Blob(data, {type: 'octet/stream'});
+    var url = window.URL.createObjectURL(blob);
+    window.open(url, '_blank');
+    window.focus();
+    window.URL.revokeObjectURL(url);
+  }
 
   change(prop) {
     return function(newValue) {

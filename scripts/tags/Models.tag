@@ -2,8 +2,14 @@
   <ul>
     <li if={ !opts.models.length }>
       <button onclick={ opts.model.new } class="green">
-      <span class="octicon octicon-plus"></span>
-      New model</button>
+        <span class="octicon octicon-plus"></span>
+        New model
+      </button>
+      <button onclick={ openFileDialog }>
+        <span class="octicon octicon-cloud-upload"></span>
+        Load model
+      </button>
+      <input type="file" name="fileUpload" show={ false } onchange={ loadModel }/>
     </li>
     <li if={ opts.models.length }>
       <input type="text" name="searchInput" placeholder="Search" onkeyup={ search }>
@@ -120,6 +126,20 @@
       self.collapsed = self.collapsedBeforeSearch;
       delete self.collapsedBeforeSearch;
     }
+  }
+
+  openFileDialog() {
+    self.fileUpload.click();
+  }
+
+  loadModel() {
+    var fileReader = new FileReader();
+    fileReader.onload = function() {
+      var modelObject = JSON.parse(fileReader.result);
+      opts.model.load(modelObject);
+      // TODO load vertices and edges too
+    }
+    fileReader.readAsText(self.fileUpload.files[0]);
   }
 
 </models-pane>

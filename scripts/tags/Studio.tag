@@ -139,6 +139,12 @@
       ModelActions.add({}, function(model) {
         self.model.set(model.id);
       });
+    },
+    // Load existing model
+    load: function(model) {
+      ModelActions.add(model, function(model) {
+        self.model.set(model.id);
+      });
     }
   };
   Object.defineProperty(self, 'model', {
