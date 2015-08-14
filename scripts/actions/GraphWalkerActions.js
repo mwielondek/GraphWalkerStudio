@@ -26,22 +26,23 @@ function() {
     });
   };
 
+  var _sendRequest = function(request, onsuccess, onerror) {
+    _sendRequestRaw(request, function(response) {
+      if (response.success) {
+        onsuccess(response);
+      } else {
+        onerror(response);
+      }
+    });
+  };
+
   return {
-    sendRequest: function(request, onsuccess, onerror) {
-      _sendRequestRaw(request, function(response) {
-        if (response.success) {
-          onsuccess(response);
-        } else {
-          onerror(response);
-        }
-      });
-    },
     addVertex: function(newVertex) {
       // Prepare server request
       var request = {
         command: METHODS.ADDVERTEX
       };
-      this.sendRequest(request,
+      _sendRequest(request,
         // On success
         function(response) {
           VertexActions.setProps(newVertex, {id: response.body.id, status: STATUS.VERIFIED});
@@ -61,7 +62,7 @@ function() {
       };
       // Mark as unverified
       VertexActions.setProps(vertexId, {status: STATUS.UNVERIFIED});
-      this.sendRequest(request,
+      _sendRequest(request,
         // On success
         function(response) {
           VertexActions.setProps(vertexId, {errorMessage: null, status: STATUS.VERIFIED});
@@ -80,7 +81,7 @@ function() {
       var request = {
         command: METHODS.ADDEDGE
       };
-      this.sendRequest(request,
+      _sendRequest(request,
         // On success
         function(response) {
           EdgeActions.setProps(newEdge, {id: response.body.id, status: STATUS.VERIFIED});
@@ -100,7 +101,7 @@ function() {
       };
       // Mark as unverified
       EdgeActions.setProps(edgeId, {status: STATUS.UNVERIFIED});
-      this.sendRequest(request,
+      _sendRequest(request,
         // On success
         function(response) {
           EdgeActions.setProps(edgeId, {errorMessage: null, status: STATUS.VERIFIED});
@@ -113,6 +114,26 @@ function() {
     },
     removeEdge: function(edgeId) {
       // TODO
+    },
+    startRunningModel: function(modelId, callback) {
+      // Prepare server request
+      var request = {
+        command: METHODS.START,
+        id: modelId
+      };
+      _sendRequest(request,
+        // On success
+        function(response) {
+          callback(true, response.body.next);
+        },
+        // On error
+        function(response) {
+          callback(false, response.body.error);
+        }
+      );
+    },
+    stopRunningModel: function() {
+      _sendRequest({command: METHODS.STOP});
     }
   }
 })

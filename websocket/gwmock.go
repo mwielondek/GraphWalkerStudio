@@ -21,6 +21,8 @@ const (
   CHANGEVERTEX = "changeVertex"
   ADDEDGE = "addEdge"
   CHANGEEDGE = "changeEdge"
+  START = "startRunning"
+  STOP = "stopRunning"
 )
 
 type Response struct {
@@ -119,6 +121,12 @@ func GWMockServer(ws *websocket.Conn) {
             Success: false,
             Body: map[string]string{"error": "Bad name!"},
           }
+        }
+      case START:
+        response = &Response{
+          Requestid: req["requestId"].(string),
+          Success: false,
+          Body: map[string]string{"error": "Not implemented!"},
         }
       default:
         logger.Print("Unknown command %s", req["command"])

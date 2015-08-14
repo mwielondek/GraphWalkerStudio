@@ -9,7 +9,9 @@ define(function() {
     'ADDVERTEX': 'addVertex',
     'CHANGEVERTEX': 'changeVertex',
     'ADDEDGE': 'addEdge',
-    'CHANGEEDGE': 'changeEdge'
+    'CHANGEEDGE': 'changeEdge',
+    'START': 'startRunning',
+    'STOP': 'stopRunning'
   }
 
   return constants;
