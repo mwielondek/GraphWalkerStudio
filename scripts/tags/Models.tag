@@ -135,9 +135,10 @@
   loadModel() {
     var fileReader = new FileReader();
     fileReader.onload = function() {
-      var modelObject = JSON.parse(fileReader.result);
-      opts.model.load(modelObject);
-      // TODO load vertices and edges too
+      var dataObject = JSON.parse(fileReader.result);
+      opts.model.load(dataObject.model);
+      dataObject.vertices.forEach(VertexActions.add);
+      dataObject.edges.forEach(EdgeActions.add);
     }
     fileReader.readAsText(self.fileUpload.files[0]);
   }

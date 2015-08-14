@@ -40,14 +40,32 @@
   });
 
   saveModel() {
-    var data = [
-      JSON.stringify(opts.model) // TODO append model specific vertices and edges
-    ];
-    var blob = new Blob(data, {type: 'octet/stream'});
-    var url = window.URL.createObjectURL(blob);
-    window.open(url, '_blank');
-    window.focus();
-    window.URL.revokeObjectURL(url);
+    // TODO Use promises instead of counter
+    var counter = 0;
+    var vertices, edges;
+    VertexActions.getAll(function(resp) {
+      vertices = resp;
+      if (++counter == 2) save();
+    });
+    EdgeActions.getAll(function(resp) {
+      edges = resp.map(function(edge) {
+        delete edge._jsp_connection;
+        return edge;
+      });
+      if (++counter == 2) save();
+    });
+    function save() {
+      var data = {
+        model: opts.model,
+        vertices: vertices,
+        edges: edges
+      };
+      var blob = new Blob([JSON.stringify(data)], {type: 'octet/stream'});
+      var url = window.URL.createObjectURL(blob);
+      window.open(url, '_blank');
+      window.focus();
+      window.URL.revokeObjectURL(url);
+    }
   }
 
   change(prop) {
